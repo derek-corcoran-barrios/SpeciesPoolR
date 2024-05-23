@@ -24,3 +24,7 @@ Remotes:
     jinyizju/V.PhyloMaker
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
