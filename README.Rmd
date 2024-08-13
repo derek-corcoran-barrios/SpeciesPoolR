@@ -9,7 +9,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  warning = FALSE,
+  message = FALSE,
+  error = FALSE
 )
 ```
 
@@ -39,3 +42,20 @@ library(SpeciesPoolR)
 ## Summary metrics
 
 Now that you have in which habitat and where a species can be found, we can generate several summary metrics, we will start by reading in the resulting potential occurrence by species in.
+
+## Read in Presences from a folder
+
+The first thing to do is to read in Presences from a folder, with the function `GetLandusePresences` as seen in the following code
+
+```{r GetLandusePresences}
+
+folder <- system.file("ex/", package="SpeciesPoolR")
+Landuse <- "ForestDryPoor"
+presences <- GetLandusePresences(folder, Landuse)
+```
+
+This is the first 10 lines of the file
+
+```{r Table1, echo=FALSE}
+knitr::kable(head(presences))
+```
