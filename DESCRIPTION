@@ -22,7 +22,7 @@ Depends:
 LazyData: true
 Remotes: 
     jinyizju/V.PhyloMaker
-URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR
+URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues
 Suggests: 
     knitr,
