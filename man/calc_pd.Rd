@@ -20,8 +20,16 @@ This function calculates the phylogenetic diversity (PD) for a given dataset and
 \examples{
 \dontrun{
   # Example usage:
-  Fin <- data.table(cell = c(1, 1, 2, 2), species = c("species_a", "species_b", "species_a", "species_c"), Landuse = c("forest", "forest", "grassland", "grassland"))
-  Tree <- V.PhyloMaker::phylo.maker(...)  # Assume this generates a valid tree object
+  Fin <- data.table(
+    cell = c(1, 1, 2, 2),
+    species = c("species_a", "species_b", "species_a", "species_c"),
+    Landuse = c("forest", "forest", "grassland", "grassland")
+  )
+
+  # Assume this generates a valid tree object
+  Tree <- V.PhyloMaker::phylo.maker(...)
+
+  # Calculate phylogenetic diversity
   pd_results <- calc_pd(Fin, Tree)
   print(pd_results)
 }

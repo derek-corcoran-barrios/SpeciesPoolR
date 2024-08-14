@@ -17,6 +17,8 @@
 #' @importFrom purrr map keep
 #' @export
 GetLandusePresences <- function(folder, Landuse){
+  V1 <- NULL
+
   DT <- list.files(path = paste0(folder, Landuse, "/"), full.names = TRUE) |>
     purrr::map(function(file) {
       tryCatch({

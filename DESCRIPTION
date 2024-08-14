@@ -13,10 +13,12 @@ Imports:
     data.table,
     dplyr,
     picante,
+    purrr,
     readr,
+    rgbif,
     stringr,
     terra,
-    V.PhyloMaker (>= 0.1.0)
+    V.PhyloMaker
 Depends: 
     R (>= 2.10)
 LazyData: true

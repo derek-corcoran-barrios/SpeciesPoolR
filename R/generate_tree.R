@@ -16,6 +16,9 @@
 #' @importFrom V.PhyloMaker phylo.maker
 #' @export
 generate_tree <- function(DF){
+
+  species <- genus <- family <- NULL
+
   Tree <- readr::read_csv(DF) |>
     dplyr::select(species, genus, family) |>
     dplyr::distinct() |>

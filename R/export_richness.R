@@ -22,6 +22,9 @@
 #' @export
 
 export_richness <- function(Results, path, folder) {
+
+  cell <- NULL
+
   if (!dir.exists(folder)) {
     dir.create(folder, recursive = TRUE)
   }
