@@ -6,6 +6,9 @@
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/articles/index.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/authors.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/index.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/Clean_Taxa.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/Clean_Taxa_Taxize.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/Clean_Taxa_rgbif.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/GetLandusePresences.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/Richness_PD.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/Richness_Rar.html</loc></url>
@@ -13,7 +16,9 @@
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/count_presences.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/export_richness.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/generate_tree.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/get_data.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/index.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/run_workflow.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/write_cog.html</loc></url>
 </urlset>
 
