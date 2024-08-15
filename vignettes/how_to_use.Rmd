@@ -35,7 +35,7 @@ Now that you have in which habitat and where a species can be found, we can gene
 
 The first thing to do is to read in Presences from a folder, with the function `GetLandusePresences` as seen in the following code
 
-```{r GetLandusePresences}
+```{r GetLandusePresences, eval = F}
 
 folder <- system.file("ex/", package="SpeciesPoolR")
 Landuse <- "ForestDryPoor"
@@ -44,7 +44,7 @@ presences <- GetLandusePresences(folder, Landuse)
 
 This is the first 10 lines of the file
 
-```{r Table1, echo=FALSE}
+```{r Table1, echo=FALSE, eval = F}
 knitr::kable(head(presences))
 ```
 

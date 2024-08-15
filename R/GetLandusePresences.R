@@ -9,6 +9,7 @@
 #' \dontrun{
 #'   # Example usage:
 #'   folder <- system.file("ex/", package="SpeciesPoolR")
+#'   list.files(folder, pattern = ".zip")
 #'   Landuse <- "ForestDryPoor"
 #'   presences <- GetLandusePresences(folder, Landuse)
 #'   head(presences)
