@@ -4,40 +4,38 @@
 #' `SpeciesPoolR` package. The workflow includes steps for cleaning species data, counting
 #' species presences, filtering data, and generating buffers for spatial analysis.
 #'
-#' @param workers Number of parallel workers to use in the `crew` controller. Default is 4.
+#' @param workers Number of parallel workers to use in the `crew` controller. Default is 2.
 #' @param error Handling for errors in outdated targets. Default is "null".
 #' @param file_path Path to the Excel or csv file containing the data.
-#' @param landuse_suitability Path to the land use suitability raster file.
-#' @param landuse_tiff Path to the land use TIFF file.
-#' @param n Minimum number of occurrences for species filtering. Default is 5.
 #' @return Executes the `targets` pipeline.
-#' @importFrom crew crew_controller
-#' @importFrom targets tar_option_set tar_target
+#' @importFrom crew crew_controller_local
+#' @importFrom targets tar_option_set tar_target tar_script
 #' @export
-run_workflow <- function(workers = 4,
+run_workflow <- function(workers = 2,
                          error = "null",
-                         file_path,
-                         landuse_suitability,
-                         landuse_tiff,
-                         n = 5) {
+                         file_path) {
 
-  LanduseSuitability <- LandUseTiff <- data <- Clean <- clean_species <- NULL
+  data <- Clean <- clean_species <- NULL
+
+  controller <- substitute(crew::crew_controller_local(workers = workers))
+  error_val <- substitute(error)
+  file_path_val <- substitute(file_path)
 
   # Set tar_option_set for the workflow
-  targets::tar_option_set(
-    packages = c("SpeciesPoolR"),
-    controller = crew::crew_controller(workers = workers),
-    error = error
-  )
+  targets::tar_script({
+    targets::tar_option_set(
+      packages = c("SpeciesPoolR"),
+      controller = eval(controller),
+      error = eval(error_val)
+    )
 
-  # Define the targets pipeline
-  targets <- list(
-    targets::tar_target(LanduseSuitability, landuse_suitability, format = "file"),
-    targets::tar_target(LandUseTiff, landuse_tiff, format = "file"),
-    targets::tar_target(file, command = file_path, format = "file"),
-    targets::tar_target(data, get_data(file)),
-    targets::tar_target(Clean, clean_species(data))
-  )
+    # Define the targets pipeline
+    targets <- list(
+      targets::tar_target(file, command = eval(file_path_val), format = "file"),
+      targets::tar_target(data, get_data(file)),
+      targets::tar_target(Clean, clean_species(data))
+    )
+  }, ask = FALSE)
 
   # Run the workflow
   targets::tar_make(targets)
