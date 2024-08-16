@@ -18,6 +18,7 @@ Imports:
     readr,
     readxl,
     rgbif,
+    rlang,
     stringr,
     targets,
     taxize,
