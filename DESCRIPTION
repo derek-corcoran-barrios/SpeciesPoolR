@@ -39,6 +39,7 @@ Suggests:
     knitr,
     openxlsx,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    visNetwork
 VignetteBuilder: knitr
 Config/testthat/edition: 3
