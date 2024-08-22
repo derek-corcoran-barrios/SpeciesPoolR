@@ -53,6 +53,8 @@ species presences, filtering data, and generating buffers for spatial analysis.<
 <span>  error <span class="op">=</span> <span class="st">"null"</span>,</span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  country <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shapefile <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -76,6 +78,14 @@ species presences, filtering data, and generating buffers for spatial analysis.<
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
 <dd><p>An optional expression used to filter the resulting <code>data.frame</code>. This should be an expression
 written as if you were using <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code>. The default is NULL, meaning no filtering is applied.</p></dd>
+
+
+<dt id="arg-country">country<a class="anchor" aria-label="anchor" href="#arg-country"></a></dt>
+<dd><p>A two-letter country code to define the area of interest for counting species presences. Default is NULL.</p></dd>
+
+
+<dt id="arg-shapefile">shapefile<a class="anchor" aria-label="anchor" href="#arg-shapefile"></a></dt>
+<dd><p>Path to a shapefile defining the area of interest for counting species presences. Default is NULL.</p></dd>
 
 
 <dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>

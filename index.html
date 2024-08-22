@@ -51,12 +51,27 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="speciespoolr">SpeciesPoolR<a class="anchor" aria-label="anchor" href="#speciespoolr"></a>
+  <main id="main" class="col-md-9"><ul>
+<li><a href="#id_1-speciespoolr">1 SpeciesPoolR</a></li>
+<li>
+<a href="#id_2-using-speciespoolr-manually">2 Using SpeciesPoolR Manually</a>
+<ul>
+<li><a href="#id_21-importing-and-downloading-species-presences">2.1 Importing and Downloading Species Presences</a></li>
+</ul>
+</li>
+<li>
+<a href="#id_3-running-the-speciespoolr-workflow">3 Running the SpeciesPoolR Workflow</a>
+<ul>
+<li><a href="#id_31-how-it-works">3.1 How It Works</a></li>
+</ul>
+</li>
+</ul>
+<!-- README.md is generated from README.Rmd. Please edit that file --><div class="section level1">
+<div class="page-header"><h1 id="id_1-speciespoolr">1 SpeciesPoolR<a class="anchor" aria-label="anchor" href="#id_1-speciespoolr"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of the <code>SpeciesPoolR</code> package is to generate potential species pools and their summary metrics in a spatial way, to install the package you can do it from github:</p>
+<p>The goal of the SpeciesPoolR package is to generate potential species pools and their summary metrics in a spatial way. You can install the package directly from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"derek-corcoran-barrios/SpeciesPoolR"</span><span class="op">)</span></span></code></pre></div>
@@ -65,12 +80,15 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR" class="external-link">SpeciesPoolR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
-<h1 id="using-speciespoolr-manually">Using SpeciesPoolR manually<a class="anchor" aria-label="anchor" href="#using-speciespoolr-manually"></a>
+<h1 id="id_2-using-speciespoolr-manually">2 Using SpeciesPoolR Manually<a class="anchor" aria-label="anchor" href="#id_2-using-speciespoolr-manually"></a>
 </h1>
 <div class="section level2">
-<h2 id="importing-and-downloading-species-presences">Importing and downloading species presences<a class="anchor" aria-label="anchor" href="#importing-and-downloading-species-presences"></a>
+<h2 id="id_21-importing-and-downloading-species-presences">2.1 Importing and Downloading Species Presences<a class="anchor" aria-label="anchor" href="#id_21-importing-and-downloading-species-presences"></a>
 </h2>
-<p>If you are going to use each of the functions of the <code>SpeciesPoolR</code> manually and sequentially the first step would be to read in a species list from either a csv or an xlsx file, for that you can use the <code>get_data</code> function. You can include filtering in a <code>dplyr</code> filter style in order to subset your dataset in the following way:</p>
+<div class="section level3">
+<h3 id="id_211-step-1-reading-and-filtering-data">2.1.1 Step 1: Reading and Filtering Data<a class="anchor" aria-label="anchor" href="#id_211-step-1-reading-and-filtering-data"></a>
+</h3>
+<p>If you are going to use each of the functions of the SpeciesPoolR manually and sequentially, the first step would be to read in a species list from either a CSV or an XLSX file. You can use the get_data function for this. The function allows you to filter your data in a dplyr-like style:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span><span class="op">(</span></span>
@@ -79,7 +97,7 @@
 <span>                    <span class="va">Class</span> <span class="op">==</span> <span class="st">"Magnoliopsida"</span> <span class="op">&amp;</span> </span>
 <span>                    <span class="va">Family</span> <span class="op">==</span> <span class="st">"Fabaceae"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>This will generate the following dataset that we can use on subsequently to count the species presences and download the species presences.</p>
+<p>This will generate a dataset that can be used subsequently to count species presences and download species data as seen in table <a href="#tab:tablespecies">2.1</a></p>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -194,11 +212,15 @@
 </tr>
 </tbody>
 </table>
-<p>Species that will be used to generate species pools</p>
-<p>After that we do a taxonomic harmonization to ensure that the species we use have the names recognized in the GBIF taxonomic backbone:</p>
+<p><span id="tab:tablespecies"></span>Table 2.1: Species that will be used to generate species pools</p>
+</div>
+<div class="section level3">
+<h3 id="id_212-step-2-taxonomic-harmonization">2.1.2 Step 2: Taxonomic Harmonization<a class="anchor" aria-label="anchor" href="#id_212-step-2-taxonomic-harmonization"></a>
+</h3>
+<p>Next, you should perform taxonomic harmonization to ensure that the species names you use are recognized by the GBIF taxonomic backbone. This can be done using the Clean_Taxa function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Clean_Species</span> <span class="op">&lt;-</span> <span class="fu">SpeciesPoolR</span><span class="fu">::</span><span class="fu"><a href="reference/Clean_Taxa.html">Clean_Taxa</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div>
-<p>This will return a very similar dataframe, but it will ensure that the names are recognized by GBIF, this results in the following data.frame</p>
+<p>The resulting data frame, with harmonized species names, is shown in table <a href="#tab:cleantable">2.2</a></p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="12%">
@@ -343,13 +365,16 @@
 </tr>
 </tbody>
 </table>
-<p>Taxonomicallty harmonized dataset</p>
-<p>After that, and specially if you want to calculate rarity it is important that you get from gbif the number of presences of each of this species in your study area, for that we use the function <code>count_presences</code> here you can select either by country or use a shapefile to limit your search, here is an example of the usage of this function for Denmark only, it is very important that the dataframe you feed to this function has a column called species.</p>
+<p><span id="tab:cleantable"></span>Table 2.2: Taxonomicallty harmonized dataset</p>
+</div>
+<div class="section level3">
+<h3 id="id_213-step-3-counting-species-presences">2.1.3 Step 3: Counting Species Presences<a class="anchor" aria-label="anchor" href="#id_213-step-3-counting-species-presences"></a>
+</h3>
+<p>After harmonizing the species names, it’s important to obtain the number of occurrences of each species in your study area, especially if you plan to calculate rarity. You can do this using the <code>count_presences</code> function. This function allows you to filter occurrences by country or by a shapefile. Below is an example for Denmark:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span><span class="co"># Assuming Clean_Species is your data frame</span></span>
+<code class="sourceCode R"><span><span class="co"># Assuming Clean_Species is your data frame</span></span>
 <span><span class="va">Count_DK</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, country <span class="op">=</span> <span class="st">"DK"</span><span class="op">)</span></span></code></pre></div>
-<p>this results in the following table:</p>
+<p>The resulting data frame of species presences in Denmark is shown in table <a href="#tab:tableCountDenmark">2.3</a></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Count_DK</span>, caption <span class="op">=</span> <span class="st">"Counts of presences for the different species within Denmark"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -410,13 +435,13 @@
 </tr>
 </tbody>
 </table>
-<p>Counts of presences for the different species within Denmark</p>
-<p>Or if we used only Aarhus commune:</p>
+<p><span id="tab:tableCountDenmark"></span>Table 2.3: Counts of presences for the different species within Denmark</p>
+<p>Alternatively, you can filter by a specific region using a shapefile. For example, to count species presences within Aarhus commune:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span></code></pre></div>
-<p>Which results in the following data.frame</p>
+<p>The resulting data.frame for Aarhus commune is shown int table <a href="#tab:tableCountAarhus">2.4</a></p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">family</th>
@@ -475,7 +500,39 @@
 </tr>
 </tbody>
 </table>
-<p>Counts of presences for the different species within Aarhus commune</p>
+<p><span id="tab:tableCountAarhus"></span>Table 2.4: Counts of presences for the different species within Aarhus commune</p>
+<p>Now it is recommended to eliminate species that have no occurrences in the area, this is done automatically in the workflow version:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="va">Count_Aarhus</span><span class="op">[</span><span class="va">N</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></code></pre></div>
+<p>So that then we can retrieve the species presences using the function <code><a href="reference/get_presences.html">SpeciesPoolR::get_presences</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_presences.html">get_presences</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">Count_Aarhus</span><span class="op">$</span><span class="va">species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"</span></span></code></pre></div>
+<p>there we end up with 1070 presences for our 7 species.</p>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="id_3-running-the-speciespoolr-workflow">3 Running the SpeciesPoolR Workflow<a class="anchor" aria-label="anchor" href="#id_3-running-the-speciespoolr-workflow"></a>
+</h1>
+<p>If you prefer to automate the process and run the <code>SpeciesPoolR</code> workflow as a pipeline, you can use the <code>run_workflow</code> function. This function sets up a <code>targets</code> workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis. This approach is especially useful for larger datasets or when you want to ensure reproducibility.</p>
+<p>To run the workflow, you can use the following code. We’ll use the same species filter as before, focusing on the <code>Plantae</code> kingdom, <code>Magnoliopsida</code> class, and <code>Fabaceae</code> family. Additionally, we’ll focus on the Aarhus commune using a shapefile.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/run_workflow.html">run_workflow</a></span><span class="op">(</span></span>
+<span>  file_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Kingdom</span> <span class="op">==</span> <span class="st">"Plantae"</span> <span class="op">&amp;</span> <span class="va">Class</span> <span class="op">==</span> <span class="st">"Magnoliopsida"</span> <span class="op">&amp;</span> <span class="va">Family</span> <span class="op">==</span> <span class="st">"Fabaceae"</span><span class="op">)</span>,</span>
+<span>  shapefile <span class="op">=</span> <span class="va">shp</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="id_31-how-it-works">3.1 How It Works<a class="anchor" aria-label="anchor" href="#id_31-how-it-works"></a>
+</h2>
+<p>The run_workflow function creates a pipeline that:</p>
+<p>1- Reads the data from the specified file path. 2- Filters the data using the provided filter expression. 3- Cleans the species names to match the GBIF taxonomic backbone. 4- Counts the species presences within the specified geographic area (in this case, Aarhus). 5- Generates a visual representation of the workflow (if plot = TRUE).</p>
+<p>You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork(). The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.</p>
+<p>This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data. It also makes it easier to rerun the workflow with different parameters or datasets.</p>
 </div>
 </div>
 
