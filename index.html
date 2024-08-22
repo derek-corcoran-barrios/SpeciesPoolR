@@ -55,7 +55,7 @@
 <div class="page-header"><h1 id="speciespoolr">SpeciesPoolR<a class="anchor" aria-label="anchor" href="#speciespoolr"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of the <code>SpeciesPoolR</code> package is to generate potential species pools and their summary metrics in a spatial way.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -77,51 +77,6 @@
 <h2 id="read-in-presences-from-a-folder">Read in Presences from a folder<a class="anchor" aria-label="anchor" href="#read-in-presences-from-a-folder"></a>
 </h2>
 <p>The first thing to do is to read in Presences from a folder, with the function <code>GetLandusePresences</code> as seen in the following code</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
-<span><span class="va">Landuse</span> <span class="op">&lt;-</span> <span class="st">"ForestDryPoor"</span></span>
-<span><span class="va">presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/GetLandusePresences.html">GetLandusePresences</a></span><span class="op">(</span><span class="va">folder</span>, <span class="va">Landuse</span><span class="op">)</span></span></code></pre></div>
-<p>This is the first 10 lines of the file</p>
-<table class="table">
-<thead><tr class="header">
-<th align="left">cell</th>
-<th align="left">species</th>
-<th align="left">Landuse</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">60273</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-<tr class="even">
-<td align="left">60274</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-<tr class="odd">
-<td align="left">60275</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-<tr class="even">
-<td align="left">60276</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-<tr class="odd">
-<td align="left">60867</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-<tr class="even">
-<td align="left">60868</td>
-<td align="left">Argentina anserina</td>
-<td align="left">ForestDryPoor</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -155,7 +110,12 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
