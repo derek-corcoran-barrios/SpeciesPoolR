@@ -4,6 +4,8 @@
 # SpeciesPoolR
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of the `SpeciesPoolR` package is to generate potential species
@@ -35,21 +37,3 @@ resulting potential occurrence by species in.
 
 The first thing to do is to read in Presences from a folder, with the
 function `GetLandusePresences` as seen in the following code
-
-``` r
-
-folder <- system.file("ex/", package="SpeciesPoolR")
-Landuse <- "ForestDryPoor"
-presences <- GetLandusePresences(folder, Landuse)
-```
-
-This is the first 10 lines of the file
-
-| cell  | species            | Landuse       |
-|:------|:-------------------|:--------------|
-| 60273 | Argentina anserina | ForestDryPoor |
-| 60274 | Argentina anserina | ForestDryPoor |
-| 60275 | Argentina anserina | ForestDryPoor |
-| 60276 | Argentina anserina | ForestDryPoor |
-| 60867 | Argentina anserina | ForestDryPoor |
-| 60868 | Argentina anserina | ForestDryPoor |

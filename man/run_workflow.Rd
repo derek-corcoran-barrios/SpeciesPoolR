@@ -4,7 +4,13 @@
 \alias{run_workflow}
 \title{Run the SpeciesPoolR Workflow}
 \usage{
-run_workflow(workers = 2, error = "null", file_path, filter = NULL)
+run_workflow(
+  workers = 2,
+  error = "null",
+  file_path,
+  filter = NULL,
+  plot = TRUE
+)
 }
 \arguments{
 \item{workers}{Number of parallel workers to use in the \code{crew} controller. Default is 2.}
@@ -15,6 +21,8 @@ run_workflow(workers = 2, error = "null", file_path, filter = NULL)
 
 \item{filter}{An optional expression used to filter the resulting \code{data.frame}. This should be an expression
 written as if you were using \code{dplyr::filter()}. The default is NULL, meaning no filtering is applied.}
+
+\item{plot}{if TRUE (default) it will run the \code{targets::tar_visnetwork()} to plot the workflow}
 }
 \value{
 Executes the \code{targets} pipeline.

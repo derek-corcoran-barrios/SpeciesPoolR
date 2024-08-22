@@ -9,19 +9,21 @@
 #' @param file_path Path to the Excel or csv file containing the data.
 #' @param filter An optional expression used to filter the resulting `data.frame`. This should be an expression
 #' written as if you were using `dplyr::filter()`. The default is NULL, meaning no filtering is applied.
+#' @param plot if TRUE (default) it will run the `targets::tar_visnetwork()` to plot the workflow
 #' @return Executes the `targets` pipeline.
 #' @importFrom crew crew_controller_local
 #' @importFrom rlang enquo
-#' @importFrom targets tar_option_set tar_target tar_helper tar_make
+#' @importFrom targets tar_option_set tar_target tar_helper tar_make tar_visnetwork
 #' @export
 
 run_workflow <- function(workers = 2,
                          error = "null",
                          file_path,
-                         filter = NULL
+                         filter = NULL,
+                         plot = TRUE
                          ) {
 
-  data <- Clean <- NULL
+  data <- Clean <- Count_Presences <- Presences <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(
@@ -37,7 +39,13 @@ run_workflow <- function(workers = 2,
       list(
         targets::tar_target(file, command = !!file_path, format = "file"),
         targets::tar_target(data, get_data(file, filter = !!rlang::enquo(filter))),
-        targets::tar_target(Clean, SpeciesPoolR::Clean_Taxa(data$Species))
+        targets::tar_target(Clean, SpeciesPoolR::Clean_Taxa(data$Species)),
+        targets::tar_target(Count_Presences,
+                   count_presences(Clean),
+                   pattern = map(Clean)),
+        targets::tar_target(Presences,
+                            get_presences(Count_Presences),
+                            pattern = map(Count_Presences))
       )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected
@@ -45,5 +53,8 @@ run_workflow <- function(workers = 2,
 
   # Run the workflow
   targets::tar_make()
+  if(plot){
+    targets::tar_visnetwork()
+  }
 }
 

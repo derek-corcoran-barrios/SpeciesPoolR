@@ -13,6 +13,7 @@ Imports:
     crew,
     data.table,
     dplyr,
+    janitor,
     picante,
     purrr,
     readr,
@@ -24,6 +25,7 @@ Imports:
     taxize,
     terra,
     tibble,
+    utils,
     V.PhyloMaker
 Depends: 
     R (>= 2.10)
