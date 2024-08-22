@@ -6,12 +6,12 @@
 \usage{
 GetOccs(
   Species,
-  WriteFile = T,
+  WriteFile = FALSE,
   continent = NULL,
   country = NULL,
   shapefile = NULL,
   limit = 10000,
-  Log = T,
+  Log = FALSE,
   ...
 )
 }

@@ -7,7 +7,7 @@
 get_presences(species, country = NULL, shapefile = NULL)
 }
 \arguments{
-\item{species}{A data.frame or tibble containing a column named \code{species} with the list of species to query.}
+\item{species}{A vector of species to use.}
 
 \item{country}{A two-letter country code (e.g., "DK" for Denmark) to define the area of interest.}
 

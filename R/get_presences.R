@@ -26,7 +26,7 @@
 #' Presences <- GetOccs(Species = c("Abies concolor", "Canis lupus"), WriteFile = FALSE)
 #' }
 
-GetOccs <- function(Species, WriteFile = T, continent = NULL, country = NULL, shapefile = NULL, limit = 10000, Log = T, ...){
+GetOccs <- function(Species, WriteFile = FALSE, continent = NULL, country = NULL, shapefile = NULL, limit = 10000, Log = FALSE, ...){
 
   if (!is.character(Species)) {
     stop("Species argument must be a character vector")
@@ -123,7 +123,7 @@ GetOccs <- function(Species, WriteFile = T, continent = NULL, country = NULL, sh
 #'
 #' This function retrieves occurrence data for a given list of species using the `GetOccs` function. The function is designed to fetch data for species in Denmark (`country = "DK"`) from 1999 to 2023 and return a cleaned data frame with selected columns.
 #'
-#' @param species A data.frame or tibble containing a column named `species` with the list of species to query.
+#' @param species A vector of species to use.
 #' @param shapefile A shapefile (with lat/long coordinates) defining the area of interest.
 #'   The function will create a minimum bounding rectangle around the shapefile to query the
 #'   species occurrences. Default is `NULL`.
@@ -132,6 +132,7 @@ GetOccs <- function(Species, WriteFile = T, continent = NULL, country = NULL, sh
 #' @return A data.frame containing the occurrence data for the specified species, including the columns: `scientificName`, `decimalLatitude`, `decimalLongitude`, `family`, `genus`, and `species`.
 #'
 #' @importFrom dplyr select
+#' @importFrom purrr keep map reduce
 #' @importFrom terra geom minRect vect
 #' @examples
 #' \dontrun{
@@ -141,24 +142,42 @@ GetOccs <- function(Species, WriteFile = T, continent = NULL, country = NULL, sh
 #' @export
 
 get_presences <- function(species, country = NULL, shapefile = NULL){
-
-  scientificName <- decimalLatitude <- decimalLongitude <- family <- genus <- species <- NULL
+  scientificName <- decimalLatitude <- decimalLongitude <- family <- genus <- NULL
+  geometry <- NULL
 
   if(!is.null(shapefile)){
-    geometry <- terra::vect(shapefile) |>
-      terra::minRect() |>
-      terra::geom(wkt = TRUE)
-  } else if(is.null(shapefile)){
-    geometry <- NULL
+    try({
+      geometry <- terra::vect(shapefile) |>
+        terra::minRect() |>
+        terra::geom(wkt = TRUE)
+      print(paste("Geometry created:", geometry))
+    }, silent = TRUE)
+
+    if (is.null(geometry)) {
+      stop("Failed to create geometry from the shapefile. Please check the shapefile.")
+    }
   }
 
-  DF<- GetOccs(Species = unique(as.character(species$species)),
-                             WriteFile = FALSE,
-                             Log = FALSE,
-                             country = country,
-                             limit = 100000,
-                             year='1999,2023',
-                             geometry = geometry)
-  try(DF <- DF[[1]] |> dplyr::select(scientificName, decimalLatitude, decimalLongitude, family, genus, species))
+  # Directly use species without unique() or as.character()
+  species_list <- species
+
+  # Check the type and content of species_list
+
+  if (length(species_list) == 0) {
+    stop("Species list is empty. Please check the input data.")
+  }
+
+  DF <- GetOccs(Species = species_list,
+                WriteFile = FALSE,
+                Log = FALSE,
+                country = country,
+                limit = 100000,
+                year='1999,2024',
+                geometry = geometry)
+
+  try({DF <- DF |>
+    purrr::keep(\(x) !is.null(x)) |>
+    purrr::map(~dplyr::select(.x,scientificName, decimalLatitude, decimalLongitude, family, genus, species)) |>
+    purrr::reduce(dplyr::bind_rows)})
   return(DF)
 }

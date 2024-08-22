@@ -1,16 +1,24 @@
 
+- [1 SpeciesPoolR](#1-speciespoolr)
+- [2 Using SpeciesPoolR Manually](#2-using-speciespoolr-manually)
+  - [2.1 Importing and Downloading Species
+    Presences](#21-importing-and-downloading-species-presences)
+- [3 Running the SpeciesPoolR
+  Workflow](#3-running-the-speciespoolr-workflow)
+  - [3.1 How It Works](#31-how-it-works)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# SpeciesPoolR
+# 1 SpeciesPoolR
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of the `SpeciesPoolR` package is to generate potential species
-pools and their summary metrics in a spatial way, to install the package
-you can do it from github:
+The goal of the SpeciesPoolR package is to generate potential species
+pools and their summary metrics in a spatial way. You can install the
+package directly from GitHub:
 
 ``` r
 #install.packages("remotes")
@@ -23,15 +31,17 @@ No you can load the package
 library(SpeciesPoolR)
 ```
 
-# Using SpeciesPoolR manually
+# 2 Using SpeciesPoolR Manually
 
-## Importing and downloading species presences
+## 2.1 Importing and Downloading Species Presences
 
-If you are going to use each of the functions of the `SpeciesPoolR`
-manually and sequentially the first step would be to read in a species
-list from either a csv or an xlsx file, for that you can use the
-`get_data` function. You can include filtering in a `dplyr` filter style
-in order to subset your dataset in the following way:
+### 2.1.1 Step 1: Reading and Filtering Data
+
+If you are going to use each of the functions of the SpeciesPoolR
+manually and sequentially, the first step would be to read in a species
+list from either a CSV or an XLSX file. You can use the get_data
+function for this. The function allows you to filter your data in a
+dplyr-like style:
 
 ``` r
 f <- system.file("ex/Species_List.csv", package="SpeciesPoolR")
@@ -43,8 +53,9 @@ filtered_data <- get_data(
 )
 ```
 
-This will generate the following dataset that we can use on subsequently
-to count the species presences and download the species presences.
+This will generate a dataset that can be used subsequently to count
+species presences and download species data as seen in table
+<a href="#tab:tablespecies">2.1</a>
 
 | redlist_2010 | Kingdom | Phyllum       | Class         | Order   | Family   | Genus     | Species               |
 |:-------------|:--------|:--------------|:--------------|:--------|:---------|:----------|:----------------------|
@@ -58,17 +69,21 @@ to count the species presences and download the species presences.
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    |
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         |
 
-Species that will be used to generate species pools
+<span id="tab:tablespecies"></span>Table 2.1: Species that will be used
+to generate species pools
 
-After that we do a taxonomic harmonization to ensure that the species we
-use have the names recognized in the GBIF taxonomic backbone:
+### 2.1.2 Step 2: Taxonomic Harmonization
+
+Next, you should perform taxonomic harmonization to ensure that the
+species names you use are recognized by the GBIF taxonomic backbone.
+This can be done using the Clean_Taxa function:
 
 ``` r
 Clean_Species <- SpeciesPoolR::Clean_Taxa(filtered_data$Species)
 ```
 
-This will return a very similar dataframe, but it will ensure that the
-names are recognized by GBIF, this results in the following data.frame
+The resulting data frame, with harmonized species names, is shown in
+table <a href="#tab:cleantable">2.2</a>
 
 | Taxa                  | matched_name2         | confidence | canonicalName         | kingdom | phylum       | class         | order   | family   | genus     | species               | rank    |
 |:----------------------|:----------------------|-----------:|:----------------------|:--------|:-------------|:--------------|:--------|:---------|:----------|:----------------------|:--------|
@@ -81,23 +96,24 @@ names are recognized by GBIF, this results in the following data.frame
 | Lathyrus japonicus    | Lathyrus japonicus    |         99 | Lathyrus japonicus    | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    | SPECIES |
 | Vicia villosa         | Vicia villosa         |         97 | Vicia villosa         | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         | SPECIES |
 
-Taxonomicallty harmonized dataset
+<span id="tab:cleantable"></span>Table 2.2: Taxonomicallty harmonized
+dataset
 
-After that, and specially if you want to calculate rarity it is
-important that you get from gbif the number of presences of each of this
-species in your study area, for that we use the function
-`count_presences` here you can select either by country or use a
-shapefile to limit your search, here is an example of the usage of this
-function for Denmark only, it is very important that the dataframe you
-feed to this function has a column called species.
+### 2.1.3 Step 3: Counting Species Presences
+
+After harmonizing the species names, it’s important to obtain the number
+of occurrences of each species in your study area, especially if you
+plan to calculate rarity. You can do this using the `count_presences`
+function. This function allows you to filter occurrences by country or
+by a shapefile. Below is an example for Denmark:
 
 ``` r
-library(data.table)
 # Assuming Clean_Species is your data frame
 Count_DK <- count_presences(Clean_Species, country = "DK")
 ```
 
-this results in the following table:
+The resulting data frame of species presences in Denmark is shown in
+table <a href="#tab:tableCountDenmark">2.3</a>
 
 ``` r
 knitr::kable(Count_DK, caption = "Counts of presences for the different species within Denmark")
@@ -114,9 +130,11 @@ knitr::kable(Count_DK, caption = "Counts of presences for the different species 
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  3904 |
 | Fabaceae | Vicia     | Vicia villosa         |   243 |
 
-Counts of presences for the different species within Denmark
+<span id="tab:tableCountDenmark"></span>Table 2.3: Counts of presences
+for the different species within Denmark
 
-Or if we used only Aarhus commune:
+Alternatively, you can filter by a specific region using a shapefile.
+For example, to count species presences within Aarhus commune:
 
 ``` r
 shp <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
@@ -124,7 +142,8 @@ shp <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
 Count_Aarhus <- count_presences(Clean_Species, shapefile = shp)
 ```
 
-Which results in the following data.frame
+The resulting data.frame for Aarhus commune is shown int table
+<a href="#tab:tableCountAarhus">2.4</a>
 
 | family   | genus     | species               |   N |
 |:---------|:----------|:----------------------|----:|
@@ -137,4 +156,67 @@ Which results in the following data.frame
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  39 |
 | Fabaceae | Vicia     | Vicia villosa         |  10 |
 
-Counts of presences for the different species within Aarhus commune
+<span id="tab:tableCountAarhus"></span>Table 2.4: Counts of presences
+for the different species within Aarhus commune
+
+Now it is recommended to eliminate species that have no occurrences in
+the area, this is done automatically in the workflow version:
+
+``` r
+library(data.table)
+Count_Aarhus <- Count_Aarhus[N > 0,]
+```
+
+So that then we can retrieve the species presences using the function
+`SpeciesPoolR::get_presences`.
+
+``` r
+Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
+#> [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"
+```
+
+there we end up with 1070 presences for our 7 species.
+
+# 3 Running the SpeciesPoolR Workflow
+
+If you prefer to automate the process and run the `SpeciesPoolR`
+workflow as a pipeline, you can use the `run_workflow` function. This
+function sets up a `targets` workflow that sequentially executes the
+steps for cleaning species data, counting species presences, and
+performing spatial analysis. This approach is especially useful for
+larger datasets or when you want to ensure reproducibility.
+
+To run the workflow, you can use the following code. We’ll use the same
+species filter as before, focusing on the `Plantae` kingdom,
+`Magnoliopsida` class, and `Fabaceae` family. Additionally, we’ll focus
+on the Aarhus commune using a shapefile.
+
+``` r
+shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
+
+run_workflow(
+  file_path = system.file("ex/Species_List.csv", package = "SpeciesPoolR"),
+  filter = quote(Kingdom == "Plantae" & Class == "Magnoliopsida" & Family == "Fabaceae"),
+  shapefile = shp
+)
+```
+
+## 3.1 How It Works
+
+The run_workflow function creates a pipeline that:
+
+1- Reads the data from the specified file path. 2- Filters the data
+using the provided filter expression. 3- Cleans the species names to
+match the GBIF taxonomic backbone. 4- Counts the species presences
+within the specified geographic area (in this case, Aarhus). 5-
+Generates a visual representation of the workflow (if plot = TRUE).
+
+You can monitor the progress of the workflow and visualize the
+dependencies between steps using targets::tar_visnetwork(). The result
+will be similar to running the steps manually but with the added
+benefits of parallel execution and reproducibility.
+
+This automated approach allows you to streamline your analysis and
+ensures that all steps are consistently applied to your data. It also
+makes it easier to rerun the workflow with different parameters or
+datasets.

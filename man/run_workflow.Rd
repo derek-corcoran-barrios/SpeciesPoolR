@@ -9,6 +9,8 @@ run_workflow(
   error = "null",
   file_path,
   filter = NULL,
+  country = NULL,
+  shapefile = NULL,
   plot = TRUE
 )
 }
@@ -21,6 +23,10 @@ run_workflow(
 
 \item{filter}{An optional expression used to filter the resulting \code{data.frame}. This should be an expression
 written as if you were using \code{dplyr::filter()}. The default is NULL, meaning no filtering is applied.}
+
+\item{country}{A two-letter country code to define the area of interest for counting species presences. Default is NULL.}
+
+\item{shapefile}{Path to a shapefile defining the area of interest for counting species presences. Default is NULL.}
 
 \item{plot}{if TRUE (default) it will run the \code{targets::tar_visnetwork()} to plot the workflow}
 }
