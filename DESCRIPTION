@@ -35,6 +35,7 @@ Remotes:
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues
 Suggests: 
+    bookdown,
     knitr,
     openxlsx,
     rmarkdown,
