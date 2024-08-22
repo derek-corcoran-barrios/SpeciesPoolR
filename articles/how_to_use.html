@@ -51,8 +51,9 @@
 
 
 
-
-<div class="row">
+<link href="how_to_use_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="how_to_use_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="how_to_use_files/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="how_to_use_files/vis-9.1.0/vis-network.min.js"></script><script src="how_to_use_files/visNetwork-binding-2.1.2/visNetwork.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>How to use the SpeciesPoolR package</h1>
@@ -64,27 +65,35 @@
 
     
     
-<p>The goal of the <code>SpeciesPoolR</code> package is to generate
-potential species pools and their summary metrics in a spatial way, to
-install the package you can do it from github:</p>
+<div class="section level2">
+<h2 id="speciespoolr">SpeciesPoolR<a class="anchor" aria-label="anchor" href="#speciespoolr"></a>
+</h2>
+<!-- badges: start -->
+<p><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
+<p>The goal of the SpeciesPoolR package is to generate potential species
+pools and their summary metrics in a spatial way. You can install the
+package directly from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"derek-corcoran-barrios/SpeciesPoolR"</span><span class="op">)</span></span></code></pre></div>
 <p>No you can load the package</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR" class="external-link">SpeciesPoolR</a></span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
-<h2 id="using-speciespoolr-manually">Using SpeciesPoolR manually<a class="anchor" aria-label="anchor" href="#using-speciespoolr-manually"></a>
+<h2 id="using-speciespoolr-manually">Using SpeciesPoolR Manually<a class="anchor" aria-label="anchor" href="#using-speciespoolr-manually"></a>
 </h2>
 <div class="section level3">
-<h3 id="importing-and-downloading-species-presences">Importing and downloading species presences<a class="anchor" aria-label="anchor" href="#importing-and-downloading-species-presences"></a>
+<h3 id="importing-and-downloading-species-presences">Importing and Downloading Species Presences<a class="anchor" aria-label="anchor" href="#importing-and-downloading-species-presences"></a>
 </h3>
-<p>If you are going to use each of the functions of the
-<code>SpeciesPoolR</code> manually and sequentially the first step would
-be to read in a species list from either a csv or an xlsx file, for that
-you can use the <code>get_data</code> function. You can include
-filtering in a <code>dplyr</code> filter style in order to subset your
-dataset in the following way:</p>
+<div class="section level4">
+<h4 id="step-1-reading-and-filtering-data">Step 1: Reading and Filtering Data<a class="anchor" aria-label="anchor" href="#step-1-reading-and-filtering-data"></a>
+</h4>
+<p>If you are going to use each of the functions of the SpeciesPoolR
+manually and sequentially, the first step would be to read in a species
+list from either a CSV or an XLSX file. You can use the get_data
+function for this. The function allows you to filter your data in a
+dplyr-like style:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span></span>
@@ -100,9 +109,9 @@ dataset in the following way:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre></div>
-<p>This will generate the following dataset that we can use on
-subsequently to count the species presences and download the species
-presences.</p>
+<p>This will generate a dataset that can be used subsequently to count
+species presences and download species data as seen in table
+@ref(tab:tablespecies)</p>
 <table class="table">
 <caption>Species that will be used to generate species pools</caption>
 <colgroup>
@@ -218,6 +227,422 @@ presences.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level4">
+<h4 id="step-2-taxonomic-harmonization">Step 2: Taxonomic Harmonization<a class="anchor" aria-label="anchor" href="#step-2-taxonomic-harmonization"></a>
+</h4>
+<p>Next, you should perform taxonomic harmonization to ensure that the
+species names you use are recognized by the GBIF taxonomic backbone.
+This can be done using the Clean_Taxa function:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Clean_Species</span> <span class="op">&lt;-</span> <span class="fu">SpeciesPoolR</span><span class="fu">::</span><span class="fu"><a href="../reference/Clean_Taxa.html">Clean_Taxa</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Joining with `by = join_by(Taxa)`</span></span>
+<span><span class="co">#&gt; Joining with `by = join_by(matched_name2)`</span></span></code></pre></div>
+<p>The resulting data frame, with harmonized species names, is shown in
+table @ref(tab:cleantable)</p>
+<table class="table">
+<caption>Taxonomicallty harmonized dataset</caption>
+<colgroup>
+<col width="13%">
+<col width="13%">
+<col width="6%">
+<col width="13%">
+<col width="4%">
+<col width="7%">
+<col width="8%">
+<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="13%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Taxa</th>
+<th align="left">matched_name2</th>
+<th align="right">confidence</th>
+<th align="left">canonicalName</th>
+<th align="left">kingdom</th>
+<th align="left">phylum</th>
+<th align="left">class</th>
+<th align="left">order</th>
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="left">rank</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Vicia sepium</td>
+<td align="left">Vicia sepium</td>
+<td align="right">99</td>
+<td align="left">Vicia sepium</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Genista tinctoria</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">99</td>
+<td align="left">Genista tinctoria</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">99</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sativa</td>
+<td align="left">Vicia sativa</td>
+<td align="right">97</td>
+<td align="left">Vicia sativa</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Lathyrus latifolius</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">98</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">97</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Lathyrus japonicus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">99</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia villosa</td>
+<td align="left">Vicia villosa</td>
+<td align="right">97</td>
+<td align="left">Vicia villosa</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="left">SPECIES</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="step-3-counting-species-presences">Step 3: Counting Species Presences<a class="anchor" aria-label="anchor" href="#step-3-counting-species-presences"></a>
+</h4>
+<p>After harmonizing the species names, it’s important to obtain the
+number of occurrences of each species in your study area, especially if
+you plan to calculate rarity. You can do this using the
+<code>count_presences</code> function. This function allows you to
+filter occurrences by country or by a shapefile. Below is an example for
+Denmark:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Assuming Clean_Species is your data frame</span></span>
+<span><span class="va">Count_DK</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, country <span class="op">=</span> <span class="st">"DK"</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting data frame of species presences in Denmark is shown in
+table @ref(tab:tableCountDenmark)</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Count_DK</span>, caption <span class="op">=</span> <span class="st">"Counts of presences for the different species within Denmark"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Counts of presences for the different species within
+Denmark</caption>
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="right">2897</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">988</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="right">17379</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">684</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">8876</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">3904</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="right">243</td>
+</tr>
+</tbody>
+</table>
+<p>Alternatively, you can filter by a specific region using a shapefile.
+For example, to count species presences within Aarhus commune:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting data.frame for Aarhus commune is shown int table
+@ref(tab:tableCountAarhus)</p>
+<table class="table">
+<caption>Counts of presences for the different species within Aarhus
+commune</caption>
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="right">283</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="right">467</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">153</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+<p>Now it is recommended to eliminate species that have no occurrences
+in the area, this is done automatically in the workflow version:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="va">Count_Aarhus</span><span class="op">[</span><span class="va">N</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></code></pre></div>
+<p>So that then we can retrieve the species presences using the function
+<code><a href="../reference/get_presences.html">SpeciesPoolR::get_presences</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_presences.html">get_presences</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">Count_Aarhus</span><span class="op">$</span><span class="va">species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"</span></span>
+<span><span class="co">#&gt; Starting species 1</span></span>
+<span><span class="co">#&gt; 1 of 7 ready! 2024-08-22 13:35:54.472922</span></span>
+<span><span class="co">#&gt; Starting species 2</span></span>
+<span><span class="co">#&gt; 2 of 7 ready! 2024-08-22 13:35:54.82879</span></span>
+<span><span class="co">#&gt; Starting species 3</span></span>
+<span><span class="co">#&gt; 3 of 7 ready! 2024-08-22 13:35:55.845192</span></span>
+<span><span class="co">#&gt; Starting species 4</span></span>
+<span><span class="co">#&gt; 4 of 7 ready! 2024-08-22 13:35:56.217292</span></span>
+<span><span class="co">#&gt; Starting species 5</span></span>
+<span><span class="co">#&gt; 5 of 7 ready! 2024-08-22 13:35:56.813774</span></span>
+<span><span class="co">#&gt; Starting species 6</span></span>
+<span><span class="co">#&gt; 6 of 7 ready! 2024-08-22 13:35:57.182109</span></span>
+<span><span class="co">#&gt; Starting species 7</span></span>
+<span><span class="co">#&gt; 7 of 7 ready! 2024-08-22 13:35:57.530911</span></span></code></pre></div>
+<p>there we end up with 1070 presences for our 7 species.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="running-the-speciespoolr-workflow">Running the SpeciesPoolR Workflow<a class="anchor" aria-label="anchor" href="#running-the-speciespoolr-workflow"></a>
+</h2>
+<p>If you prefer to automate the process and run the
+<code>SpeciesPoolR</code> workflow as a pipeline, you can use the
+<code>run_workflow</code> function. This function sets up a
+<code>targets</code> workflow that sequentially executes the steps for
+cleaning species data, counting species presences, and performing
+spatial analysis. This approach is especially useful for larger datasets
+or when you want to ensure reproducibility.</p>
+<p>To run the workflow, you can use the following code. We’ll use the
+same species filter as before, focusing on the <code>Plantae</code>
+kingdom, <code>Magnoliopsida</code> class, and <code>Fabaceae</code>
+family. Additionally, we’ll focus on the Aarhus commune using a
+shapefile.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/run_workflow.html">run_workflow</a></span><span class="op">(</span></span>
+<span>  file_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Kingdom</span> <span class="op">==</span> <span class="st">"Plantae"</span> <span class="op">&amp;</span> <span class="va">Class</span> <span class="op">==</span> <span class="st">"Magnoliopsida"</span> <span class="op">&amp;</span> <span class="va">Family</span> <span class="op">==</span> <span class="st">"Fabaceae"</span><span class="op">)</span>,</span>
+<span>  shapefile <span class="op">=</span> <span class="va">shp</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">▶ dispatched target shp</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target file</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target shp [3.663 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target file [3.669 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target data</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target data [0.157 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Clean</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Clean [1.179 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.478 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.531 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.151 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.134 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.106 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.106 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.106 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.107 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Count_Presences</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target More_than_zero</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target More_than_zero [0 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_af64bac105a08467 [0.942 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_c112b37cd15959d6 [1.505 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_310adeccf6b44725 [0.41 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.049 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.362 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.617 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_88937156c1302a12 [0.346 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Presences</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ ended pipeline [10.872 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; </span></span></span></code></pre></div>
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:432.632880098888px;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"name":["Clean","Count_Presences","data","file","More_than_zero","Presences","shp","target_list"],"type":["stem","pattern","stem","stem","stem","pattern","stem","object"],"description":[null,null,null,null,null,null,null,null],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[1.179,1.719,0.157,3.669,0,5.231,3.663,null],"bytes":[583,1676,525,16964,335,17070,25548,null],"branches":[null,8,null,null,null,7,null,null],"label":["Clean","Count_Presences","data","file","More_than_zero","Presences","shp","target_list"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["Clean","Count_Presences","data","file","More_than_zero","Presences","shp","target_list"],"level":[3,4,2,1,5,6,1,0],"shape":["dot","square","dot","dot","dot","square","dot","triangleDown"]},"edges":{"from":["More_than_zero","shp","Clean","shp","file","Count_Presences","data"],"to":["Presences","Presences","Count_Presences","Count_Presences","data","More_than_zero","Clean"],"arrows":["to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern","Object"],"color":["#354823","#899DA4","#899DA4","#899DA4"],"shape":["dot","dot","square","triangleDown"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><div class="section level3">
+<h3 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
+</h3>
+<p>The run_workflow function creates a pipeline that:</p>
+<p>1- Reads the data from the specified file path. 2- Filters the data
+using the provided filter expression. 3- Cleans the species names to
+match the GBIF taxonomic backbone. 4- Counts the species presences
+within the specified geographic area (in this case, Aarhus). 5-
+Generates a visual representation of the workflow (if plot = TRUE).</p>
+<p>You can monitor the progress of the workflow and visualize the
+dependencies between steps using targets::tar_visnetwork(). The result
+will be similar to running the steps manually but with the added
+benefits of parallel execution and reproducibility.</p>
+<p>This automated approach allows you to streamline your analysis and
+ensures that all steps are consistently applied to your data. It also
+makes it easier to rerun the workflow with different parameters or
+datasets.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
