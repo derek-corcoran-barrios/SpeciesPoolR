@@ -127,7 +127,7 @@ If you prefer to automate the process and run the `SpeciesPoolR` workflow as a p
 
 To run the workflow, you can use the following code. We'll use the same species filter as before, focusing on the `Plantae` kingdom, `Magnoliopsida` class, and `Fabaceae` family. Additionally, we'll focus on the Aarhus commune using a shapefile.
 
-```{r run_workflow, eval = F}
+```{r run_workflow}
 shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
 
 run_workflow(
@@ -151,4 +151,9 @@ The run_workflow function creates a pipeline that:
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork(). The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
 
 This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data. It also makes it easier to rerun the workflow with different parameters or datasets.
+
+```{r removefiles, include=FALSE}
+unlink("_targets/", recursive = T, force = T)
+file.remove("_targets.R")
+```
 

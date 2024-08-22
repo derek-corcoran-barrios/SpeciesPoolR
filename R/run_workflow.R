@@ -26,7 +26,7 @@ run_workflow <- function(workers = 2,
                          shapefile = NULL,
                          plot = TRUE) {
 
-  data <- Clean <- Count_Presences <- Presences <- shp <- NULL
+  data <- Clean <- Count_Presences <- Presences <- shp <- More_than_zero <- N <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(

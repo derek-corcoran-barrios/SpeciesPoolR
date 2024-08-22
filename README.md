@@ -199,7 +199,52 @@ run_workflow(
   filter = quote(Kingdom == "Plantae" & Class == "Magnoliopsida" & Family == "Fabaceae"),
   shapefile = shp
 )
+#> ▶ dispatched target shp
+#> ▶ dispatched target file
+#> ● completed target shp [4.844 seconds]
+#> ● completed target file [0 seconds]
+#> ▶ dispatched target data
+#> ● completed target data [10.3 seconds]
+#> ▶ dispatched target Clean
+#> ● completed target Clean [1.12 seconds]
+#> ▶ dispatched branch Count_Presences_33538e94b3809372
+#> ▶ dispatched branch Count_Presences_52d72a5ad405e933
+#> ● completed branch Count_Presences_33538e94b3809372 [0.198 seconds]
+#> ▶ dispatched branch Count_Presences_e70f77d9439a4770
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.096 seconds]
+#> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.021 seconds]
+#> ▶ dispatched branch Count_Presences_69210fc440d13855
+#> ● completed branch Count_Presences_69210fc440d13855 [0.028 seconds]
+#> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.031 seconds]
+#> ▶ dispatched branch Count_Presences_974105e269324d3e
+#> ● completed branch Count_Presences_974105e269324d3e [0.04 seconds]
+#> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.032 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [5.274 seconds]
+#> ● completed pattern Count_Presences
+#> ▶ dispatched target More_than_zero
+#> ● completed target More_than_zero [0.001 seconds]
+#> ▶ dispatched branch Presences_c112b37cd15959d6
+#> ▶ dispatched branch Presences_af64bac105a08467
+#> ● completed branch Presences_af64bac105a08467 [0.486 seconds]
+#> ▶ dispatched branch Presences_daf8d6353bc80f0c
+#> ● completed branch Presences_c112b37cd15959d6 [0.882 seconds]
+#> ▶ dispatched branch Presences_310adeccf6b44725
+#> ● completed branch Presences_310adeccf6b44725 [0.429 seconds]
+#> ▶ dispatched branch Presences_e65f4227e8299cc4
+#> ● completed branch Presences_daf8d6353bc80f0c [0.947 seconds]
+#> ▶ dispatched branch Presences_d4b9dc68293bd5b2
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.575 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch Presences_e65f4227e8299cc4 [0.73 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.335 seconds]
+#> ● completed pattern Presences
+#> ▶ ended pipeline [26.828 seconds]
 ```
+
+<img src="man/figures/README-run_workflow-1.png" width="100%" />
 
 ## 3.1 How It Works
 
