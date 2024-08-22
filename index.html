@@ -56,29 +56,429 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of the <code>SpeciesPoolR</code> package is to generate potential species pools and their summary metrics in a spatial way.</p>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>You can install the development version of SpeciesPoolR from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The goal of the <code>SpeciesPoolR</code> package is to generate potential species pools and their summary metrics in a spatial way, to install the package you can do it from github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"derek-corcoran-barrios/SpeciesPoolR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"derek-corcoran-barrios/SpeciesPoolR"</span><span class="op">)</span></span></code></pre></div>
 <p>No you can load the package</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR" class="external-link">SpeciesPoolR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level1">
+<h1 id="using-speciespoolr-manually">Using SpeciesPoolR manually<a class="anchor" aria-label="anchor" href="#using-speciespoolr-manually"></a>
+</h1>
 <div class="section level2">
-<h2 id="summary-metrics">Summary metrics<a class="anchor" aria-label="anchor" href="#summary-metrics"></a>
+<h2 id="importing-and-downloading-species-presences">Importing and downloading species presences<a class="anchor" aria-label="anchor" href="#importing-and-downloading-species-presences"></a>
 </h2>
-<p>Now that you have in which habitat and where a species can be found, we can generate several summary metrics, we will start by reading in the resulting potential occurrence by species in.</p>
+<p>If you are going to use each of the functions of the <code>SpeciesPoolR</code> manually and sequentially the first step would be to read in a species list from either a csv or an xlsx file, for that you can use the <code>get_data</code> function. You can include filtering in a <code>dplyr</code> filter style in order to subset your dataset in the following way:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_data.html">get_data</a></span><span class="op">(</span></span>
+<span>   file <span class="op">=</span> <span class="va">f</span>,</span>
+<span>   filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">Kingdom</span> <span class="op">==</span> <span class="st">"Plantae"</span> <span class="op">&amp;</span> </span>
+<span>                    <span class="va">Class</span> <span class="op">==</span> <span class="st">"Magnoliopsida"</span> <span class="op">&amp;</span> </span>
+<span>                    <span class="va">Family</span> <span class="op">==</span> <span class="st">"Fabaceae"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This will generate the following dataset that we can use on subsequently to count the species presences and download the species presences.</p>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="8%">
+<col width="14%">
+<col width="14%">
+<col width="8%">
+<col width="9%">
+<col width="10%">
+<col width="21%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">redlist_2010</th>
+<th align="left">Kingdom</th>
+<th align="left">Phyllum</th>
+<th align="left">Class</th>
+<th align="left">Order</th>
+<th align="left">Family</th>
+<th align="left">Genus</th>
+<th align="left">Species</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+</tr>
+<tr class="even">
+<td align="left">LC</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Plantae</td>
+<td align="left">Magnoliophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+</tr>
+</tbody>
+</table>
+<p>Species that will be used to generate species pools</p>
+<p>After that we do a taxonomic harmonization to ensure that the species we use have the names recognized in the GBIF taxonomic backbone:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Clean_Species</span> <span class="op">&lt;-</span> <span class="fu">SpeciesPoolR</span><span class="fu">::</span><span class="fu"><a href="reference/Clean_Taxa.html">Clean_Taxa</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div>
+<p>This will return a very similar dataframe, but it will ensure that the names are recognized by GBIF, this results in the following data.frame</p>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="12%">
+<col width="12%">
+<col width="6%">
+<col width="12%">
+<col width="4%">
+<col width="7%">
+<col width="8%">
+<col width="4%">
+<col width="5%">
+<col width="6%">
+<col width="12%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Taxa</th>
+<th align="left">matched_name2</th>
+<th align="right">confidence</th>
+<th align="left">canonicalName</th>
+<th align="left">kingdom</th>
+<th align="left">phylum</th>
+<th align="left">class</th>
+<th align="left">order</th>
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="left">rank</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Vicia sepium</td>
+<td align="left">Vicia sepium</td>
+<td align="right">99</td>
+<td align="left">Vicia sepium</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Genista tinctoria</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">99</td>
+<td align="left">Genista tinctoria</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">99</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sativa</td>
+<td align="left">Vicia sativa</td>
+<td align="right">97</td>
+<td align="left">Vicia sativa</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Lathyrus latifolius</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">98</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">97</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="odd">
+<td align="left">Lathyrus japonicus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">99</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="left">SPECIES</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia villosa</td>
+<td align="left">Vicia villosa</td>
+<td align="right">97</td>
+<td align="left">Vicia villosa</td>
+<td align="left">Plantae</td>
+<td align="left">Tracheophyta</td>
+<td align="left">Magnoliopsida</td>
+<td align="left">Fabales</td>
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="left">SPECIES</td>
+</tr>
+</tbody>
+</table>
+<p>Taxonomicallty harmonized dataset</p>
+<p>After that, and specially if you want to calculate rarity it is important that you get from gbif the number of presences of each of this species in your study area, for that we use the function <code>count_presences</code> here you can select either by country or use a shapefile to limit your search, here is an example of the usage of this function for Denmark only, it is very important that the dataframe you feed to this function has a column called species.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co"># Assuming Clean_Species is your data frame</span></span>
+<span><span class="va">Count_DK</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, country <span class="op">=</span> <span class="st">"DK"</span><span class="op">)</span></span></code></pre></div>
+<p>this results in the following table:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Count_DK</span>, caption <span class="op">=</span> <span class="st">"Counts of presences for the different species within Denmark"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="right">2897</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">988</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="right">17379</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">684</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">8876</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">3904</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="right">243</td>
+</tr>
+</tbody>
+</table>
+<p>Counts of presences for the different species within Denmark</p>
+<p>Or if we used only Aarhus commune:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span></code></pre></div>
+<p>Which results in the following data.frame</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sepium</td>
+<td align="right">283</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Genista</td>
+<td align="left">Genista tinctoria</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Trifolium</td>
+<td align="left">Trifolium vesiculosum</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia sativa</td>
+<td align="right">467</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus latifolius</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Anthyllis</td>
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">153</td>
+</tr>
+<tr class="odd">
+<td align="left">Fabaceae</td>
+<td align="left">Lathyrus</td>
+<td align="left">Lathyrus japonicus</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">Fabaceae</td>
+<td align="left">Vicia</td>
+<td align="left">Vicia villosa</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+<p>Counts of presences for the different species within Aarhus commune</p>
 </div>
-<div class="section level2">
-<h2 id="read-in-presences-from-a-folder">Read in Presences from a folder<a class="anchor" aria-label="anchor" href="#read-in-presences-from-a-folder"></a>
-</h2>
-<p>The first thing to do is to read in Presences from a folder, with the function <code>GetLandusePresences</code> as seen in the following code</p>
 </div>
-</div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
