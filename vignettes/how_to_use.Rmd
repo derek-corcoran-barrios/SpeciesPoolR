@@ -27,24 +27,27 @@ No you can load the package
 library(SpeciesPoolR)
 ```
 
-# Summary metrics
+# Using SpeciesPoolR manually
 
-Now that you have in which habitat and where a species can be found, we can generate several summary metrics, we will start by reading in the resulting potential occurrence by species in.
+## Importing and downloading species presences
 
-## Read in Presences from a folder
+If you are going to use each of the functions of the `SpeciesPoolR` manually and sequentially the first step would  be to read in a species list from either a csv or an xlsx file, for that you can use the `get_data` function. You can include filtering in a `dplyr` filter style in order to subset your dataset in the following way:
 
-The first thing to do is to read in Presences from a folder, with the function `GetLandusePresences` as seen in the following code
-
-```{r GetLandusePresences, eval = F}
-
-folder <- system.file("ex/", package="SpeciesPoolR")
-Landuse <- "ForestDryPoor"
-presences <- GetLandusePresences(folder, Landuse)
+```{r ReadInData}
+f <- system.file("ex/Species_List.csv", package="SpeciesPoolR")
+filtered_data <- get_data(
+   file = f,
+   filter = quote(Kingdom == "Plantae" & 
+                    Class == "Magnoliopsida" & 
+                    Family == "Fabaceae")
+)
 ```
 
-This is the first 10 lines of the file
+This will generate the following dataset that we can use on subsequently to count the species presences and download the species presences.
 
-```{r Table1, echo=FALSE, eval = F}
-knitr::kable(head(presences))
+```{r tablespecies, echo = F}
+knitr::kable(filtered_data, caption = "Species that will be used to generate species pools")
 ```
+
+
 

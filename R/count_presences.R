@@ -17,7 +17,7 @@
 #'   represents the number of occurrences of each species within the defined area.
 #'
 #' @importFrom terra vect minRect geom
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table rbindlist
 #' @importFrom rgbif occ_count
 #'
 #' @examples
@@ -37,24 +37,37 @@
 #' print(df_shapefile)
 #'
 #' @export
+
 count_presences <- function(species, shapefile = NULL, country = NULL){
-  if(!is.null(shapefile)){
-    geometry <- terra::vect(shapefile) |>
+  # Calculate geometry if a shapefile is provided
+  geometry <- if (!is.null(shapefile)) {
+    terra::vect(shapefile) |>
       terra::minRect() |>
       terra::geom(wkt = TRUE)
-  } else if(is.null(shapefile)){
-    geometry <- NULL
+  } else {
+    NULL
   }
 
-  DF <- data.table::data.table(
-    family = species$family,
-    genus = species$genus,
-    species = species$species,
-    N = rgbif::occ_count(scientificName = species$species,
-                         hasCoordinate = TRUE,
-                         country = country,
-                         hasGeospatialIssue = FALSE,
-                         year='1999,2023',
-                         geometry = geometry))
-  return(DF)
+  # Apply the function row-wise over the species data.frame
+  results_list <- apply(species, 1, function(row) {
+    # Create a data.table for the current species row
+    data.table::data.table(
+      family = row['family'],
+      genus = row['genus'],
+      species = row['species'],
+      N = rgbif::occ_count(
+        scientificName = row['species'],
+        hasCoordinate = TRUE,
+        country = country,
+        hasGeospatialIssue = FALSE,
+        year = '1999,2023',
+        geometry = geometry
+      )
+    )
+  })
+
+  # Combine all results into a single data.table
+  final_result <- data.table::rbindlist(results_list)
+
+  return(final_result)
 }
