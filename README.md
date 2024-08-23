@@ -5,9 +5,12 @@
     Presences](#21-importing-and-downloading-species-presences)
   - [2.2 Creating Spatial Buffers and Habitat
     Filtering](#22-creating-spatial-buffers-and-habitat-filtering)
+  - [2.3 Generating summary biodiversity
+    statistics](#23-generating-summary-biodiversity-statistics)
 - [3 Running the SpeciesPoolR
   Workflow](#3-running-the-speciespoolr-workflow)
   - [3.1 How It Works](#31-how-it-works)
+- [4 References](#4-references)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -237,6 +240,24 @@ in specific land-use types or habitats where the species is likely to
 thrive. This step typically involves using the raster data to mask or
 subset the buffer areas according to the desired habitat criteria.
 
+## 2.3 Generating summary biodiversity statistics
+
+### 2.3.1 Step 1 Generating Phylogenetic diversity metrics
+
+In order to generate Phylogenetic Diversity measures, the first step is
+to generate a phylogenetic tree with the species we have, for that we
+will use the V.Phylomaker package function `phylo.maker`based on the
+megaphylogeny of vascular plants (Jin and Qian 2019; Zanne et al. 2014),
+this means that we can only use this functions in species pools of
+plants.
+
+In this case we use the `generate_tree` from SpeciesPoolR to do so:
+
+``` r
+tree <- generate_tree(Count_Aarhus)
+#> [1] "All species in sp.list are present on tree."
+```
+
 # 3 Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR`
@@ -264,64 +285,64 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target shp [4.897 seconds]
+#> ● completed target Raster [4.523 seconds]
 #> ▶ dispatched target file
+#> ● completed target shp [0 seconds]
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Raster [5.165 seconds]
-#> ● completed target data [0.33 seconds]
+#> ● completed target data [0.357 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.213 seconds]
+#> ● completed target Clean [1.185 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.134 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.149 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.077 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.057 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.265 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.029 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.049 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.031 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.034 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.026 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_69210fc440d13855 [0.085 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.028 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.029 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.034 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.035 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.001 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.443 seconds]
-#> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.076 seconds]
-#> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.717 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.684 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.075 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.313 seconds]
+#> ▶ dispatched branch buffer_0e19b8cb545404d2
+#> ● completed branch buffer_626a53b08dfe709d [0.108 seconds]
+#> ▶ dispatched branch Presences_daf8d6353bc80f0c
+#> ● completed branch buffer_0e19b8cb545404d2 [0.236 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.353 seconds]
-#> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [0.638 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.666 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.204 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.367 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.043 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.278 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.028 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.395 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch Presences_e65f4227e8299cc4 [0.528 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.356 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_cae8301e59fc4e01 [0.035 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.333 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.035 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.039 seconds]
-#> ● completed branch Presences_88937156c1302a12 [0.326 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.028 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.294 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.024 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.032 seconds]
 #> ● completed pattern buffer
-#> ▶ ended pipeline [12.511 seconds]
+#> ▶ ended pipeline [12.674 seconds]
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
@@ -347,3 +368,27 @@ This automated approach allows you to streamline your analysis and
 ensures that all steps are consistently applied to your data. It also
 makes it easier to rerun the workflow with different parameters or
 datasets.
+
+# 4 References
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
+
+<div id="ref-Jin2019" class="csl-entry">
+
+Jin, Yi, and Hong Qian. 2019. “V.PhyloMaker: An r Package That Can
+Generate Very Large Phylogenies for Vascular Plants.” *Ecography* 42:
+1353–59.
+
+</div>
+
+<div id="ref-Zanne2014" class="csl-entry">
+
+Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman,
+Stephen A. Smith, Richard G. FitzJohn, Daniel J. McGlinn, et al. 2014.
+“Three Keys to the Radiation of Angiosperms into Freezing Environments.”
+*American Journal of Botany* 506: 89–92.
+
+</div>
+
+</div>

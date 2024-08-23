@@ -4,6 +4,7 @@ output:
     toc: true
     toc_depth: 2
     fig_caption: true
+bibliography: 'biblio.bib'
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -149,6 +150,19 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 
 After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.
 
+## Generating summary biodiversity statistics
+
+### Step 1 Generating Phylogenetic diversity metrics
+
+In order to generate Phylogenetic Diversity measures, the first step is to generate a phylogenetic tree with the species we have, for that we will use the V.Phylomaker package function `phylo.maker`based on the megaphylogeny of vascular plants [@Jin2019; @Zanne2014], this means that we can only use this functions in species pools of plants.
+
+In this case we use the `generate_tree` from SpeciesPoolR to do so:
+
+```{r treegeneration}
+tree <- generate_tree(Count_Aarhus)
+```
+
+
 # Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR` workflow as a pipeline, you can use the `run_workflow` function. This function sets up a `targets` workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis. This approach is especially useful for larger datasets or when you want to ensure reproducibility.
@@ -189,3 +203,4 @@ unlink("_targets/", recursive = T, force = T)
 file.remove("_targets.R")
 ```
 
+# References
