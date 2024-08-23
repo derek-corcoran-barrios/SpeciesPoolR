@@ -10,6 +10,7 @@ vignette: >
   %\VignetteIndexEntry{How to use the SpeciesPoolR package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: 'biblio.bib'
 ---
 
 
@@ -150,6 +151,18 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 
 After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.
 
+## Generating summary biodiversity statistics
+
+### Step 1 Generating Phylogenetic diversity metrics
+
+In order to generate Phylogenetic Diversity measures, the first step is to generate a phylogenetic tree with the species we have, for that we will use the V.Phylomaker package function `phylo.maker`based on the megaphylogeny of vascular plants [@Jin2019; @Zanne2014], this means that we can only use this functions in species pools of plants.
+
+In this case we use the `generate_tree` from SpeciesPoolR to do so:
+
+```{r treegeneration}
+tree <- generate_tree(Count_Aarhus)
+```
+
 # Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR` workflow as a pipeline, you can use the `run_workflow` function. This function sets up a `targets` workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis. This approach is especially useful for larger datasets or when you want to ensure reproducibility.
@@ -179,7 +192,8 @@ The run_workflow function creates a pipeline that:
 3- Cleans the species names to match the GBIF taxonomic backbone.
 4- Counts the species presences within the specified geographic area (in this case, Aarhus).
 5- Generates a buffer around the species presences within the specified distance, for a template raster.
-6- Generates a visual representation of the workflow (if plot = TRUE).
+6- Generates a phyllogenetic tree for the species in the species list.
+7- Generates a visual representation of the workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork(). The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
 

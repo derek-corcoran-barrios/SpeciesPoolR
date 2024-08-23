@@ -285,64 +285,66 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target Raster [4.523 seconds]
+#> ● completed target shp [4.91 seconds]
 #> ▶ dispatched target file
-#> ● completed target shp [0 seconds]
-#> ● completed target file [0 seconds]
+#> ● completed target file [0.001 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [0.357 seconds]
+#> ● completed target Raster [5.257 seconds]
+#> ● completed target data [0.485 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.185 seconds]
+#> ● completed target Clean [1.279 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.149 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.144 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.057 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.07 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.029 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.261 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
 #> ● completed branch Count_Presences_dea4ef8633a449a1 [0.031 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_69210fc440d13855 [0.026 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.043 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.028 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.04 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.035 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.127 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.036 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.001 seconds]
+#> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_c112b37cd15959d6 [0.684 seconds]
-#> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch Presences_af64bac105a08467 [0.313 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.42 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_626a53b08dfe709d [0.108 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.079 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch buffer_0e19b8cb545404d2 [0.236 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.651 seconds]
+#> ▶ dispatched branch buffer_626a53b08dfe709d
+#> ● completed branch buffer_626a53b08dfe709d [0.108 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_daf8d6353bc80f0c [0.666 seconds]
-#> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch Presences_310adeccf6b44725 [0.367 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.406 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.043 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.709 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_b226446ac3154351 [0.24 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_b226446ac3154351 [0.028 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.278 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.356 seconds]
-#> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.333 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.408 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.035 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.504 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_cae8301e59fc4e01 [0.033 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch buffer_cae8301e59fc4e01 [0.028 seconds]
-#> ● completed branch Presences_88937156c1302a12 [0.294 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.041 seconds]
+#> ▶ dispatched target Phylo_Tree
+#> ● completed branch Presences_88937156c1302a12 [0.348 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.032 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.037 seconds]
 #> ● completed pattern buffer
-#> ▶ ended pipeline [12.674 seconds]
+#> ● completed target Phylo_Tree [28.396 seconds]
+#> ▶ ended pipeline [40.266 seconds]
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
@@ -356,7 +358,8 @@ using the provided filter expression. 3- Cleans the species names to
 match the GBIF taxonomic backbone. 4- Counts the species presences
 within the specified geographic area (in this case, Aarhus). 5-
 Generates a buffer around the species presences within the specified
-distance, for a template raster. 6- Generates a visual representation of
+distance, for a template raster. 6- Generates a phyllogenetic tree for
+the species in the species list. 7- Generates a visual representation of
 the workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the

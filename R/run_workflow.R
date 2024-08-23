@@ -58,7 +58,8 @@ run_workflow <- function(workers = 2,
                                           shapefile = shp),
                             pattern = map(More_than_zero)),
         targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
-                   pattern = map(Presences))
+                   pattern = map(Presences)),
+        targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected
