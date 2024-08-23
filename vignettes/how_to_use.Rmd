@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{How to use the SpeciesPoolR package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: 'biblio.bib'
+bibliography: 'Biblio.bib'
 ---
 
 
