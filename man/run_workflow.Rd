@@ -8,6 +8,8 @@ run_workflow(
   workers = 2,
   error = "null",
   file_path,
+  rastertemp,
+  dist = 500,
   filter = NULL,
   country = NULL,
   shapefile = NULL,
@@ -20,6 +22,10 @@ run_workflow(
 \item{error}{Handling for errors in outdated targets. Default is "null".}
 
 \item{file_path}{Path to the Excel or csv file containing the data.}
+
+\item{rastertemp}{A file path to the raster file that will be used as a template for rasterizing the buffers.}
+
+\item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
 
 \item{filter}{An optional expression used to filter the resulting \code{data.frame}. This should be an expression
 written as if you were using \code{dplyr::filter()}. The default is NULL, meaning no filtering is applied.}
