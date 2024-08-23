@@ -11,6 +11,8 @@
 #' written as if you were using `dplyr::filter()`. The default is NULL, meaning no filtering is applied.
 #' @param country A two-letter country code to define the area of interest for counting species presences. Default is NULL.
 #' @param shapefile Path to a shapefile defining the area of interest for counting species presences. Default is NULL.
+#' @param rastertemp A file path to the raster file that will be used as a template for rasterizing the buffers.
+#' @param dist A numeric value specifying the buffer distance in meters. Default is 500 meters.
 #' @param plot if TRUE (default) it will run the `targets::tar_visnetwork()` to plot the workflow
 #' @return Executes the `targets` pipeline.
 #' @importFrom crew crew_controller_local
@@ -21,6 +23,8 @@
 run_workflow <- function(workers = 2,
                          error = "null",
                          file_path,
+                         rastertemp,
+                         dist = 500,
                          filter = NULL,
                          country = NULL,
                          shapefile = NULL,
@@ -39,10 +43,11 @@ run_workflow <- function(workers = 2,
         error = !!error
       )
 
-      target_list <- list(
+      list(
         targets::tar_target(file, command = !!file_path, format = "file"),
         targets::tar_target(data, get_data(file, filter = !!rlang::enquo(filter))),
         targets::tar_target(shp, command = !!shapefile, format = "file"),
+        targets::tar_target(Raster, command = !!rastertemp, format = "file"),
         targets::tar_target(Clean, SpeciesPoolR::Clean_Taxa(data$Species)),
         targets::tar_target(Count_Presences,
                             count_presences(Clean, country = !!country, shapefile = shp),
@@ -51,7 +56,9 @@ run_workflow <- function(workers = 2,
         targets::tar_target(Presences,
                             get_presences(More_than_zero$species, country = !!country,
                                           shapefile = shp),
-                            pattern = map(More_than_zero))
+                            pattern = map(More_than_zero)),
+        targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
+                   pattern = map(Presences))
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected

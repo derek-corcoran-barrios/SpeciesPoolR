@@ -3,6 +3,8 @@
 - [2 Using SpeciesPoolR Manually](#2-using-speciespoolr-manually)
   - [2.1 Importing and Downloading Species
     Presences](#21-importing-and-downloading-species-presences)
+  - [2.2 Creating Spatial Buffers and Habitat
+    Filtering](#22-creating-spatial-buffers-and-habitat-filtering)
 - [3 Running the SpeciesPoolR
   Workflow](#3-running-the-speciespoolr-workflow)
   - [3.1 How It Works](#31-how-it-works)
@@ -177,6 +179,64 @@ Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
 
 there we end up with 1070 presences for our 7 species.
 
+## 2.2 Creating Spatial Buffers and Habitat Filtering
+
+### 2.2.1 Step 1 Creating Buffers Around Species Presences
+
+Once you have obtained the species presences within your area of
+interest, the next step is to create spatial buffers around these
+occurrences. These buffers simulate the potential dispersal range of
+each species. By doing so, you can assess the possible areas where each
+species could establish itself, considering a given dispersal distance.
+
+To create these buffers, you’ll need a raster file that serves as a
+template for rasterizing the buffers. You’ll also specify the distance
+(in meters) that represents the dispersal range of the species.
+
+``` r
+Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+
+buffer500 <- make_buffer_rasterized(Presences, file = Raster, dist = 500)
+```
+
+In the example above, the `make_buffer_rasterized` function creates a
+500-meter buffer around each occurrence point of the species in the
+Presences dataset. The function uses the provided raster file as a
+template to rasterize the buffers.
+
+The resulting data frame, `buffer500`, contains information on which
+raster cells are covered by the buffer for each species. The first 10
+observations of this data frame are shown in Table
+<a href="#tab:showbuffer500">2.5</a>.
+
+| cell | species      |
+|-----:|:-------------|
+|   26 | Vicia sepium |
+|   27 | Vicia sepium |
+|   28 | Vicia sepium |
+|   29 | Vicia sepium |
+|   30 | Vicia sepium |
+|  161 | Vicia sepium |
+|  162 | Vicia sepium |
+|  163 | Vicia sepium |
+|  164 | Vicia sepium |
+|  165 | Vicia sepium |
+
+<span id="tab:showbuffer500"></span>Table 2.5: Raster cells within the
+500-meter buffer of each species
+
+This table provides a detailed view of how the buffer overlaps with the
+raster cells, listing each cell and the corresponding species present
+within that buffer.
+
+### 2.2.2 Step 2: Habitat Filtering
+
+After creating the buffers, you may want to filter the areas further
+based on habitat suitability. For instance, you might only be interested
+in specific land-use types or habitats where the species is likely to
+thrive. This step typically involves using the raster data to mask or
+subset the buffer areas according to the desired habitat criteria.
+
 # 3 Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR`
@@ -193,55 +253,75 @@ on the Aarhus commune using a shapefile.
 
 ``` r
 shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
+Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
 
 run_workflow(
   file_path = system.file("ex/Species_List.csv", package = "SpeciesPoolR"),
   filter = quote(Kingdom == "Plantae" & Class == "Magnoliopsida" & Family == "Fabaceae"),
-  shapefile = shp
+  shapefile = shp,
+  dist = 500,
+  rastertemp = Raster
 )
+#> ▶ dispatched target Raster
 #> ▶ dispatched target shp
+#> ● completed target shp [4.897 seconds]
 #> ▶ dispatched target file
-#> ● completed target shp [4.844 seconds]
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [10.3 seconds]
+#> ● completed target Raster [5.165 seconds]
+#> ● completed target data [0.33 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.12 seconds]
+#> ● completed target Clean [1.213 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.198 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.134 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.096 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.077 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.021 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.265 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_69210fc440d13855 [0.028 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.049 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.031 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.034 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.04 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.085 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.032 seconds]
-#> ● completed branch Count_Presences_52d72a5ad405e933 [5.274 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.029 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.034 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.001 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.486 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.443 seconds]
+#> ▶ dispatched branch buffer_0e19b8cb545404d2
+#> ● completed branch buffer_0e19b8cb545404d2 [0.076 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.882 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.717 seconds]
+#> ▶ dispatched branch buffer_626a53b08dfe709d
+#> ● completed branch buffer_626a53b08dfe709d [0.075 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.429 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.353 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch Presences_daf8d6353bc80f0c [0.638 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_b226446ac3154351 [0.204 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_daf8d6353bc80f0c [0.947 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.278 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.575 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.395 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch Presences_e65f4227e8299cc4 [0.528 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_cae8301e59fc4e01 [0.035 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_e65f4227e8299cc4 [0.73 seconds]
-#> ● completed branch Presences_88937156c1302a12 [0.335 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.039 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.326 seconds]
 #> ● completed pattern Presences
-#> ▶ ended pipeline [26.828 seconds]
+#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.024 seconds]
+#> ● completed pattern buffer
+#> ▶ ended pipeline [12.511 seconds]
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
@@ -254,7 +334,9 @@ The run_workflow function creates a pipeline that:
 using the provided filter expression. 3- Cleans the species names to
 match the GBIF taxonomic backbone. 4- Counts the species presences
 within the specified geographic area (in this case, Aarhus). 5-
-Generates a visual representation of the workflow (if plot = TRUE).
+Generates a buffer around the species presences within the specified
+distance, for a template raster. 6- Generates a visual representation of
+the workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the
 dependencies between steps using targets::tar_visnetwork(). The result
