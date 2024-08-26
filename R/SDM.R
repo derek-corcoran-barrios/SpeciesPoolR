@@ -138,6 +138,7 @@ ModelSpecies <- function(DF) {
     )
 
     Preds <- data.frame(Landuse = unique(All$Landuse), Pred = 0)
+    Landuse_matrix <- model.matrix(~ Landuse - 1, data = Preds)
 
     if (!is.null(Mod)) {
       Preds$Pred <- tryCatch(
@@ -200,10 +201,10 @@ ModelAndPredictFunc <- function(DF, file) {
     if (nrow(species_data) > 0) {
       tryCatch({
         # Sample land-use data for presence points
-        Pres <- SampleLanduse(DF = species_data, file = file, type = "presence")
+        Pres <- SampleLanduse(DF = species_data, file = file, type = "pres")
 
         # Sample land-use data for background points
-        BG <- SampleLanduse(DF = species_data, file = file, type = "background")
+        BG <- SampleLanduse(DF = species_data, file = file, type = "bg")
 
         # Combine presence and background data
         Both <- dplyr::bind_rows(Pres, BG)

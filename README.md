@@ -186,15 +186,15 @@ there we end up with 1073 presences for our 7 species.
 
 ### 2.2.1 Step 1 Creating Buffers Around Species Presences
 
-Once you have obtained the species presences within your area of
+Once you have identified the species presences within your area of
 interest, the next step is to create spatial buffers around these
-occurrences. These buffers simulate the potential dispersal range of
-each species. By doing so, you can assess the possible areas where each
-species could establish itself, considering a given dispersal distance.
+occurrences. These buffers represent the potential dispersal range of
+each species, helping to assess areas where the species might establish
+itself given a specified dispersal distance.
 
-To create these buffers, you’ll need a raster file that serves as a
-template for rasterizing the buffers. You’ll also specify the distance
-(in meters) that represents the dispersal range of the species.
+To create these buffers, you’ll use a raster file as a template to
+rasterize the buffers and specify the distance (in meters) representing
+the species’ dispersal range.
 
 ``` r
 Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
@@ -202,15 +202,17 @@ Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
 buffer500 <- make_buffer_rasterized(Presences, file = Raster, dist = 500)
 ```
 
-In the example above, the `make_buffer_rasterized` function creates a
-500-meter buffer around each occurrence point of the species in the
-Presences dataset. The function uses the provided raster file as a
-template to rasterize the buffers.
+In this example, the make_buffer_rasterized function generates a
+500-meter buffer around each occurrence point in the Presences dataset.
+The function utilizes the provided raster file as a template for
+rasterizing these buffers.
 
-The resulting data frame, `buffer500`, contains information on which
-raster cells are covered by the buffer for each species. The first 10
-observations of this data frame are shown in Table
-<a href="#tab:showbuffer500">2.5</a>.
+The resulting buffer500 data frame indicates which raster cells are
+covered by the buffer for each species. Table
+<a href="#tab:showbuffer500">2.5</a> displays the first 10 observations
+of this data frame, providing a detailed view of the buffer’s overlap
+with raster cells, listing each cell and the corresponding species
+within that buffer.
 
 | cell | species      |
 |-----:|:-------------|
@@ -234,47 +236,87 @@ within that buffer.
 
 ### 2.2.2 Step 2: Habitat Filtering
 
-After creating the buffers, you may want to filter the areas further
-based on habitat suitability. For instance, you might only be interested
-in specific land-use types or habitats where the species is likely to
-thrive. This step typically involves using the raster data to mask or
+After creating the buffers, the next logical step is to filter these
+areas based on habitat suitability. This allows you to focus on specific
+land-use types or habitats where the species is more likely to thrive.
+Habitat filtering typically involves using raster data to refine or
 subset the buffer areas according to the desired habitat criteria.
 
-For that we will use the `ModelAndPredictFunc` which will take the data
-frame of presences obtained through the `get_presences` and modeling
-through the landuse raster that we have as an example in the dataset:
+To achieve this, you’ll use the `ModelAndPredictFunc`, which takes the
+presence data frame (e.g., Presences) obtained through the get_presences
+function and the land-use raster. This comprehensive function
+encompasses several critical steps:
+
+1- *Grouping Data by Species*: The presence data is grouped by species
+using `group_split`, ensuring that each species is modeled individually.
+
+2- *Sampling Land-Use Data*: For each species, land-use data is sampled
+at the presence points using the SampleLanduse function.
+
+3- *Sampling Background Data*: Background points are also sampled from
+the same land-use raster, providing a contrast to the presence data.
+
+4- *Modeling Habitat Suitability*: The presence and background data are
+combined and passed to the `ModelSpecies` function. This function fits a
+MaxEnt model to predict habitat suitability across the different
+land-use types.
+
+5- *Predicting Suitability*: The fitted model is then used to predict
+habitat suitability for each species across all available land-use
+types.
 
 ``` r
 Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found 
-#> An error occurred: object 'Data' not found
 ```
 
-Here we see the first 9 observations of the dataset in table
-<a href="#tab:tablespeciespred"><strong>??</strong></a>, where we see
-the spacial suitability of each species on each landuse
+The resulting Habitats data frame contains continuous suitability
+predictions for each species across various land-use types. Table
+<a href="#tab:tablespeciespred">2.6</a> shows the first 9 observations,
+illustrating the predicted habitat suitability scores for the first
+species in each land-use type.
 
 ``` r
-knitr::kable(Habitats[10:19,])
+knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.")
 ```
 
-|     | Pred | Landuse       | species            |
-|-----|-----:|:--------------|:-------------------|
-| 10  |    0 | ForestDryRich | Genista tinctoria  |
-| 11  |    0 | ForestDryPoor | Genista tinctoria  |
-| 12  |    0 | ForestWetRich | Genista tinctoria  |
-| 13  |    0 | OpenDryPoor   | Genista tinctoria  |
-| 14  |    0 | ForestWetPoor | Genista tinctoria  |
-| 15  |    0 | OpenDryRich   | Genista tinctoria  |
-| 16  |    0 | OpenWetPoor   | Genista tinctoria  |
-| 17  |    0 | Exclude       | Genista tinctoria  |
-| 18  |    0 | OpenWetRich   | Genista tinctoria  |
-| 19  |    0 | ForestDryRich | Lathyrus japonicus |
+| Landuse       |      Pred | species              |
+|:--------------|----------:|:---------------------|
+| OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
+| OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
+| ForestWetRich | 0.6864141 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6864141 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6864141 | Anthyllis vulneraria |
+| Exclude       | 0.5152447 | Anthyllis vulneraria |
+| ForestDryRich | 0.3834924 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2205493 | Anthyllis vulneraria |
+| Exclude       | 0.6335459 | Genista tinctoria    |
+
+<span id="tab:tablespeciespred"></span>Table 2.6: Predicted habitat
+suitability scores across various land-use types for the first species.
+The values represent continuous predictions, indicating the relative
+likelihood of species presence in each land-use category.
+
+### 2.2.3 Step 3: Generating Habitat Suitability Thresholds
+
+While continuous predictions provide a detailed picture of habitat
+suitability, it is often useful to classify these predictions into
+binary suitability thresholds. Thresholds can help determine areas where
+species presence is more likely or unlikely based on habitat
+preferences.
+
+The create_thresholds function facilitates this by generating thresholds
+based on the modeled land-use preferences, using the 90th, 95th, and
+99th percentiles of the predicted suitability values. These thresholds
+represent the commission rates, helping to define the probability cutoff
+above which a land-use type is considered suitable for a species.
+
+Here’s how you can generate these thresholds for the species in your
+dataset:
+
+This step produces a data frame containing the thresholds for each
+species, which can then be used to classify habitat suitability into
+binary categories, helping you to identify core habitats or areas of
+higher conservation value.
 
 ## 2.3 Generating summary biodiversity statistics
 
@@ -321,66 +363,66 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target Raster [7.369 seconds]
+#> ● completed target Raster [4.645 seconds]
 #> ▶ dispatched target file
 #> ● completed target shp [0 seconds]
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [10.367 seconds]
+#> ● completed target data [0.367 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [9.315 seconds]
+#> ● completed target Clean [1.185 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.205 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.119 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.121 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.055 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.356 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.034 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.045 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.028 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.041 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.033 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.026 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_69210fc440d13855 [0.145 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.032 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.027 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.551 seconds]
-#> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.117 seconds]
-#> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.966 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.677 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.134 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.321 seconds]
+#> ▶ dispatched branch buffer_0e19b8cb545404d2
+#> ● completed branch buffer_626a53b08dfe709d [0.082 seconds]
+#> ▶ dispatched branch Presences_daf8d6353bc80f0c
+#> ● completed branch buffer_0e19b8cb545404d2 [0.191 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.508 seconds]
-#> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [0.941 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.75 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.372 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.377 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.058 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.403 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.037 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.49 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.045 seconds]
-#> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_e65f4227e8299cc4 [0.637 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.595 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.05 seconds]
-#> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [0.374 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.355 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_cae8301e59fc4e01 [0.042 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch Presences_88937156c1302a12 [0.336 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.051 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.035 seconds]
+#> ▶ dispatched target Phylo_Tree
+#> ● completed branch buffer_0a8436ee3d4f2644 [5.188 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [47.153 seconds]
-#> ▶ ended pipeline [1.352 minutes]
+#> ● completed target Phylo_Tree [30.337 seconds]
+#> ▶ ended pipeline [43.58 seconds]
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />

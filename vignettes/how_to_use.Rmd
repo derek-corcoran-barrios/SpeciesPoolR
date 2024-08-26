@@ -127,9 +127,9 @@ there we end up with `r nrow(Presences)` presences for our `r nrow(Count_Aarhus)
 
 ### Step 1 Creating Buffers Around Species Presences
 
-Once you have obtained the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers simulate the potential dispersal range of each species. By doing so, you can assess the possible areas where each species could establish itself, considering a given dispersal distance.
+Once you have identified the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers represent the potential dispersal range of each species, helping to assess areas where the species might establish itself given a specified dispersal distance.
 
-To create these buffers, you'll need a raster file that serves as a template for rasterizing the buffers. You'll also specify the distance (in meters) that represents the dispersal range of the species.
+To create these buffers, you'll use a raster file as a template to rasterize the buffers and specify the distance (in meters) representing the species' dispersal range.
 
 ```{r buffer500}
 Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
@@ -137,9 +137,9 @@ Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
 buffer500 <- make_buffer_rasterized(Presences, file = Raster, dist = 500)
 ```
 
-In the example above, the `make_buffer_rasterized` function creates a 500-meter buffer around each occurrence point of the species in the Presences dataset. The function uses the provided raster file as a template to rasterize the buffers.
+In this example, the make_buffer_rasterized function generates a 500-meter buffer around each occurrence point in the Presences dataset. The function utilizes the provided raster file as a template for rasterizing these buffers.
 
-The resulting data frame, `buffer500`, contains information on which raster cells are covered by the buffer for each species. The first 10 observations of this data frame are shown in Table \@ref(tab:showbuffer500).
+The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species. Table \@ref(tab:showbuffer500) displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.
 
 ```{r showbuffer500, echo=FALSE}
 knitr::kable(head(buffer500, 10), caption = "Raster cells within the 500-meter buffer of each species")
@@ -149,13 +149,33 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 
 ### Step 2: Habitat Filtering
 
-After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.
+After creating the buffers, the next logical step is to filter these areas based on habitat suitability. This allows you to focus on specific land-use types or habitats where the species is more likely to thrive. Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.
 
-For that we will use the `ModelAndPredictFunc` which will take the data frame of presences obtained through the `get_presences` and modeling through the landuse raster that we have as an example in the dataset:
+To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster. This comprehensive function encompasses several critical steps:
+
+1- *Grouping Data by Species*: The presence data is grouped by species using `group_split`, ensuring that each species is modeled individually.
+
+2- *Sampling Land-Use Data*: For each species, land-use data is sampled at the presence points using the SampleLanduse function.
+
+3- *Sampling Background Data*: Background points are also sampled from the same land-use raster, providing a contrast to the presence data.
+
+4- *Modeling Habitat Suitability*: The presence and background data are combined and passed to the `ModelSpecies` function. This function fits a MaxEnt model to predict habitat suitability across the different land-use types.
+
+5- *Predicting Suitability*: The fitted model is then used to predict habitat suitability for each species across all available land-use types.
 
 ```{r habitatfiltering}
 Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
 ```
+
+The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types. Table \@ref(tab:tablespeciespred) shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.
+
+```{r tablespeciespred}
+knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.")
+```
+
+### Step 3: Generating Habitat Suitability Thresholds
+
+While continuous predictions provide a detailed picture of habitat
 
 
 ## Generating summary biodiversity statistics
