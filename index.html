@@ -521,14 +521,14 @@
 <div class="section level3">
 <h3 id="id_221-step-1-creating-buffers-around-species-presences">2.2.1 Step 1 Creating Buffers Around Species Presences<a class="anchor" aria-label="anchor" href="#id_221-step-1-creating-buffers-around-species-presences"></a>
 </h3>
-<p>Once you have obtained the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers simulate the potential dispersal range of each species. By doing so, you can assess the possible areas where each species could establish itself, considering a given dispersal distance.</p>
-<p>To create these buffers, you’ll need a raster file that serves as a template for rasterizing the buffers. You’ll also specify the distance (in meters) that represents the dispersal range of the species.</p>
+<p>Once you have identified the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers represent the potential dispersal range of each species, helping to assess areas where the species might establish itself given a specified dispersal distance.</p>
+<p>To create these buffers, you’ll use a raster file as a template to rasterize the buffers and specify the distance (in meters) representing the species’ dispersal range.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">buffer500</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_buffer_rasterized.html">make_buffer_rasterized</a></span><span class="op">(</span><span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span>, dist <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
-<p>In the example above, the <code>make_buffer_rasterized</code> function creates a 500-meter buffer around each occurrence point of the species in the Presences dataset. The function uses the provided raster file as a template to rasterize the buffers.</p>
-<p>The resulting data frame, <code>buffer500</code>, contains information on which raster cells are covered by the buffer for each species. The first 10 observations of this data frame are shown in Table <a href="#tab:showbuffer500">2.5</a>.</p>
+<p>In this example, the make_buffer_rasterized function generates a 500-meter buffer around each occurrence point in the Presences dataset. The function utilizes the provided raster file as a template for rasterizing these buffers.</p>
+<p>The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species. Table <a href="#tab:showbuffer500">2.5</a> displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="right">cell</th>
@@ -583,90 +583,81 @@
 <div class="section level3">
 <h3 id="id_222-step-2-habitat-filtering">2.2.2 Step 2: Habitat Filtering<a class="anchor" aria-label="anchor" href="#id_222-step-2-habitat-filtering"></a>
 </h3>
-<p>After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.</p>
-<p>For that we will use the <code>ModelAndPredictFunc</code> which will take the data frame of presences obtained through the <code>get_presences</code> and modeling through the landuse raster that we have as an example in the dataset:</p>
+<p>After creating the buffers, the next logical step is to filter these areas based on habitat suitability. This allows you to focus on specific land-use types or habitats where the species is more likely to thrive. Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.</p>
+<p>To achieve this, you’ll use the <code>ModelAndPredictFunc</code>, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster. This comprehensive function encompasses several critical steps:</p>
+<p>1- <em>Grouping Data by Species</em>: The presence data is grouped by species using <code>group_split</code>, ensuring that each species is modeled individually.</p>
+<p>2- <em>Sampling Land-Use Data</em>: For each species, land-use data is sampled at the presence points using the SampleLanduse function.</p>
+<p>3- <em>Sampling Background Data</em>: Background points are also sampled from the same land-use raster, providing a contrast to the presence data.</p>
+<p>4- <em>Modeling Habitat Suitability</em>: The presence and background data are combined and passed to the <code>ModelSpecies</code> function. This function fits a MaxEnt model to predict habitat suitability across the different land-use types.</p>
+<p>5- <em>Predicting Suitability</em>: The fitted model is then used to predict habitat suitability for each species across all available land-use types.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Habitats</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ModelAndPredictFunc.html">ModelAndPredictFunc</a></span><span class="op">(</span>DF <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found </span></span>
-<span><span class="co">#&gt; An error occurred: object 'Data' not found</span></span></code></pre></div>
-<p>Here we see the first 9 observations of the dataset in table <a href="#tab:tablespeciespred"><strong>??</strong></a>, where we see the spacial suitability of each species on each landuse</p>
+<code class="sourceCode R"><span><span class="va">Habitats</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ModelAndPredictFunc.html">ModelAndPredictFunc</a></span><span class="op">(</span>DF <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types. Table <a href="#tab:tablespeciespred">2.6</a> shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Habitats</span><span class="op">[</span><span class="fl">10</span><span class="op">:</span><span class="fl">19</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Habitats</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>,<span class="op">]</span>, caption <span class="op">=</span> <span class="st">"Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category."</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th></th>
-<th align="right">Pred</th>
 <th align="left">Landuse</th>
+<th align="right">Pred</th>
 <th align="left">species</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>10</td>
-<td align="right">0</td>
-<td align="left">ForestDryRich</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="even">
-<td>11</td>
-<td align="right">0</td>
-<td align="left">ForestDryPoor</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="odd">
-<td>12</td>
-<td align="right">0</td>
-<td align="left">ForestWetRich</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="even">
-<td>13</td>
-<td align="right">0</td>
-<td align="left">OpenDryPoor</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="odd">
-<td>14</td>
-<td align="right">0</td>
-<td align="left">ForestWetPoor</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="even">
-<td>15</td>
-<td align="right">0</td>
 <td align="left">OpenDryRich</td>
-<td align="left">Genista tinctoria</td>
-</tr>
-<tr class="odd">
-<td>16</td>
-<td align="right">0</td>
-<td align="left">OpenWetPoor</td>
-<td align="left">Genista tinctoria</td>
+<td align="right">1.0000000</td>
+<td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
-<td>17</td>
-<td align="right">0</td>
-<td align="left">Exclude</td>
-<td align="left">Genista tinctoria</td>
+<td align="left">OpenDryPoor</td>
+<td align="right">1.0000000</td>
+<td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
-<td>18</td>
-<td align="right">0</td>
+<td align="left">ForestWetRich</td>
+<td align="right">0.6864141</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="even">
 <td align="left">OpenWetRich</td>
-<td align="left">Genista tinctoria</td>
+<td align="right">0.6864141</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="odd">
+<td align="left">OpenWetPoor</td>
+<td align="right">0.6864141</td>
+<td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
-<td>19</td>
-<td align="right">0</td>
+<td align="left">Exclude</td>
+<td align="right">0.5152447</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="odd">
 <td align="left">ForestDryRich</td>
-<td align="left">Lathyrus japonicus</td>
+<td align="right">0.3834924</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="even">
+<td align="left">ForestDryPoor</td>
+<td align="right">0.2205493</td>
+<td align="left">Anthyllis vulneraria</td>
+</tr>
+<tr class="odd">
+<td align="left">Exclude</td>
+<td align="right">0.6335459</td>
+<td align="left">Genista tinctoria</td>
 </tr>
 </tbody>
 </table>
+<p><span id="tab:tablespeciespred"></span>Table 2.6: Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.</p>
+</div>
+<div class="section level3">
+<h3 id="id_223-step-3-generating-habitat-suitability-thresholds">2.2.3 Step 3: Generating Habitat Suitability Thresholds<a class="anchor" aria-label="anchor" href="#id_223-step-3-generating-habitat-suitability-thresholds"></a>
+</h3>
+<p>While continuous predictions provide a detailed picture of habitat suitability, it is often useful to classify these predictions into binary suitability thresholds. Thresholds can help determine areas where species presence is more likely or unlikely based on habitat preferences.</p>
+<p>The create_thresholds function facilitates this by generating thresholds based on the modeled land-use preferences, using the 90th, 95th, and 99th percentiles of the predicted suitability values. These thresholds represent the commission rates, helping to define the probability cutoff above which a land-use type is considered suitable for a species.</p>
+<p>Here’s how you can generate these thresholds for the species in your dataset:</p>
+<p>This step produces a data frame containing the thresholds for each species, which can then be used to classify habitat suitability into binary categories, helping you to identify core habitats or areas of higher conservation value.</p>
 </div>
 </div>
 <div class="section level2">
@@ -701,66 +692,66 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Raster</span></span>
 <span><span class="co">#&gt; ▶ dispatched target shp</span></span>
-<span><span class="co">#&gt; ● completed target Raster [7.369 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Raster [4.645 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target file</span></span>
 <span><span class="co">#&gt; ● completed target shp [0 seconds]</span></span>
 <span><span class="co">#&gt; ● completed target file [0 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target data</span></span>
-<span><span class="co">#&gt; ● completed target data [10.367 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target data [0.367 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Clean</span></span>
-<span><span class="co">#&gt; ● completed target Clean [9.315 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Clean [1.185 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.205 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.119 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.121 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.055 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.356 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.034 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.045 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.028 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.041 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.033 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.026 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.145 seconds]</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.032 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.027 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Count_Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched target More_than_zero</span></span>
 <span><span class="co">#&gt; ● completed target More_than_zero [0.002 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [0.551 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.117 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [0.966 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [0.677 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.134 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [0.321 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.082 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.191 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [0.508 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [0.941 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [0.75 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.372 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [0.377 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.058 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.403 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.037 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.49 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.045 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.637 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.595 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.05 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched target Phylo_Tree</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.374 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.355 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.042 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.336 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.051 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.035 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched target Phylo_Tree</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [5.188 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern buffer</span></span>
-<span><span class="co">#&gt; ● completed target Phylo_Tree [47.153 seconds]</span></span>
-<span><span class="co">#&gt; ▶ ended pipeline [1.352 minutes]</span></span></code></pre></div>
+<span><span class="co">#&gt; ● completed target Phylo_Tree [30.337 seconds]</span></span>
+<span><span class="co">#&gt; ▶ ended pipeline [43.58 seconds]</span></span></code></pre></div>
 <p><img src="reference/figures/README-run_workflow-1.png" width="100%"></p>
 <div class="section level2">
 <h2 id="id_31-how-it-works">3.1 How It Works<a class="anchor" aria-label="anchor" href="#id_31-how-it-works"></a>
