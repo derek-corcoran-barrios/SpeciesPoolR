@@ -14,6 +14,7 @@ Imports:
     data.table,
     dplyr,
     janitor,
+    maxnet,
     picante,
     purrr,
     readr,

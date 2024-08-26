@@ -150,6 +150,19 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 
 After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.
 
+For that we will use the `ModelAndPredictFunc` which will take the data frame of presences obtained through the `get_presences` and modeling through the landuse raster that we have as an example in the dataset:
+
+```{r habitatfiltering}
+Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
+```
+
+Here we see the first 9 observations of the dataset in table \@ref(tab:tablespeciespred), where we see the spacial suitability of each species on each landuse
+
+```{r tablespeciespred}
+knitr::kable(Habitats[10:19,])
+```
+
+
 ## Generating summary biodiversity statistics
 
 ### Step 1 Generating Phylogenetic diversity metrics

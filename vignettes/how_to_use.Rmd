@@ -115,7 +115,7 @@ library(data.table)
 Count_Aarhus <- Count_Aarhus[N > 0,]
 ```
 
-So that then we can retrieve the species presences using the function `SpeciesPoolR::get_presences`.
+So that then we can retrieve the species presences using the function `get_presences`.
 
 ```{r getPresences}
 Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
@@ -150,6 +150,13 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 ### Step 2: Habitat Filtering
 
 After creating the buffers, you may want to filter the areas further based on habitat suitability. For instance, you might only be interested in specific land-use types or habitats where the species is likely to thrive. This step typically involves using the raster data to mask or subset the buffer areas according to the desired habitat criteria.
+
+For that we will use the `ModelAndPredictFunc` which will take the data frame of presences obtained through the `get_presences` and modeling through the landuse raster that we have as an example in the dataset:
+
+```{r habitatfiltering}
+Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
+```
+
 
 ## Generating summary biodiversity statistics
 

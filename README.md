@@ -180,7 +180,7 @@ Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
 #> [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"
 ```
 
-there we end up with 1070 presences for our 7 species.
+there we end up with 1073 presences for our 7 species.
 
 ## 2.2 Creating Spatial Buffers and Habitat Filtering
 
@@ -240,6 +240,42 @@ in specific land-use types or habitats where the species is likely to
 thrive. This step typically involves using the raster data to mask or
 subset the buffer areas according to the desired habitat criteria.
 
+For that we will use the `ModelAndPredictFunc` which will take the data
+frame of presences obtained through the `get_presences` and modeling
+through the landuse raster that we have as an example in the dataset:
+
+``` r
+Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found 
+#> An error occurred: object 'Data' not found
+```
+
+Here we see the first 9 observations of the dataset in table
+<a href="#tab:tablespeciespred"><strong>??</strong></a>, where we see
+the spacial suitability of each species on each landuse
+
+``` r
+knitr::kable(Habitats[10:19,])
+```
+
+|     | Pred | Landuse       | species            |
+|-----|-----:|:--------------|:-------------------|
+| 10  |    0 | ForestDryRich | Genista tinctoria  |
+| 11  |    0 | ForestDryPoor | Genista tinctoria  |
+| 12  |    0 | ForestWetRich | Genista tinctoria  |
+| 13  |    0 | OpenDryPoor   | Genista tinctoria  |
+| 14  |    0 | ForestWetPoor | Genista tinctoria  |
+| 15  |    0 | OpenDryRich   | Genista tinctoria  |
+| 16  |    0 | OpenWetPoor   | Genista tinctoria  |
+| 17  |    0 | Exclude       | Genista tinctoria  |
+| 18  |    0 | OpenWetRich   | Genista tinctoria  |
+| 19  |    0 | ForestDryRich | Lathyrus japonicus |
+
 ## 2.3 Generating summary biodiversity statistics
 
 ### 2.3.1 Step 1 Generating Phylogenetic diversity metrics
@@ -285,66 +321,66 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target shp [4.91 seconds]
+#> ● completed target Raster [7.369 seconds]
 #> ▶ dispatched target file
-#> ● completed target file [0.001 seconds]
+#> ● completed target shp [0 seconds]
+#> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Raster [5.257 seconds]
-#> ● completed target data [0.485 seconds]
+#> ● completed target data [10.367 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.279 seconds]
+#> ● completed target Clean [9.315 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.144 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.205 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.07 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.121 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.261 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.356 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.031 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.045 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_69210fc440d13855 [0.043 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.041 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.04 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.127 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.036 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.145 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.032 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.42 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.551 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.079 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.117 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.651 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.966 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.108 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.134 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.406 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.508 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [0.709 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.941 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.24 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.372 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.278 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.403 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.408 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.49 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch Presences_e65f4227e8299cc4 [0.504 seconds]
-#> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_cae8301e59fc4e01 [0.033 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.045 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.041 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.637 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.05 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [0.348 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.374 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.037 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.051 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [28.396 seconds]
-#> ▶ ended pipeline [40.266 seconds]
+#> ● completed target Phylo_Tree [47.153 seconds]
+#> ▶ ended pipeline [1.352 minutes]
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
