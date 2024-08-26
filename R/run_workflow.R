@@ -12,6 +12,7 @@
 #' @param country A two-letter country code to define the area of interest for counting species presences. Default is NULL.
 #' @param shapefile Path to a shapefile defining the area of interest for counting species presences. Default is NULL.
 #' @param rastertemp A file path to the raster file that will be used as a template for rasterizing the buffers.
+#' @param rasterLU A file path to the raster file that has the landuses that exist in the area that will be modeled.
 #' @param dist A numeric value specifying the buffer distance in meters. Default is 500 meters.
 #' @param plot if TRUE (default) it will run the `targets::tar_visnetwork()` to plot the workflow
 #' @return Executes the `targets` pipeline.
@@ -24,6 +25,7 @@ run_workflow <- function(workers = 2,
                          error = "null",
                          file_path,
                          rastertemp,
+                         rasterLU,
                          dist = 500,
                          filter = NULL,
                          country = NULL,
@@ -48,6 +50,7 @@ run_workflow <- function(workers = 2,
         targets::tar_target(data, get_data(file, filter = !!rlang::enquo(filter))),
         targets::tar_target(shp, command = !!shapefile, format = "file"),
         targets::tar_target(Raster, command = !!rastertemp, format = "file"),
+        targets::tar_target(Landuses, command = !!rasterLU, format = "file"),
         targets::tar_target(Clean, SpeciesPoolR::Clean_Taxa(data$Species)),
         targets::tar_target(Count_Presences,
                             count_presences(Clean, country = !!country, shapefile = shp),
@@ -59,6 +62,7 @@ run_workflow <- function(workers = 2,
                             pattern = map(More_than_zero)),
         targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
                    pattern = map(Presences)),
+        targets::tar_target(ModelAndPredict, ModelAndPredictFunc(Presences, file = Landuses), pattern = map(Presences)),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
         )
     },

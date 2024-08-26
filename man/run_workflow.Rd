@@ -9,6 +9,7 @@ run_workflow(
   error = "null",
   file_path,
   rastertemp,
+  rasterLU,
   dist = 500,
   filter = NULL,
   country = NULL,
@@ -24,6 +25,8 @@ run_workflow(
 \item{file_path}{Path to the Excel or csv file containing the data.}
 
 \item{rastertemp}{A file path to the raster file that will be used as a template for rasterizing the buffers.}
+
+\item{rasterLU}{A file path to the raster file that has the landuses that exist in the area that will be modeled.}
 
 \item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
 

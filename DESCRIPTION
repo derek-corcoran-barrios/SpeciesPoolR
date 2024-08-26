@@ -26,6 +26,7 @@ Imports:
     taxize,
     terra,
     tibble,
+    tidyr,
     utils,
     V.PhyloMaker
 Depends: 

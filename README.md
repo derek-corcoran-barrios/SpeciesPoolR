@@ -283,12 +283,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6864141 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6864141 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6864141 | Anthyllis vulneraria |
-| Exclude       | 0.5152447 | Anthyllis vulneraria |
-| ForestDryRich | 0.3834924 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2205493 | Anthyllis vulneraria |
+| ForestWetRich | 0.6782673 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6782673 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6782673 | Anthyllis vulneraria |
+| Exclude       | 0.5111090 | Anthyllis vulneraria |
+| ForestDryRich | 0.3633268 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2306091 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 2.6: Predicted habitat
@@ -359,70 +359,90 @@ run_workflow(
   filter = quote(Kingdom == "Plantae" & Class == "Magnoliopsida" & Family == "Fabaceae"),
   shapefile = shp,
   dist = 500,
-  rastertemp = Raster
+  rastertemp = Raster,
+  rasterLU = Raster
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target Raster [4.645 seconds]
+#> ● completed target shp [5.072 seconds]
 #> ▶ dispatched target file
-#> ● completed target shp [0 seconds]
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [0.367 seconds]
+#> ● completed target Raster [5.257 seconds]
+#> ▶ dispatched target Landuses
+#> ● completed target Landuses [0 seconds]
+#> ● completed target data [0.418 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.185 seconds]
+#> ● completed target Clean [1.311 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.119 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.146 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.055 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.231 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.034 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.075 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.028 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.032 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_69210fc440d13855 [0.033 seconds]
-#> ▶ dispatched branch Count_Presences_974105e269324d3e
 #> ● completed branch Count_Presences_a61be030e01ebaf5 [0.026 seconds]
+#> ▶ dispatched branch Count_Presences_974105e269324d3e
+#> ● completed branch Count_Presences_69210fc440d13855 [0.086 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.027 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.03 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.03 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.002 seconds]
+#> ● completed target More_than_zero [0.001 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_c112b37cd15959d6 [0.677 seconds]
-#> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch Presences_af64bac105a08467 [0.321 seconds]
-#> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_626a53b08dfe709d [0.082 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.456 seconds]
+#> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
+#> ● completed branch Presences_c112b37cd15959d6 [0.715 seconds]
+#> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.112 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch buffer_0e19b8cb545404d2 [0.191 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.706 seconds]
+#> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [15.273 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_daf8d6353bc80f0c [0.75 seconds]
-#> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch Presences_310adeccf6b44725 [0.377 seconds]
-#> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.058 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.499 seconds]
+#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
+#> ● completed branch ModelAndPredict_b226446ac3154351 [6.467 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_b226446ac3154351 [0.037 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.63 seconds]
+#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.417 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.595 seconds]
-#> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.355 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.042 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.511 seconds]
+#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.915 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [0.336 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.362 seconds]
 #> ● completed pattern Presences
-#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.035 seconds]
+#> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.312 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch buffer_0a8436ee3d4f2644 [5.188 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.433 seconds]
+#> ● completed pattern ModelAndPredict
+#> ▶ dispatched branch buffer_0e19b8cb545404d2
+#> ● completed branch buffer_0e19b8cb545404d2 [0.071 seconds]
+#> ▶ dispatched branch buffer_626a53b08dfe709d
+#> ● completed branch buffer_626a53b08dfe709d [0.203 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.078 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch buffer_b226446ac3154351 [0.038 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.058 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_cae8301e59fc4e01 [0.05 seconds]
+#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.112 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [30.337 seconds]
-#> ▶ ended pipeline [43.58 seconds]
+#> ● completed target Phylo_Tree [36.95 seconds]
+#> ▶ ended pipeline [1.229 minutes]
+#> Warning message:
+#> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
@@ -436,9 +456,12 @@ using the provided filter expression. 3- Cleans the species names to
 match the GBIF taxonomic backbone. 4- Counts the species presences
 within the specified geographic area (in this case, Aarhus). 5-
 Generates a buffer around the species presences within the specified
-distance, for a template raster. 6- Generates a phyllogenetic tree for
-the species in the species list. 7- Generates a visual representation of
-the workflow (if plot = TRUE).
+distance, for a template raster. 6- Predicts habitat suitability for
+each species across different land-use types using the
+ModelAndPredictFunc, which models habitat preferences and provides
+continuous predictions. 7- Generates a phyllogenetic tree for the
+species in the species list. 8- Generates a visual representation of the
+workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the
 dependencies between steps using targets::tar_visnetwork(). The result
