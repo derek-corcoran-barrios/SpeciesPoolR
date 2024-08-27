@@ -4,7 +4,7 @@ output:
     toc: true
     toc_depth: 2
     fig_caption: true
-bibliography: 'biblio.bib'
+bibliography: 'https://api.citedrive.com/bib/c81da0f5-66e3-4821-9af9-c556d83cbbd4/references.bib?x=eyJpZCI6ICJjODFkYTBmNS02NmUzLTQ4MjEtOWFmOS1jNTU2ZDgzY2JiZDQiLCAidXNlciI6ICI4NjQ0IiwgInNpZ25hdHVyZSI6ICI3ZDA1NmUzMGRmZTA5YmFmYWIyZTRkNTRhMzljZTViNGY3ZjAwYmIwODgyNWIwOThiMmI2YTYxZDFlYjkxYzVmIn0=.bib'
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -39,6 +39,14 @@ No you can load the package
 ```{r setup}
 library(SpeciesPoolR)
 ```
+
+# Motivation for the pacakge
+
+## Rare species are common and important
+
+In ecological research, the debate on whether rare species outnumber common species within communities is pivotal for understanding biodiversity and guiding conservation efforts. Numerous studies have shown that rare species typically dominate large ecological assemblages, although common species often exert a more substantial influence on overall species richness patterns [@Magurran2003Explaining; @Bregovic2019Contribution; @Schalkwyk2019Contribution]. This complexity underscores the need for innovative approaches in studying biodiversity, particularly since rare species are challenging to model using traditional Species Distribution Models (SDMs) due to their low occurrence rates [@Boyd2022Eco-evolutionary].
+
+Given the limitations of SDMs in capturing the dynamics of rare species, it is essential to develop alternative methods for integrating these species into biodiversity assessments and conservation planning. Although rare species contribute uniquely to functional diversity and ecosystem stability, especially in specific habitats [@Chapman2018Both; @Saterberg2019A], their elusiveness in ecological models presents a significant challenge. The question of the minimum number of presence records required for reliable SDMs is crucial. Research has shown that while as few as 10-15 presence observations can produce nonrandom models for some species [@Stoa2019How], others require higher thresholds—ranging from 14 to 25 records depending on the species' prevalence and geographic range [@Proosdij2016Minimum; @Sampaio2023Accurate]. These findings suggest that even sparse datasets can be useful, but the threshold varies significantly depending on species traits and habitat characteristics. Therefore, researchers must explore novel analytical frameworks and conservation strategies that better accommodate the ecological importance of rare species, thereby enhancing our ability to manage and preserve biodiversity effectively [@Reddin2015Between-taxon].
 
 # Using SpeciesPoolR Manually
 

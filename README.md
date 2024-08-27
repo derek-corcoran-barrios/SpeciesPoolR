@@ -1,16 +1,19 @@
 
 - [1 SpeciesPoolR](#1-speciespoolr)
-- [2 Using SpeciesPoolR Manually](#2-using-speciespoolr-manually)
-  - [2.1 Importing and Downloading Species
-    Presences](#21-importing-and-downloading-species-presences)
-  - [2.2 Creating Spatial Buffers and Habitat
-    Filtering](#22-creating-spatial-buffers-and-habitat-filtering)
-  - [2.3 Generating summary biodiversity
-    statistics](#23-generating-summary-biodiversity-statistics)
-- [3 Running the SpeciesPoolR
-  Workflow](#3-running-the-speciespoolr-workflow)
-  - [3.1 How It Works](#31-how-it-works)
-- [4 References](#4-references)
+- [2 Motivation for the pacakge](#2-motivation-for-the-pacakge)
+  - [2.1 Rare species are common and
+    important](#21-rare-species-are-common-and-important)
+- [3 Using SpeciesPoolR Manually](#3-using-speciespoolr-manually)
+  - [3.1 Importing and Downloading Species
+    Presences](#31-importing-and-downloading-species-presences)
+  - [3.2 Creating Spatial Buffers and Habitat
+    Filtering](#32-creating-spatial-buffers-and-habitat-filtering)
+  - [3.3 Generating summary biodiversity
+    statistics](#33-generating-summary-biodiversity-statistics)
+- [4 Running the SpeciesPoolR
+  Workflow](#4-running-the-speciespoolr-workflow)
+  - [4.1 How It Works](#41-how-it-works)
+- [5 References](#5-references)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -36,11 +39,47 @@ No you can load the package
 library(SpeciesPoolR)
 ```
 
-# 2 Using SpeciesPoolR Manually
+# 2 Motivation for the pacakge
 
-## 2.1 Importing and Downloading Species Presences
+## 2.1 Rare species are common and important
 
-### 2.1.1 Step 1: Reading and Filtering Data
+In ecological research, the debate on whether rare species outnumber
+common species within communities is pivotal for understanding
+biodiversity and guiding conservation efforts. Numerous studies have
+shown that rare species typically dominate large ecological assemblages,
+although common species often exert a more substantial influence on
+overall species richness patterns (Magurran and Henderson 2003;
+Bregović, Fišer, and Zagmajster 2019; Schalkwyk, Pryke, and Samways
+2019). This complexity underscores the need for innovative approaches in
+studying biodiversity, particularly since rare species are challenging
+to model using traditional Species Distribution Models (SDMs) due to
+their low occurrence rates (Boyd et al. 2022).
+
+Given the limitations of SDMs in capturing the dynamics of rare species,
+it is essential to develop alternative methods for integrating these
+species into biodiversity assessments and conservation planning.
+Although rare species contribute uniquely to functional diversity and
+ecosystem stability, especially in specific habitats (Chapman,
+Tunnicliffe, and Bates 2018; Säterberg et al. 2019), their elusiveness
+in ecological models presents a significant challenge. The question of
+the minimum number of presence records required for reliable SDMs is
+crucial. Research has shown that while as few as 10-15 presence
+observations can produce nonrandom models for some species (Støa et al.
+2019), others require higher thresholds—ranging from 14 to 25 records
+depending on the species’ prevalence and geographic range (Proosdij et
+al. 2016; Sampaio and Cavalcante 2023). These findings suggest that even
+sparse datasets can be useful, but the threshold varies significantly
+depending on species traits and habitat characteristics. Therefore,
+researchers must explore novel analytical frameworks and conservation
+strategies that better accommodate the ecological importance of rare
+species, thereby enhancing our ability to manage and preserve
+biodiversity effectively (Reddin, Bothwell, and Lennon 2015).
+
+# 3 Using SpeciesPoolR Manually
+
+## 3.1 Importing and Downloading Species Presences
+
+### 3.1.1 Step 1: Reading and Filtering Data
 
 If you are going to use each of the functions of the SpeciesPoolR
 manually and sequentially, the first step would be to read in a species
@@ -60,7 +99,7 @@ filtered_data <- get_data(
 
 This will generate a dataset that can be used subsequently to count
 species presences and download species data as seen in table
-<a href="#tab:tablespecies">2.1</a>
+<a href="#tab:tablespecies">3.1</a>
 
 | redlist_2010 | Kingdom | Phyllum       | Class         | Order   | Family   | Genus     | Species               |
 |:-------------|:--------|:--------------|:--------------|:--------|:---------|:----------|:----------------------|
@@ -74,10 +113,10 @@ species presences and download species data as seen in table
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    |
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         |
 
-<span id="tab:tablespecies"></span>Table 2.1: Species that will be used
+<span id="tab:tablespecies"></span>Table 3.1: Species that will be used
 to generate species pools
 
-### 2.1.2 Step 2: Taxonomic Harmonization
+### 3.1.2 Step 2: Taxonomic Harmonization
 
 Next, you should perform taxonomic harmonization to ensure that the
 species names you use are recognized by the GBIF taxonomic backbone.
@@ -88,7 +127,7 @@ Clean_Species <- SpeciesPoolR::Clean_Taxa(filtered_data$Species)
 ```
 
 The resulting data frame, with harmonized species names, is shown in
-table <a href="#tab:cleantable">2.2</a>
+table <a href="#tab:cleantable">3.2</a>
 
 | Taxa                  | matched_name2         | confidence | canonicalName         | kingdom | phylum       | class         | order   | family   | genus     | species               | rank    |
 |:----------------------|:----------------------|-----------:|:----------------------|:--------|:-------------|:--------------|:--------|:---------|:----------|:----------------------|:--------|
@@ -101,10 +140,10 @@ table <a href="#tab:cleantable">2.2</a>
 | Lathyrus japonicus    | Lathyrus japonicus    |         99 | Lathyrus japonicus    | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    | SPECIES |
 | Vicia villosa         | Vicia villosa         |         97 | Vicia villosa         | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         | SPECIES |
 
-<span id="tab:cleantable"></span>Table 2.2: Taxonomicallty harmonized
+<span id="tab:cleantable"></span>Table 3.2: Taxonomicallty harmonized
 dataset
 
-### 2.1.3 Step 3: Counting Species Presences
+### 3.1.3 Step 3: Counting Species Presences
 
 After harmonizing the species names, it’s important to obtain the number
 of occurrences of each species in your study area, especially if you
@@ -118,7 +157,7 @@ Count_DK <- count_presences(Clean_Species, country = "DK")
 ```
 
 The resulting data frame of species presences in Denmark is shown in
-table <a href="#tab:tableCountDenmark">2.3</a>
+table <a href="#tab:tableCountDenmark">3.3</a>
 
 ``` r
 knitr::kable(Count_DK, caption = "Counts of presences for the different species within Denmark")
@@ -135,7 +174,7 @@ knitr::kable(Count_DK, caption = "Counts of presences for the different species 
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  3904 |
 | Fabaceae | Vicia     | Vicia villosa         |   243 |
 
-<span id="tab:tableCountDenmark"></span>Table 2.3: Counts of presences
+<span id="tab:tableCountDenmark"></span>Table 3.3: Counts of presences
 for the different species within Denmark
 
 Alternatively, you can filter by a specific region using a shapefile.
@@ -148,7 +187,7 @@ Count_Aarhus <- count_presences(Clean_Species, shapefile = shp)
 ```
 
 The resulting data.frame for Aarhus commune is shown int table
-<a href="#tab:tableCountAarhus">2.4</a>
+<a href="#tab:tableCountAarhus">3.4</a>
 
 | family   | genus     | species               |   N |
 |:---------|:----------|:----------------------|----:|
@@ -161,7 +200,7 @@ The resulting data.frame for Aarhus commune is shown int table
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  39 |
 | Fabaceae | Vicia     | Vicia villosa         |  10 |
 
-<span id="tab:tableCountAarhus"></span>Table 2.4: Counts of presences
+<span id="tab:tableCountAarhus"></span>Table 3.4: Counts of presences
 for the different species within Aarhus commune
 
 Now it is recommended to eliminate species that have no occurrences in
@@ -182,9 +221,9 @@ Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
 
 there we end up with 1073 presences for our 7 species.
 
-## 2.2 Creating Spatial Buffers and Habitat Filtering
+## 3.2 Creating Spatial Buffers and Habitat Filtering
 
-### 2.2.1 Step 1 Creating Buffers Around Species Presences
+### 3.2.1 Step 1 Creating Buffers Around Species Presences
 
 Once you have identified the species presences within your area of
 interest, the next step is to create spatial buffers around these
@@ -209,7 +248,7 @@ rasterizing these buffers.
 
 The resulting buffer500 data frame indicates which raster cells are
 covered by the buffer for each species. Table
-<a href="#tab:showbuffer500">2.5</a> displays the first 10 observations
+<a href="#tab:showbuffer500">3.5</a> displays the first 10 observations
 of this data frame, providing a detailed view of the buffer’s overlap
 with raster cells, listing each cell and the corresponding species
 within that buffer.
@@ -227,14 +266,14 @@ within that buffer.
 |  164 | Vicia sepium |
 |  165 | Vicia sepium |
 
-<span id="tab:showbuffer500"></span>Table 2.5: Raster cells within the
+<span id="tab:showbuffer500"></span>Table 3.5: Raster cells within the
 500-meter buffer of each species
 
 This table provides a detailed view of how the buffer overlaps with the
 raster cells, listing each cell and the corresponding species present
 within that buffer.
 
-### 2.2.2 Step 2: Habitat Filtering
+### 3.2.2 Step 2: Habitat Filtering
 
 After creating the buffers, the next logical step is to filter these
 areas based on habitat suitability. This allows you to focus on specific
@@ -271,7 +310,7 @@ Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
 
 The resulting Habitats data frame contains continuous suitability
 predictions for each species across various land-use types. Table
-<a href="#tab:tablespeciespred">2.6</a> shows the first 9 observations,
+<a href="#tab:tablespeciespred">3.6</a> shows the first 9 observations,
 illustrating the predicted habitat suitability scores for the first
 species in each land-use type.
 
@@ -283,20 +322,20 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6782673 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6782673 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6782673 | Anthyllis vulneraria |
-| Exclude       | 0.5111090 | Anthyllis vulneraria |
-| ForestDryRich | 0.3633268 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2306091 | Anthyllis vulneraria |
+| ForestWetRich | 0.6976068 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6976068 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6976068 | Anthyllis vulneraria |
+| Exclude       | 0.5126502 | Anthyllis vulneraria |
+| ForestDryRich | 0.2785385 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2191165 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
-<span id="tab:tablespeciespred"></span>Table 2.6: Predicted habitat
+<span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat
 suitability scores across various land-use types for the first species.
 The values represent continuous predictions, indicating the relative
 likelihood of species presence in each land-use category.
 
-### 2.2.3 Step 3: Generating Habitat Suitability Thresholds
+### 3.2.3 Step 3: Generating Habitat Suitability Thresholds
 
 While continuous predictions provide a detailed picture of habitat
 suitability, it is often useful to classify these predictions into
@@ -318,9 +357,9 @@ species, which can then be used to classify habitat suitability into
 binary categories, helping you to identify core habitats or areas of
 higher conservation value.
 
-## 2.3 Generating summary biodiversity statistics
+## 3.3 Generating summary biodiversity statistics
 
-### 2.3.1 Step 1 Generating Phylogenetic diversity metrics
+### 3.3.1 Step 1 Generating Phylogenetic diversity metrics
 
 In order to generate Phylogenetic Diversity measures, the first step is
 to generate a phylogenetic tree with the species we have, for that we
@@ -336,7 +375,7 @@ tree <- generate_tree(Count_Aarhus)
 #> [1] "All species in sp.list are present on tree."
 ```
 
-# 3 Running the SpeciesPoolR Workflow
+# 4 Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR`
 workflow as a pipeline, you can use the `run_workflow` function. This
@@ -364,90 +403,90 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target shp [5.072 seconds]
+#> ● completed target Raster [7.645 seconds]
 #> ▶ dispatched target file
+#> ● completed target shp [0.001 seconds]
+#> ▶ dispatched target Landuses
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Raster [5.257 seconds]
-#> ▶ dispatched target Landuses
 #> ● completed target Landuses [0 seconds]
-#> ● completed target data [0.418 seconds]
+#> ● completed target data [10.409 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.311 seconds]
+#> ● completed target Clean [8.631 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.146 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.169 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.231 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.261 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.075 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.08 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.032 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.037 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.026 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.038 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_69210fc440d13855 [0.086 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.163 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.03 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.03 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.039 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.034 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.001 seconds]
+#> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.456 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.501 seconds]
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch Presences_c112b37cd15959d6 [0.715 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.879 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.112 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.742 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_daf8d6353bc80f0c [0.706 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [1.064 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [15.273 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [20.668 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.499 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.644 seconds]
 #> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [6.467 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [6.36 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_e65f4227e8299cc4 [0.63 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.818 seconds]
 #> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.417 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [28.418 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.511 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.48 seconds]
 #> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.915 seconds]
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.864 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [0.362 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.405 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.312 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.287 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.433 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [10.361 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.071 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.102 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.203 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.306 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.078 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.085 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.038 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.055 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.058 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.04 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.05 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.033 seconds]
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.112 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.031 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [36.95 seconds]
-#> ▶ ended pipeline [1.229 minutes]
+#> ● completed target Phylo_Tree [37.873 seconds]
+#> ▶ ended pipeline [1.707 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
 
-## 3.1 How It Works
+## 4.1 How It Works
 
 The run_workflow function creates a pipeline that:
 
@@ -473,16 +512,104 @@ ensures that all steps are consistently applied to your data. It also
 makes it easier to rerun the workflow with different parameters or
 datasets.
 
-# 4 References
+# 5 References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
+
+<div id="ref-Boyd2022Eco-evolutionary" class="csl-entry">
+
+Boyd, Jennifer Nagel, Jill T. Anderson, Jessica R. Brzyski, Carol J.
+Baskauf, and J. Cruse-Sanders. 2022. “Eco-Evolutionary Causes and
+Consequences of Rarity in Plants: A Meta-Analysis.” *The New
+Phytologist*. <https://doi.org/10.1111/nph.18172>.
+
+</div>
+
+<div id="ref-Bregovic2019Contribution" class="csl-entry">
+
+Bregović, Petra, C. Fišer, and M. Zagmajster. 2019. “Contribution of
+Rare and Common Species to Subterranean Species Richness Patterns.”
+*Ecology and Evolution* 9: 11606–18.
+<https://doi.org/10.1002/ece3.5604>.
+
+</div>
+
+<div id="ref-Chapman2018Both" class="csl-entry">
+
+Chapman, Abbie S. A., V. Tunnicliffe, and A. Bates. 2018. “Both Rare and
+Common Species Make Unique Contributions to Functional Diversity in an
+Ecosystem Unaffected by Human Activities.” *Diversity and Distributions*
+24: 568–78. <https://doi.org/10.1111/ddi.12712>.
+
+</div>
 
 <div id="ref-Jin2019" class="csl-entry">
 
 Jin, Yi, and Hong Qian. 2019. “V.PhyloMaker: An r Package That Can
 Generate Very Large Phylogenies for Vascular Plants.” *Ecography* 42:
 1353–59.
+
+</div>
+
+<div id="ref-Magurran2003Explaining" class="csl-entry">
+
+Magurran, A., and P. Henderson. 2003. “Explaining the Excess of Rare
+Species in Natural Species Abundance Distributions.” *Nature* 422:
+714–16. <https://doi.org/10.1038/nature01547>.
+
+</div>
+
+<div id="ref-Proosdij2016Minimum" class="csl-entry">
+
+Proosdij, A. V., M. Sosef, J. Wieringa, and N. Raes. 2016. “Minimum
+Required Number of Specimen Records to Develop Accurate Species
+Distribution Models.” *Ecography* 39: 542–52.
+<https://doi.org/10.1111/ECOG.01509>.
+
+</div>
+
+<div id="ref-Reddin2015Between-taxon" class="csl-entry">
+
+Reddin, Carl J., J. Bothwell, and J. Lennon. 2015. “Between-Taxon
+Matching of Common and Rare Species Richness Patterns.” *Global Ecology
+and Biogeography* 24: 1476–86. <https://doi.org/10.1111/GEB.12372>.
+
+</div>
+
+<div id="ref-Sampaio2023Accurate" class="csl-entry">
+
+Sampaio, A. C. G., and A. Cavalcante. 2023. “Accurate Species
+Distribution Models: Minimum Required Number of Specimen Records in the
+Caatinga Biome.” *Anais Da Academia Brasileira de Ciencias* 95 2:
+e20201421. <https://doi.org/10.1590/0001-3765202320201421>.
+
+</div>
+
+<div id="ref-Saterberg2019A" class="csl-entry">
+
+Säterberg, Torbjörn, T. Jonsson, J. Yearsley, Sofia Berg, and B.
+Ebenman. 2019. “A Potential Role for Rare Species in Ecosystem
+Dynamics.” *Scientific Reports* 9.
+<https://doi.org/10.1038/s41598-019-47541-6>.
+
+</div>
+
+<div id="ref-Schalkwyk2019Contribution" class="csl-entry">
+
+Schalkwyk, J., J. Pryke, and M. Samways. 2019. “Contribution of Common
+Vs. Rare Species to Species Diversity Patterns in Conservation
+Corridors.” *Ecological Indicators*.
+<https://doi.org/10.1016/J.ECOLIND.2019.05.014>.
+
+</div>
+
+<div id="ref-Stoa2019How" class="csl-entry">
+
+Støa, Bente, R. Halvorsen, J. Stokland, and V. I. Gusarov. 2019. “How
+Much Is Enough? Influence of Number of Presence Observations on the
+Performance of Species Distribution Models.” *Sommerfeltia* 39: 1–28.
+<https://doi.org/10.2478/som-2019-0001>.
 
 </div>
 
