@@ -19,7 +19,3 @@ A data frame with the calculated thresholds. The data frame contains columns for
 \description{
 This function generates thresholds for species distribution predictions based on modeled land-use preferences. Thresholds are calculated for the 99th, 95th, and 90th percentiles of the predicted values.
 }
-\examples{
-thresholds <- create_thresholds(Model = model_output, reference = reference_data, file = file)
-
-}

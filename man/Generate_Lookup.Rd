@@ -17,7 +17,3 @@ A data frame that indicates the land-use types where species are predicted to be
 \description{
 This function generates a lookup table that indicates the land-use types where species are predicted to be present, based on model predictions and specified thresholds.
 }
-\examples{
-lookup_table <- Generate_Lookup(Model = model_output, Thresholds = thresholds)
-
-}

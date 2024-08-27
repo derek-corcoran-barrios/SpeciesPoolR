@@ -32,7 +32,7 @@ run_workflow <- function(workers = 2,
                          shapefile = NULL,
                          plot = TRUE) {
 
-  data <- Clean <- Count_Presences <- Presences <- shp <- More_than_zero <- N <- NULL
+  data <- Clean <- Count_Presences <- Presences <- shp <- More_than_zero <- N <- Landuses <- Raster <- buffer <- Phylo_Tree <- ModelAndPredict <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(

@@ -22,6 +22,7 @@
 #'
 #' @export
 make_buffer_rasterized <- function(DT, file, dist = 500) {
+  cell <- . <- genus <- family <- decimalLongitude <- decimalLatitude <- NULL
   if (nrow(DT) == 0) {
     DT <- data.frame(matrix(ncol = 2, nrow = 0))
     colnames(DT) <- c("cell", "species")

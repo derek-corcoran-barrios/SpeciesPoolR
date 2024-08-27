@@ -19,9 +19,3 @@ A data frame with the sampled land-use data. The data frame contains columns for
 \description{
 This function samples land-use data either from species presence locations or from background locations within a specified geographic area.
 }
-\examples{
-file <- system.file("extdata", "landuse.tif", package = "SpeciesPoolR")
-presence_data <- SampleLanduse(DF = species_data, file = file, type = "pres")
-background_data <- SampleLanduse(DF = species_data, file = file, type = "bg")
-
-}

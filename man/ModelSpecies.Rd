@@ -15,7 +15,3 @@ A data frame with predicted species distribution for each land-use type. The dat
 \description{
 This function fits a MaxEnt model to predict species distribution based on land-use data. It handles cases where land-use types are listed as "Both" by splitting these into separate "Poor" and "Rich" categories.
 }
-\examples{
-model_output <- ModelSpecies(DF = combined_data)
-
-}

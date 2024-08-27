@@ -68,13 +68,11 @@ Convex_20 <- function(DF, lon = "decimalLongitude", lat = "decimalLatitude", pro
 #' @importFrom dplyr select mutate filter
 #' @importFrom stringr str_detect
 #' @importFrom data.table as.data.table
-#' @examples
-#' file <- system.file("extdata", "landuse.tif", package = "SpeciesPoolR")
-#' presence_data <- SampleLanduse(DF = species_data, file = file, type = "pres")
-#' background_data <- SampleLanduse(DF = species_data, file = file, type = "bg")
 #'
 #' @export
 SampleLanduse <- function(DF, file, type = "pres") {
+  species <- decimalLongitude <- decimalLatitude <- Landuse <- SN_ModelClass <- NULL
+
   Denmark_LU <- terra::rast(file)
   Temp <- DF |>
     dplyr::select(species, decimalLongitude, decimalLatitude) |>
@@ -105,17 +103,17 @@ SampleLanduse <- function(DF, file, type = "pres") {
 #'
 #' @return A data frame with predicted species distribution for each land-use type. The data frame contains columns for `Landuse`, `Pred` (predicted value), and `species`.
 #'
-#' @importFrom dplyr mutate select filter arrange
+#' @importFrom dplyr mutate select filter arrange desc bind_rows
 #' @importFrom tidyr pivot_longer
+#' @importFrom stats model.matrix predict
 #' @importFrom stringr str_remove_all
 #' @importFrom maxnet maxnet
-#' @examples
-#' model_output <- ModelSpecies(DF = combined_data)
 #'
 #' @export
 
 
 ModelSpecies <- function(DF) {
+  Landuse <- Pred <-NULL
   All <- DF |>
     dplyr::mutate(Landuse = as.factor(Landuse))
 
@@ -125,7 +123,7 @@ ModelSpecies <- function(DF) {
   duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
   duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
   All <- All[!is_both, ] |>
-    bind_rows(duplicated_rows1, duplicated_rows2)
+    dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
 
   if (length(unique(All$Landuse)) > 1) {
     Landuse_matrix <- model.matrix(~ Landuse - 1, data = All)
@@ -186,6 +184,7 @@ ModelSpecies <- function(DF) {
 #'
 #' @export
 ModelAndPredictFunc <- function(DF, file) {
+  species <- NULL
   # Split the data by species
   split_species <- dplyr::group_split(DF, species)
 
@@ -242,19 +241,26 @@ ModelAndPredictFunc <- function(DF, file) {
 #'
 #' @return A data frame with the calculated thresholds. The data frame contains columns for `species`, `Thres_99`, `Thres_95`, and `Thres_90`.
 #'
-#' @importFrom dplyr left_join slice_max pull
-#' @examples
-#' thresholds <- create_thresholds(Model = model_output, reference = reference_data, file = file)
+#' @importFrom dplyr left_join slice_max pull bind_rows
+#' @importFrom stringr str_replace_all
 #'
 #' @export
 
 create_thresholds <- function(Model, reference, file){
+  Pred <- NULL
   if (nrow(reference) == 0) {
     Thres <- data.frame(species = unique(Model$species),Thres_99 = 1, Thres_95 = 1, Thres_90 = 1)
   } else {
     Thres <- data.frame(species = unique(Model$species),Thres_99 = NA, Thres_95 = NA, Thres_90 = NA)
-    Pres <- SamplePresLanduse(DF = reference, file = file)
-    FixedDataset <- DuplicateBoth(DF = Pres)
+    Pres <- SampleLanduse(DF = reference, file = file)
+
+    is_both <- stringr::str_detect(Pres$Landuse, "Both")
+    duplicated_rows1 <- Pres[is_both, ]
+    duplicated_rows2 <- Pres[is_both, ]
+    duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
+    duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
+    FixedDataset <- Pres[!is_both, ] |>
+      dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
     Thres$Thres_99 <- FixedDataset |>
       dplyr::left_join(Model) |>
       slice_max(order_by = Pred,prop = 0.99, with_ties = F) |>
@@ -288,12 +294,11 @@ create_thresholds <- function(Model, reference, file){
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom data.table as.data.table
-#' @examples
-#' lookup_table <- Generate_Lookup(Model = model_output, Thresholds = thresholds)
 #'
 #' @export
 
 Generate_Lookup <- function(Model, Thresholds) {
+  species <- Pres <- Pred <- Thres_95 <- Landuse <- . <- NULL
   Model <- as.data.table(Model)
   Model <- Model[species != "Spp"]
   Thresholds <- as.data.table(Thresholds)
