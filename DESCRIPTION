@@ -23,7 +23,7 @@ Imports:
     rlang,
     stringr,
     targets,
-    taxize,
+    taxize (>= 0.9.100),
     terra,
     tibble,
     tidyr,
@@ -32,8 +32,9 @@ Imports:
 Depends: 
     R (>= 2.10)
 LazyData: true
-Remotes: 
-    jinyizju/V.PhyloMaker
+Remotes:  
+    jinyizju/V.PhyloMaker,
+    ropensci/taxize
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues
 Suggests: 
