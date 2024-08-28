@@ -54,20 +54,26 @@
   <main id="main" class="col-md-9"><ul>
 <li><a href="#id_1-speciespoolr">1 SpeciesPoolR</a></li>
 <li>
-<a href="#id_2-using-speciespoolr-manually">2 Using SpeciesPoolR Manually</a>
+<a href="#id_2-motivation-for-the-pacakge">2 Motivation for the pacakge</a>
 <ul>
-<li><a href="#id_21-importing-and-downloading-species-presences">2.1 Importing and Downloading Species Presences</a></li>
-<li><a href="#id_22-creating-spatial-buffers-and-habitat-filtering">2.2 Creating Spatial Buffers and Habitat Filtering</a></li>
-<li><a href="#id_23-generating-summary-biodiversity-statistics">2.3 Generating summary biodiversity statistics</a></li>
+<li><a href="#id_21-rare-species-are-common-and-important">2.1 Rare species are common and important</a></li>
 </ul>
 </li>
 <li>
-<a href="#id_3-running-the-speciespoolr-workflow">3 Running the SpeciesPoolR Workflow</a>
+<a href="#id_3-using-speciespoolr-manually">3 Using SpeciesPoolR Manually</a>
 <ul>
-<li><a href="#id_31-how-it-works">3.1 How It Works</a></li>
+<li><a href="#id_31-importing-and-downloading-species-presences">3.1 Importing and Downloading Species Presences</a></li>
+<li><a href="#id_32-creating-spatial-buffers-and-habitat-filtering">3.2 Creating Spatial Buffers and Habitat Filtering</a></li>
+<li><a href="#id_33-generating-summary-biodiversity-statistics">3.3 Generating summary biodiversity statistics</a></li>
 </ul>
 </li>
-<li><a href="#id_4-references">4 References</a></li>
+<li>
+<a href="#id_4-running-the-speciespoolr-workflow">4 Running the SpeciesPoolR Workflow</a>
+<ul>
+<li><a href="#id_41-how-it-works">4.1 How It Works</a></li>
+</ul>
+</li>
+<li><a href="#id_5-references">5 References</a></li>
 </ul>
 <!-- README.md is generated from README.Rmd. Please edit that file --><div class="section level1">
 <div class="page-header"><h1 id="id_1-speciespoolr">1 SpeciesPoolR<a class="anchor" aria-label="anchor" href="#id_1-speciespoolr"></a>
@@ -83,13 +89,25 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/derek-corcoran-barrios/SpeciesPoolR" class="external-link">SpeciesPoolR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
-<h1 id="id_2-using-speciespoolr-manually">2 Using SpeciesPoolR Manually<a class="anchor" aria-label="anchor" href="#id_2-using-speciespoolr-manually"></a>
+<h1 id="id_2-motivation-for-the-pacakge">2 Motivation for the pacakge<a class="anchor" aria-label="anchor" href="#id_2-motivation-for-the-pacakge"></a>
 </h1>
 <div class="section level2">
-<h2 id="id_21-importing-and-downloading-species-presences">2.1 Importing and Downloading Species Presences<a class="anchor" aria-label="anchor" href="#id_21-importing-and-downloading-species-presences"></a>
+<h2 id="id_21-rare-species-are-common-and-important">2.1 Rare species are common and important<a class="anchor" aria-label="anchor" href="#id_21-rare-species-are-common-and-important"></a>
+</h2>
+<p>In ecological research, the debate on whether rare species outnumber common species within communities is pivotal for understanding biodiversity and guiding conservation efforts. Numerous studies have shown that rare species typically dominate large ecological assemblages, although common species often exert a more substantial influence on overall species richness patterns (Magurran and Henderson 2003; Bregović, Fišer, and Zagmajster 2019; Schalkwyk, Pryke, and Samways 2019). This complexity underscores the need for innovative approaches in studying biodiversity, particularly since rare species are challenging to model using traditional Species Distribution Models (SDMs) due to their low occurrence rates (Boyd et al. 2022).</p>
+<p>Given the limitations of SDMs in capturing the dynamics of rare species, it is essential to develop alternative methods for integrating these species into biodiversity assessments and conservation planning. Although rare species contribute uniquely to functional diversity and ecosystem stability, especially in specific habitats (Chapman, Tunnicliffe, and Bates 2018; Säterberg et al. 2019), their elusiveness in ecological models presents a significant challenge. The question of the minimum number of presence records required for reliable SDMs is crucial. Research has shown that while as few as 10-15 presence observations can produce nonrandom models for some species (Støa et al. 2019), others require higher thresholds—ranging from 14 to 25 records depending on the species’ prevalence and geographic range (Proosdij et al. 2016; Sampaio and Cavalcante 2023). These findings suggest that even sparse datasets can be useful, but the threshold varies significantly depending on species traits and habitat characteristics. Therefore, researchers must explore novel analytical frameworks and conservation strategies that better accommodate the ecological importance of rare species, thereby enhancing our ability to manage and preserve biodiversity effectively (Reddin, Bothwell, and Lennon 2015).</p>
+<p>In highly degraded habitats, such as Denmark, where over 60% of the land is dominated by agriculture and less than 10% remains as natural habitat, traditional SDMs may face further limitations. The scarcity of natural habitats means that presence records are often skewed towards human-modified landscapes, complicating the modeling of species’ ecological preferences. In such contexts, where the majority of occurrences may not reflect the species’ natural behaviors or habitat use, relying on complex SDMs could lead to misleading predictions. Instead, simpler algorithms that incorporate basic dispersal mechanisms and habitat filtering might be more effective. By reducing assumptions about habitat preferences, these methods can provide a more realistic framework for conservation planning, particularly when dealing with the restoration of agricultural lands into natural habitats.</p>
+<p>For rare species, and indeed for many others, this approach may offer a more practical solution in scenarios where detailed ecological data is sparse or unreliable. Studies have suggested that in such landscapes, simplistic models that prioritize dispersal and broad habitat suitability over intricate ecological niches can better capture species’ potential distributions and their responses to environmental changes (GUISAN et al. 2006; Thuiller et al. 2005), an example to this approach would be range bagging (Drake 2015). This pragmatic approach is especially pertinent when planning conservation actions in areas where habitat degradation has left little intact nature, and it ensures that even under data constraints, effective biodiversity management can still be pursued.</p>
+</div>
+</div>
+<div class="section level1">
+<h1 id="id_3-using-speciespoolr-manually">3 Using SpeciesPoolR Manually<a class="anchor" aria-label="anchor" href="#id_3-using-speciespoolr-manually"></a>
+</h1>
+<div class="section level2">
+<h2 id="id_31-importing-and-downloading-species-presences">3.1 Importing and Downloading Species Presences<a class="anchor" aria-label="anchor" href="#id_31-importing-and-downloading-species-presences"></a>
 </h2>
 <div class="section level3">
-<h3 id="id_211-step-1-reading-and-filtering-data">2.1.1 Step 1: Reading and Filtering Data<a class="anchor" aria-label="anchor" href="#id_211-step-1-reading-and-filtering-data"></a>
+<h3 id="id_311-step-1-reading-and-filtering-data">3.1.1 Step 1: Reading and Filtering Data<a class="anchor" aria-label="anchor" href="#id_311-step-1-reading-and-filtering-data"></a>
 </h3>
 <p>If you are going to use each of the functions of the SpeciesPoolR manually and sequentially, the first step would be to read in a species list from either a CSV or an XLSX file. You can use the get_data function for this. The function allows you to filter your data in a dplyr-like style:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -100,7 +118,7 @@
 <span>                    <span class="va">Class</span> <span class="op">==</span> <span class="st">"Magnoliopsida"</span> <span class="op">&amp;</span> </span>
 <span>                    <span class="va">Family</span> <span class="op">==</span> <span class="st">"Fabaceae"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>This will generate a dataset that can be used subsequently to count species presences and download species data as seen in table <a href="#tab:tablespecies">2.1</a></p>
+<p>This will generate a dataset that can be used subsequently to count species presences and download species data as seen in table <a href="#tab:tablespecies">3.1</a></p>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -215,15 +233,15 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:tablespecies"></span>Table 2.1: Species that will be used to generate species pools</p>
+<p><span id="tab:tablespecies"></span>Table 3.1: Species that will be used to generate species pools</p>
 </div>
 <div class="section level3">
-<h3 id="id_212-step-2-taxonomic-harmonization">2.1.2 Step 2: Taxonomic Harmonization<a class="anchor" aria-label="anchor" href="#id_212-step-2-taxonomic-harmonization"></a>
+<h3 id="id_312-step-2-taxonomic-harmonization">3.1.2 Step 2: Taxonomic Harmonization<a class="anchor" aria-label="anchor" href="#id_312-step-2-taxonomic-harmonization"></a>
 </h3>
 <p>Next, you should perform taxonomic harmonization to ensure that the species names you use are recognized by the GBIF taxonomic backbone. This can be done using the Clean_Taxa function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Clean_Species</span> <span class="op">&lt;-</span> <span class="fu">SpeciesPoolR</span><span class="fu">::</span><span class="fu"><a href="reference/Clean_Taxa.html">Clean_Taxa</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting data frame, with harmonized species names, is shown in table <a href="#tab:cleantable">2.2</a></p>
+<p>The resulting data frame, with harmonized species names, is shown in table <a href="#tab:cleantable">3.2</a></p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="12%">
@@ -368,16 +386,16 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:cleantable"></span>Table 2.2: Taxonomicallty harmonized dataset</p>
+<p><span id="tab:cleantable"></span>Table 3.2: Taxonomicallty harmonized dataset</p>
 </div>
 <div class="section level3">
-<h3 id="id_213-step-3-counting-species-presences">2.1.3 Step 3: Counting Species Presences<a class="anchor" aria-label="anchor" href="#id_213-step-3-counting-species-presences"></a>
+<h3 id="id_313-step-3-counting-species-presences">3.1.3 Step 3: Counting Species Presences<a class="anchor" aria-label="anchor" href="#id_313-step-3-counting-species-presences"></a>
 </h3>
 <p>After harmonizing the species names, it’s important to obtain the number of occurrences of each species in your study area, especially if you plan to calculate rarity. You can do this using the <code>count_presences</code> function. This function allows you to filter occurrences by country or by a shapefile. Below is an example for Denmark:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Assuming Clean_Species is your data frame</span></span>
 <span><span class="va">Count_DK</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, country <span class="op">=</span> <span class="st">"DK"</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting data frame of species presences in Denmark is shown in table <a href="#tab:tableCountDenmark">2.3</a></p>
+<p>The resulting data frame of species presences in Denmark is shown in table <a href="#tab:tableCountDenmark">3.3</a></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Count_DK</span>, caption <span class="op">=</span> <span class="st">"Counts of presences for the different species within Denmark"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -438,13 +456,13 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:tableCountDenmark"></span>Table 2.3: Counts of presences for the different species within Denmark</p>
+<p><span id="tab:tableCountDenmark"></span>Table 3.3: Counts of presences for the different species within Denmark</p>
 <p>Alternatively, you can filter by a specific region using a shapefile. For example, to count species presences within Aarhus commune:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting data.frame for Aarhus commune is shown int table <a href="#tab:tableCountAarhus">2.4</a></p>
+<p>The resulting data.frame for Aarhus commune is shown int table <a href="#tab:tableCountAarhus">3.4</a></p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">family</th>
@@ -503,7 +521,7 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:tableCountAarhus"></span>Table 2.4: Counts of presences for the different species within Aarhus commune</p>
+<p><span id="tab:tableCountAarhus"></span>Table 3.4: Counts of presences for the different species within Aarhus commune</p>
 <p>Now it is recommended to eliminate species that have no occurrences in the area, this is done automatically in the workflow version:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
@@ -516,10 +534,10 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="id_22-creating-spatial-buffers-and-habitat-filtering">2.2 Creating Spatial Buffers and Habitat Filtering<a class="anchor" aria-label="anchor" href="#id_22-creating-spatial-buffers-and-habitat-filtering"></a>
+<h2 id="id_32-creating-spatial-buffers-and-habitat-filtering">3.2 Creating Spatial Buffers and Habitat Filtering<a class="anchor" aria-label="anchor" href="#id_32-creating-spatial-buffers-and-habitat-filtering"></a>
 </h2>
 <div class="section level3">
-<h3 id="id_221-step-1-creating-buffers-around-species-presences">2.2.1 Step 1 Creating Buffers Around Species Presences<a class="anchor" aria-label="anchor" href="#id_221-step-1-creating-buffers-around-species-presences"></a>
+<h3 id="id_321-step-1-creating-buffers-around-species-presences">3.2.1 Step 1 Creating Buffers Around Species Presences<a class="anchor" aria-label="anchor" href="#id_321-step-1-creating-buffers-around-species-presences"></a>
 </h3>
 <p>Once you have identified the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers represent the potential dispersal range of each species, helping to assess areas where the species might establish itself given a specified dispersal distance.</p>
 <p>To create these buffers, you’ll use a raster file as a template to rasterize the buffers and specify the distance (in meters) representing the species’ dispersal range.</p>
@@ -528,7 +546,7 @@
 <span></span>
 <span><span class="va">buffer500</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_buffer_rasterized.html">make_buffer_rasterized</a></span><span class="op">(</span><span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span>, dist <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p>In this example, the make_buffer_rasterized function generates a 500-meter buffer around each occurrence point in the Presences dataset. The function utilizes the provided raster file as a template for rasterizing these buffers.</p>
-<p>The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species. Table <a href="#tab:showbuffer500">2.5</a> displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.</p>
+<p>The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species. Table <a href="#tab:showbuffer500">3.5</a> displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="right">cell</th>
@@ -577,11 +595,11 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:showbuffer500"></span>Table 2.5: Raster cells within the 500-meter buffer of each species</p>
+<p><span id="tab:showbuffer500"></span>Table 3.5: Raster cells within the 500-meter buffer of each species</p>
 <p>This table provides a detailed view of how the buffer overlaps with the raster cells, listing each cell and the corresponding species present within that buffer.</p>
 </div>
 <div class="section level3">
-<h3 id="id_222-step-2-habitat-filtering">2.2.2 Step 2: Habitat Filtering<a class="anchor" aria-label="anchor" href="#id_222-step-2-habitat-filtering"></a>
+<h3 id="id_322-step-2-habitat-filtering">3.2.2 Step 2: Habitat Filtering<a class="anchor" aria-label="anchor" href="#id_322-step-2-habitat-filtering"></a>
 </h3>
 <p>After creating the buffers, the next logical step is to filter these areas based on habitat suitability. This allows you to focus on specific land-use types or habitats where the species is more likely to thrive. Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.</p>
 <p>To achieve this, you’ll use the <code>ModelAndPredictFunc</code>, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster. This comprehensive function encompasses several critical steps:</p>
@@ -592,7 +610,7 @@
 <p>5- <em>Predicting Suitability</em>: The fitted model is then used to predict habitat suitability for each species across all available land-use types.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Habitats</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ModelAndPredictFunc.html">ModelAndPredictFunc</a></span><span class="op">(</span>DF <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types. Table <a href="#tab:tablespeciespred">2.6</a> shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.</p>
+<p>The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types. Table <a href="#tab:tablespeciespred">3.6</a> shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Habitats</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>,<span class="op">]</span>, caption <span class="op">=</span> <span class="st">"Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category."</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -614,32 +632,32 @@
 </tr>
 <tr class="odd">
 <td align="left">ForestWetRich</td>
-<td align="right">0.6782673</td>
+<td align="right">0.6920653</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
-<td align="left">OpenWetRich</td>
-<td align="right">0.6782673</td>
+<td align="left">OpenWetPoor</td>
+<td align="right">0.6920653</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
-<td align="left">OpenWetPoor</td>
-<td align="right">0.6782673</td>
+<td align="left">OpenWetRich</td>
+<td align="right">0.6920653</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
 <td align="left">Exclude</td>
-<td align="right">0.5111090</td>
+<td align="right">0.5150139</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
 <td align="left">ForestDryRich</td>
-<td align="right">0.3633268</td>
+<td align="right">0.3116834</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
 <td align="left">ForestDryPoor</td>
-<td align="right">0.2306091</td>
+<td align="right">0.2328454</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
@@ -649,10 +667,10 @@
 </tr>
 </tbody>
 </table>
-<p><span id="tab:tablespeciespred"></span>Table 2.6: Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.</p>
+<p><span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.</p>
 </div>
 <div class="section level3">
-<h3 id="id_223-step-3-generating-habitat-suitability-thresholds">2.2.3 Step 3: Generating Habitat Suitability Thresholds<a class="anchor" aria-label="anchor" href="#id_223-step-3-generating-habitat-suitability-thresholds"></a>
+<h3 id="id_323-step-3-generating-habitat-suitability-thresholds">3.2.3 Step 3: Generating Habitat Suitability Thresholds<a class="anchor" aria-label="anchor" href="#id_323-step-3-generating-habitat-suitability-thresholds"></a>
 </h3>
 <p>While continuous predictions provide a detailed picture of habitat suitability, it is often useful to classify these predictions into binary suitability thresholds. Thresholds can help determine areas where species presence is more likely or unlikely based on habitat preferences.</p>
 <p>The create_thresholds function facilitates this by generating thresholds based on the modeled land-use preferences, using the 90th, 95th, and 99th percentiles of the predicted suitability values. These thresholds represent the commission rates, helping to define the probability cutoff above which a land-use type is considered suitable for a species.</p>
@@ -661,10 +679,10 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="id_23-generating-summary-biodiversity-statistics">2.3 Generating summary biodiversity statistics<a class="anchor" aria-label="anchor" href="#id_23-generating-summary-biodiversity-statistics"></a>
+<h2 id="id_33-generating-summary-biodiversity-statistics">3.3 Generating summary biodiversity statistics<a class="anchor" aria-label="anchor" href="#id_33-generating-summary-biodiversity-statistics"></a>
 </h2>
 <div class="section level3">
-<h3 id="id_231-step-1-generating-phylogenetic-diversity-metrics">2.3.1 Step 1 Generating Phylogenetic diversity metrics<a class="anchor" aria-label="anchor" href="#id_231-step-1-generating-phylogenetic-diversity-metrics"></a>
+<h3 id="id_331-step-1-generating-phylogenetic-diversity-metrics">3.3.1 Step 1 Generating Phylogenetic diversity metrics<a class="anchor" aria-label="anchor" href="#id_331-step-1-generating-phylogenetic-diversity-metrics"></a>
 </h3>
 <p>In order to generate Phylogenetic Diversity measures, the first step is to generate a phylogenetic tree with the species we have, for that we will use the V.Phylomaker package function <code>phylo.maker</code>based on the megaphylogeny of vascular plants (Jin and Qian 2019; Zanne et al. 2014), this means that we can only use this functions in species pools of plants.</p>
 <p>In this case we use the <code>generate_tree</code> from SpeciesPoolR to do so:</p>
@@ -675,7 +693,7 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="id_3-running-the-speciespoolr-workflow">3 Running the SpeciesPoolR Workflow<a class="anchor" aria-label="anchor" href="#id_3-running-the-speciespoolr-workflow"></a>
+<h1 id="id_4-running-the-speciespoolr-workflow">4 Running the SpeciesPoolR Workflow<a class="anchor" aria-label="anchor" href="#id_4-running-the-speciespoolr-workflow"></a>
 </h1>
 <p>If you prefer to automate the process and run the <code>SpeciesPoolR</code> workflow as a pipeline, you can use the <code>run_workflow</code> function. This function sets up a <code>targets</code> workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis. This approach is especially useful for larger datasets or when you want to ensure reproducibility.</p>
 <p>To run the workflow, you can use the following code. We’ll use the same species filter as before, focusing on the <code>Plantae</code> kingdom, <code>Magnoliopsida</code> class, and <code>Fabaceae</code> family. Additionally, we’ll focus on the Aarhus commune using a shapefile.</p>
@@ -693,88 +711,88 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Raster</span></span>
 <span><span class="co">#&gt; ▶ dispatched target shp</span></span>
-<span><span class="co">#&gt; ● completed target shp [5.072 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target shp [8.316 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target file</span></span>
 <span><span class="co">#&gt; ● completed target file [0 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target data</span></span>
-<span><span class="co">#&gt; ● completed target Raster [5.257 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Raster [8.492 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Landuses</span></span>
-<span><span class="co">#&gt; ● completed target Landuses [0 seconds]</span></span>
-<span><span class="co">#&gt; ● completed target data [0.418 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Landuses [0.001 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target data [0.74 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Clean</span></span>
-<span><span class="co">#&gt; ● completed target Clean [1.311 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Clean [1.393 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.146 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.158 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.231 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.09 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.075 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.035 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.032 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.33 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.026 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.035 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.086 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.03 seconds]</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.03 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.088 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Count_Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched target More_than_zero</span></span>
-<span><span class="co">#&gt; ● completed target More_than_zero [0.001 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target More_than_zero [0.002 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [0.456 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [0.564 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [0.715 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [0.944 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_626a53b08dfe709d</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.112 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.507 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [0.706 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [0.916 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [15.273 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [21.86 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [0.499 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [1.397 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_b226446ac3154351</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [6.467 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [7.668 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.63 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [1.221 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.417 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [30.607 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.511 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.948 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.915 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.675 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.362 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.695 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.312 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.375 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Phylo_Tree</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.433 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.614 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern ModelAndPredict</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.071 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.065 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.203 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.277 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.078 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.082 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.038 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.065 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.058 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.06 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.05 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.062 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.112 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.055 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern buffer</span></span>
-<span><span class="co">#&gt; ● completed target Phylo_Tree [36.95 seconds]</span></span>
-<span><span class="co">#&gt; ▶ ended pipeline [1.229 minutes]</span></span>
+<span><span class="co">#&gt; ● completed target Phylo_Tree [42.056 seconds]</span></span>
+<span><span class="co">#&gt; ▶ ended pipeline [1.556 minutes]</span></span>
 <span><span class="co">#&gt; Warning message:</span></span>
 <span><span class="co">#&gt; 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.</span></span></code></pre></div>
 <p><img src="reference/figures/README-run_workflow-1.png" width="100%"></p>
 <div class="section level2">
-<h2 id="id_31-how-it-works">3.1 How It Works<a class="anchor" aria-label="anchor" href="#id_31-how-it-works"></a>
+<h2 id="id_41-how-it-works">4.1 How It Works<a class="anchor" aria-label="anchor" href="#id_41-how-it-works"></a>
 </h2>
 <p>The run_workflow function creates a pipeline that:</p>
 <p>1- Reads the data from the specified file path. 2- Filters the data using the provided filter expression. 3- Cleans the species names to match the GBIF taxonomic backbone. 4- Counts the species presences within the specified geographic area (in this case, Aarhus). 5- Generates a buffer around the species presences within the specified distance, for a template raster. 6- Predicts habitat suitability for each species across different land-use types using the ModelAndPredictFunc, which models habitat preferences and provides continuous predictions. 7- Generates a phyllogenetic tree for the species in the species list. 8- Generates a visual representation of the workflow (if plot = TRUE).</p>
@@ -783,11 +801,50 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="id_4-references">4 References<a class="anchor" aria-label="anchor" href="#id_4-references"></a>
+<h1 id="id_5-references">5 References<a class="anchor" aria-label="anchor" href="#id_5-references"></a>
 </h1>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Boyd2022Eco-evolutionary" class="csl-entry">
+Boyd, Jennifer Nagel, Jill T. Anderson, Jessica R. Brzyski, Carol J. Baskauf, and J. Cruse-Sanders. 2022. “Eco-Evolutionary Causes and Consequences of Rarity in Plants: A Meta-Analysis.” <em>The New Phytologist</em>. <a href="https://doi.org/10.1111/nph.18172" class="external-link uri">https://doi.org/10.1111/nph.18172</a>.
+</div>
+<div id="ref-Bregovic2019Contribution" class="csl-entry">
+Bregović, Petra, C. Fišer, and M. Zagmajster. 2019. “Contribution of Rare and Common Species to Subterranean Species Richness Patterns.” <em>Ecology and Evolution</em> 9: 11606–18. <a href="https://doi.org/10.1002/ece3.5604" class="external-link uri">https://doi.org/10.1002/ece3.5604</a>.
+</div>
+<div id="ref-Chapman2018Both" class="csl-entry">
+Chapman, Abbie S. A., V. Tunnicliffe, and A. Bates. 2018. “Both Rare and Common Species Make Unique Contributions to Functional Diversity in an Ecosystem Unaffected by Human Activities.” <em>Diversity and Distributions</em> 24: 568–78. <a href="https://doi.org/10.1111/ddi.12712" class="external-link uri">https://doi.org/10.1111/ddi.12712</a>.
+</div>
+<div id="ref-drake2015range" class="csl-entry">
+Drake, John M. 2015. “Range Bagging: A New Method for Ecological Niche Modelling from Presence-Only Data.” <em>Journal of the Royal Society Interface</em> 12 (107): 20150086.
+</div>
+<div id="ref-GUISAN_2006" class="csl-entry">
+GUISAN, ANTOINE, OLIVIER BROENNIMANN, ROBIN ENGLER, MATHIAS VUST, NIGEL G. YOCCOZ, ANTHONY LEHMANN, and NIKLAUS E. ZIMMERMANN. 2006. “Using Niche‐based Models to Improve the Sampling of Rare Species.” <em>Conservation Biology</em> 20 (2): 501–11. <a href="https://doi.org/10.1111/j.1523-1739.2006.00354.x" class="external-link uri">https://doi.org/10.1111/j.1523-1739.2006.00354.x</a>.
+</div>
 <div id="ref-Jin2019" class="csl-entry">
 Jin, Yi, and Hong Qian. 2019. “V.PhyloMaker: An r Package That Can Generate Very Large Phylogenies for Vascular Plants.” <em>Ecography</em> 42: 1353–59.
+</div>
+<div id="ref-Magurran2003Explaining" class="csl-entry">
+Magurran, A., and P. Henderson. 2003. “Explaining the Excess of Rare Species in Natural Species Abundance Distributions.” <em>Nature</em> 422: 714–16. <a href="https://doi.org/10.1038/nature01547" class="external-link uri">https://doi.org/10.1038/nature01547</a>.
+</div>
+<div id="ref-Proosdij2016Minimum" class="csl-entry">
+Proosdij, A. V., M. Sosef, J. Wieringa, and N. Raes. 2016. “Minimum Required Number of Specimen Records to Develop Accurate Species Distribution Models.” <em>Ecography</em> 39: 542–52. <a href="https://doi.org/10.1111/ECOG.01509" class="external-link uri">https://doi.org/10.1111/ECOG.01509</a>.
+</div>
+<div id="ref-Reddin2015Between-taxon" class="csl-entry">
+Reddin, Carl J., J. Bothwell, and J. Lennon. 2015. “Between-Taxon Matching of Common and Rare Species Richness Patterns.” <em>Global Ecology and Biogeography</em> 24: 1476–86. <a href="https://doi.org/10.1111/GEB.12372" class="external-link uri">https://doi.org/10.1111/GEB.12372</a>.
+</div>
+<div id="ref-Sampaio2023Accurate" class="csl-entry">
+Sampaio, A. C. G., and A. Cavalcante. 2023. “Accurate Species Distribution Models: Minimum Required Number of Specimen Records in the Caatinga Biome.” <em>Anais Da Academia Brasileira de Ciencias</em> 95 2: e20201421. <a href="https://doi.org/10.1590/0001-3765202320201421" class="external-link uri">https://doi.org/10.1590/0001-3765202320201421</a>.
+</div>
+<div id="ref-Saterberg2019A" class="csl-entry">
+Säterberg, Torbjörn, T. Jonsson, J. Yearsley, Sofia Berg, and B. Ebenman. 2019. “A Potential Role for Rare Species in Ecosystem Dynamics.” <em>Scientific Reports</em> 9. <a href="https://doi.org/10.1038/s41598-019-47541-6" class="external-link uri">https://doi.org/10.1038/s41598-019-47541-6</a>.
+</div>
+<div id="ref-Schalkwyk2019Contribution" class="csl-entry">
+Schalkwyk, J., J. Pryke, and M. Samways. 2019. “Contribution of Common Vs. Rare Species to Species Diversity Patterns in Conservation Corridors.” <em>Ecological Indicators</em>. <a href="https://doi.org/10.1016/J.ECOLIND.2019.05.014" class="external-link uri">https://doi.org/10.1016/J.ECOLIND.2019.05.014</a>.
+</div>
+<div id="ref-Stoa2019How" class="csl-entry">
+Støa, Bente, R. Halvorsen, J. Stokland, and V. I. Gusarov. 2019. “How Much Is Enough? Influence of Number of Presence Observations on the Performance of Species Distribution Models.” <em>Sommerfeltia</em> 39: 1–28. <a href="https://doi.org/10.2478/som-2019-0001" class="external-link uri">https://doi.org/10.2478/som-2019-0001</a>.
+</div>
+<div id="ref-Thuiller_2005" class="csl-entry">
+Thuiller, Wilfried, Sandra Lavorel, Miguel B. Araújo, Martin T. Sykes, and I. Colin Prentice. 2005. “Climate Change Threats to Plant Diversity in Europe.” <em>Proceedings of the National Academy of Sciences</em> 102 (23): 8245–50. <a href="https://doi.org/10.1073/pnas.0409902102" class="external-link uri">https://doi.org/10.1073/pnas.0409902102</a>.
 </div>
 <div id="ref-Zanne2014" class="csl-entry">
 Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman, Stephen A. Smith, Richard G. FitzJohn, Daniel J. McGlinn, et al. 2014. “Three Keys to the Radiation of Angiosperms into Freezing Environments.” <em>American Journal of Botany</em> 506: 89–92.
