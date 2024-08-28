@@ -75,6 +75,33 @@ strategies that better accommodate the ecological importance of rare
 species, thereby enhancing our ability to manage and preserve
 biodiversity effectively (Reddin, Bothwell, and Lennon 2015).
 
+In highly degraded habitats, such as Denmark, where over 60% of the land
+is dominated by agriculture and less than 10% remains as natural
+habitat, traditional SDMs may face further limitations. The scarcity of
+natural habitats means that presence records are often skewed towards
+human-modified landscapes, complicating the modeling of species’
+ecological preferences. In such contexts, where the majority of
+occurrences may not reflect the species’ natural behaviors or habitat
+use, relying on complex SDMs could lead to misleading predictions.
+Instead, simpler algorithms that incorporate basic dispersal mechanisms
+and habitat filtering might be more effective. By reducing assumptions
+about habitat preferences, these methods can provide a more realistic
+framework for conservation planning, particularly when dealing with the
+restoration of agricultural lands into natural habitats.
+
+For rare species, and indeed for many others, this approach may offer a
+more practical solution in scenarios where detailed ecological data is
+sparse or unreliable. Studies have suggested that in such landscapes,
+simplistic models that prioritize dispersal and broad habitat
+suitability over intricate ecological niches can better capture species’
+potential distributions and their responses to environmental changes
+(GUISAN et al. 2006; Thuiller et al. 2005), an example to this approach
+would be range bagging (Drake 2015). This pragmatic approach is
+especially pertinent when planning conservation actions in areas where
+habitat degradation has left little intact nature, and it ensures that
+even under data constraints, effective biodiversity management can still
+be pursued.
+
 # 3 Using SpeciesPoolR Manually
 
 ## 3.1 Importing and Downloading Species Presences
@@ -322,12 +349,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6976068 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6976068 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6976068 | Anthyllis vulneraria |
-| Exclude       | 0.5126502 | Anthyllis vulneraria |
-| ForestDryRich | 0.2785385 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2191165 | Anthyllis vulneraria |
+| ForestWetRich | 0.6920653 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6920653 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6920653 | Anthyllis vulneraria |
+| Exclude       | 0.5150139 | Anthyllis vulneraria |
+| ForestDryRich | 0.3116834 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2328454 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat
@@ -403,83 +430,83 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target shp
-#> ● completed target Raster [7.645 seconds]
+#> ● completed target shp [8.316 seconds]
 #> ▶ dispatched target file
-#> ● completed target shp [0.001 seconds]
-#> ▶ dispatched target Landuses
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Landuses [0 seconds]
-#> ● completed target data [10.409 seconds]
+#> ● completed target Raster [8.492 seconds]
+#> ▶ dispatched target Landuses
+#> ● completed target Landuses [0.001 seconds]
+#> ● completed target data [0.74 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [8.631 seconds]
+#> ● completed target Clean [1.393 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.169 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.158 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.261 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.09 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.08 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.035 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.037 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.33 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.038 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.035 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_69210fc440d13855 [0.163 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.039 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.034 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.088 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.501 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.564 seconds]
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch Presences_c112b37cd15959d6 [0.879 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.944 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.742 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.507 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_daf8d6353bc80f0c [1.064 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.916 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [20.668 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [21.86 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.644 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [1.397 seconds]
 #> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [6.36 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [7.668 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_e65f4227e8299cc4 [0.818 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [1.221 seconds]
 #> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [28.418 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [30.607 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.48 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.948 seconds]
 #> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.864 seconds]
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.675 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [0.405 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.695 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.287 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.375 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [10.361 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.614 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.102 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.065 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.306 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.277 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.085 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.082 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.055 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.065 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.04 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.06 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.033 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.062 seconds]
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.031 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.055 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [37.873 seconds]
-#> ▶ ended pipeline [1.707 minutes]
+#> ● completed target Phylo_Tree [42.056 seconds]
+#> ▶ ended pipeline [1.556 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
@@ -541,6 +568,24 @@ Chapman, Abbie S. A., V. Tunnicliffe, and A. Bates. 2018. “Both Rare and
 Common Species Make Unique Contributions to Functional Diversity in an
 Ecosystem Unaffected by Human Activities.” *Diversity and Distributions*
 24: 568–78. <https://doi.org/10.1111/ddi.12712>.
+
+</div>
+
+<div id="ref-drake2015range" class="csl-entry">
+
+Drake, John M. 2015. “Range Bagging: A New Method for Ecological Niche
+Modelling from Presence-Only Data.” *Journal of the Royal Society
+Interface* 12 (107): 20150086.
+
+</div>
+
+<div id="ref-GUISAN_2006" class="csl-entry">
+
+GUISAN, ANTOINE, OLIVIER BROENNIMANN, ROBIN ENGLER, MATHIAS VUST, NIGEL
+G. YOCCOZ, ANTHONY LEHMANN, and NIKLAUS E. ZIMMERMANN. 2006. “Using
+Niche‐based Models to Improve the Sampling of Rare Species.”
+*Conservation Biology* 20 (2): 501–11.
+<https://doi.org/10.1111/j.1523-1739.2006.00354.x>.
 
 </div>
 
@@ -610,6 +655,15 @@ Støa, Bente, R. Halvorsen, J. Stokland, and V. I. Gusarov. 2019. “How
 Much Is Enough? Influence of Number of Presence Observations on the
 Performance of Species Distribution Models.” *Sommerfeltia* 39: 1–28.
 <https://doi.org/10.2478/som-2019-0001>.
+
+</div>
+
+<div id="ref-Thuiller_2005" class="csl-entry">
+
+Thuiller, Wilfried, Sandra Lavorel, Miguel B. Araújo, Martin T. Sykes,
+and I. Colin Prentice. 2005. “Climate Change Threats to Plant Diversity
+in Europe.” *Proceedings of the National Academy of Sciences* 102 (23):
+8245–50. <https://doi.org/10.1073/pnas.0409902102>.
 
 </div>
 
