@@ -241,46 +241,80 @@ ModelAndPredictFunc <- function(DF, file) {
 #'
 #' @return A data frame with the calculated thresholds. The data frame contains columns for `species`, `Thres_99`, `Thres_95`, and `Thres_90`.
 #'
-#' @importFrom dplyr left_join slice_max pull bind_rows
+#' @importFrom dplyr left_join slice_max pull bind_rows filter
 #' @importFrom stringr str_replace_all
+#' @importFrom purrr map2
 #'
 #' @export
 
-create_thresholds <- function(Model, reference, file){
-  Pred <- NULL
-  if (nrow(reference) == 0) {
-    Thres <- data.frame(species = unique(Model$species),Thres_99 = 1, Thres_95 = 1, Thres_90 = 1)
-  } else {
-    Thres <- data.frame(species = unique(Model$species),Thres_99 = NA, Thres_95 = NA, Thres_90 = NA)
-    Pres <- SampleLanduse(DF = reference, file = file)
+create_thresholds <- function(Model, reference, file) {
+  # Find species that are present in both Model and reference
+  common_species <- intersect(unique(Model$species), unique(reference$species))
 
-    is_both <- stringr::str_detect(Pres$Landuse, "Both")
-    duplicated_rows1 <- Pres[is_both, ]
-    duplicated_rows2 <- Pres[is_both, ]
-    duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
-    duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
-    FixedDataset <- Pres[!is_both, ] |>
-      dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
-    Thres$Thres_99 <- FixedDataset |>
-      dplyr::left_join(Model) |>
-      slice_max(order_by = Pred,prop = 0.99, with_ties = F) |>
-      pull(Pred) |>
-      min()
+  # Filter Model and reference to include only common species
+  Model <- Model |>  dplyr::filter(species %in% common_species)
+  reference <- reference |>  dplyr::filter(species %in% common_species)
 
-    Thres$Thres_95 <- FixedDataset |>
-      dplyr::left_join(Model) |>
-      slice_max(order_by = Pred,prop = 0.95, with_ties = F) |>
-      pull(Pred) |>
-      min()
+  # Split Model and reference by species
+  Model_split <- split(Model, Model$species)
+  reference_split <- split(reference, reference$species)
 
-    Thres$Thres_90 <- FixedDataset |>
-      dplyr::left_join(Model) |>
-      slice_max(order_by = Pred,prop = 0.90, with_ties = F) |>
-      pull(Pred) |>
-      min()
+  # Define a helper function to process each species individually
+  process_species <- function(Model_species, reference_species) {
+    if (nrow(reference_species) == 0) {
+      return(data.frame(
+        species = unique(Model_species$species),
+        Thres_99 = 1,
+        Thres_95 = 1,
+        Thres_90 = 1
+      ))
+    } else {
+      Thres <- data.frame(
+        species = unique(Model_species$species),
+        Thres_99 = NA,
+        Thres_95 = NA,
+        Thres_90 = NA
+      )
+
+      Pres <- SampleLanduse(DF = reference_species, file = file)
+
+      is_both <- stringr::str_detect(Pres$Landuse, "Both")
+      duplicated_rows1 <- Pres[is_both, ]
+      duplicated_rows2 <- Pres[is_both, ]
+      duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
+      duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
+      FixedDataset <- Pres[!is_both, ] |>
+        dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
+
+      Thres$Thres_99 <- FixedDataset |>
+        dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
+        dplyr::slice_max(order_by = Pred, prop = 0.99, with_ties = FALSE) |>
+        dplyr::pull(Pred) |>
+        min()
+
+      Thres$Thres_95 <- FixedDataset |>
+        dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
+        dplyr::slice_max(order_by = Pred, prop = 0.95, with_ties = FALSE) |>
+        dplyr::pull(Pred) |>
+        min()
+
+      Thres$Thres_90 <- FixedDataset |>
+        dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
+        dplyr::slice_max(order_by = Pred, prop = 0.90, with_ties = FALSE) |>
+        dplyr::pull(Pred) |>
+        min()
+
+      return(Thres)
+    }
   }
 
-  return(Thres)
+  # Use purrr::map2 to apply process_species to each pair of Model and reference subsets
+  thresholds_list <- purrr::map2(Model_split, reference_split, process_species)
+
+  # Combine the results into a single data frame
+  thresholds <- dplyr::bind_rows(thresholds_list)
+
+  return(thresholds)
 }
 
 #' Generate a Lookup Table for Species Land-Use Preferences

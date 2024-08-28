@@ -63,6 +63,7 @@ run_workflow <- function(workers = 2,
         targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
                    pattern = map(Presences)),
         targets::tar_target(ModelAndPredict, ModelAndPredictFunc(Presences, file = Landuses), pattern = map(Presences)),
+        targets::tar_target(Thresholds, create_thresholds(Model = ModelAndPredict, reference = Presences, file = Landuses)),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
         )
     },

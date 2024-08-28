@@ -349,12 +349,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6920653 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6920653 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6920653 | Anthyllis vulneraria |
-| Exclude       | 0.5150139 | Anthyllis vulneraria |
-| ForestDryRich | 0.3116834 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2328454 | Anthyllis vulneraria |
+| ForestWetRich | 0.7025292 | Anthyllis vulneraria |
+| OpenWetRich   | 0.7025292 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.7025292 | Anthyllis vulneraria |
+| Exclude       | 0.5123318 | Anthyllis vulneraria |
+| ForestDryRich | 0.3098527 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2133406 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat
@@ -378,6 +378,27 @@ above which a land-use type is considered suitable for a species.
 
 Here’s how you can generate these thresholds for the species in your
 dataset:
+
+``` r
+Thresholds <- create_thresholds(Model = Habitats, reference = Presences, file = Raster)
+```
+
+This will generate de data set with the threshold for the comission
+rates of 90, 95 and 99th percentile for each species that can be seen in
+Table <a href="#tab:thresholdtables">3.7</a>.
+
+| species              | Thres_99 | Thres_95 | Thres_90 |
+|:---------------------|---------:|---------:|---------:|
+| Anthyllis vulneraria |    0.512 |    0.512 |    0.512 |
+| Genista tinctoria    |    0.634 |    0.634 |    0.634 |
+| Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
+| Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
+| Vicia sativa         |    0.404 |    0.404 |    0.404 |
+| Vicia sepium         |    0.288 |    0.288 |    0.288 |
+| Vicia villosa        |    0.633 |    0.633 |    0.633 |
+
+<span id="tab:thresholdtables"></span>Table 3.7: Threshold based on
+commission rate for the species that are used above
 
 This step produces a data frame containing the thresholds for each
 species, which can then be used to classify habitat suitability into
@@ -429,84 +450,86 @@ run_workflow(
   rasterLU = Raster
 )
 #> ▶ dispatched target Raster
-#> ▶ dispatched target shp
-#> ● completed target shp [8.316 seconds]
-#> ▶ dispatched target file
-#> ● completed target file [0 seconds]
-#> ▶ dispatched target data
-#> ● completed target Raster [8.492 seconds]
 #> ▶ dispatched target Landuses
-#> ● completed target Landuses [0.001 seconds]
-#> ● completed target data [0.74 seconds]
+#> ● completed target Raster [7.149 seconds]
+#> ▶ dispatched target shp
+#> ● completed target Landuses [0 seconds]
+#> ▶ dispatched target file
+#> ● completed target shp [0 seconds]
+#> ● completed target file [0.001 seconds]
+#> ▶ dispatched target data
+#> ● completed target data [10.465 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.393 seconds]
+#> ● completed target Clean [8.179 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.158 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.219 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.09 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.344 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.035 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.113 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.33 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.039 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_69210fc440d13855 [0.035 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.034 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.036 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.042 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.088 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.029 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.173 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.043 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.564 seconds]
-#> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch Presences_c112b37cd15959d6 [0.944 seconds]
-#> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.507 seconds]
-#> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_daf8d6353bc80f0c [0.916 seconds]
-#> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [21.86 seconds]
-#> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [1.397 seconds]
-#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [7.668 seconds]
-#> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_e65f4227e8299cc4 [1.221 seconds]
-#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [30.607 seconds]
-#> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.948 seconds]
-#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.675 seconds]
-#> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [0.695 seconds]
-#> ● completed pattern Presences
-#> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.375 seconds]
-#> ▶ dispatched target Phylo_Tree
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.614 seconds]
-#> ● completed pattern ModelAndPredict
+#> ● completed branch Presences_af64bac105a08467 [0.517 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.065 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.141 seconds]
+#> ▶ dispatched branch Presences_daf8d6353bc80f0c
+#> ● completed branch Presences_c112b37cd15959d6 [0.92 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.277 seconds]
-#> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.082 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.155 seconds]
+#> ▶ dispatched branch Presences_310adeccf6b44725
+#> ● completed branch Presences_310adeccf6b44725 [0.427 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.065 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [1.059 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_b226446ac3154351 [0.322 seconds]
+#> ▶ dispatched branch Presences_e65f4227e8299cc4
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.375 seconds]
+#> ▶ dispatched branch Presences_d4b9dc68293bd5b2
+#> ● completed branch Presences_e65f4227e8299cc4 [0.631 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.06 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.046 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.483 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.062 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.051 seconds]
+#> ▶ dispatched target Phylo_Tree
+#> ● completed branch Presences_88937156c1302a12 [0.352 seconds]
+#> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.055 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.036 seconds]
 #> ● completed pattern buffer
-#> ● completed target Phylo_Tree [42.056 seconds]
-#> ▶ ended pipeline [1.556 minutes]
+#> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.124 seconds]
+#> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [18.38 seconds]
+#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
+#> ● completed branch ModelAndPredict_b226446ac3154351 [4.941 seconds]
+#> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
+#> ● completed target Phylo_Tree [43.023 seconds]
+#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.431 seconds]
+#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.837 seconds]
+#> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.376 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.426 seconds]
+#> ● completed pattern ModelAndPredict
+#> ▶ dispatched target Thresholds
+#> ● completed target Thresholds [0.514 seconds]
+#> ▶ ended pipeline [1.463 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```

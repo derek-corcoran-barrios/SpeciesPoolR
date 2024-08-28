@@ -192,8 +192,14 @@ The create_thresholds function facilitates this by generating thresholds based o
 
 Here’s how you can generate these thresholds for the species in your dataset:
 
-```{r thresholds, eval=FALSE}
+```{r thresholds}
+Thresholds <- create_thresholds(Model = Habitats, reference = Presences, file = Raster)
+```
 
+This will generate de data set with the threshold for the comission rates of 90, 95 and 99th percentile for each species that can be seen in Table \@ref(tab:thresholdtables).
+
+```{r thresholdtables, echo=FALSE}
+knitr::kable(Thresholds, digits = 3, caption = "Threshold based on commission rate for the species that are used above")
 ```
 
 
