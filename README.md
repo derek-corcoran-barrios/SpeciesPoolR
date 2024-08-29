@@ -22,6 +22,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 The goal of the SpeciesPoolR package is to generate potential species
@@ -349,12 +350,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.7025292 | Anthyllis vulneraria |
-| OpenWetRich   | 0.7025292 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.7025292 | Anthyllis vulneraria |
-| Exclude       | 0.5123318 | Anthyllis vulneraria |
-| ForestDryRich | 0.3098527 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2133406 | Anthyllis vulneraria |
+| ForestWetRich | 0.6726202 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6726202 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6726202 | Anthyllis vulneraria |
+| Exclude       | 0.5103812 | Anthyllis vulneraria |
+| ForestDryRich | 0.3203061 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2439111 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat
@@ -389,11 +390,11 @@ Table <a href="#tab:thresholdtables">3.7</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.512 |    0.512 |    0.512 |
+| Anthyllis vulneraria |    0.510 |    0.510 |    0.510 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
-| Vicia sativa         |    0.404 |    0.404 |    0.404 |
+| Vicia sativa         |    0.405 |    0.405 |    0.405 |
 | Vicia sepium         |    0.288 |    0.288 |    0.288 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
@@ -404,6 +405,41 @@ This step produces a data frame containing the thresholds for each
 species, which can then be used to classify habitat suitability into
 binary categories, helping you to identify core habitats or areas of
 higher conservation value.
+
+After we have the continuous thresholds we can generate a lookup table
+to see which species can inhabit in each landuse type
+
+``` r
+LookupTable <- Generate_Lookup(Model = Habitats, Thresholds = Thresholds)
+```
+
+This creates Table <a href="#tab:lookuptab">3.8</a>, notice how it only
+shows for each species which habitats are available not the ones that
+are not.
+
+| species              | Landuse       | Pres |
+|:---------------------|:--------------|-----:|
+| Anthyllis vulneraria | OpenDryRich   |    1 |
+| Anthyllis vulneraria | OpenDryPoor   |    1 |
+| Anthyllis vulneraria | ForestWetRich |    1 |
+| Anthyllis vulneraria | OpenWetRich   |    1 |
+| Anthyllis vulneraria | OpenWetPoor   |    1 |
+| Lathyrus japonicus   | OpenDryPoor   |    1 |
+| Vicia sativa         | OpenDryPoor   |    1 |
+| Vicia sativa         | OpenDryRich   |    1 |
+| Vicia sativa         | ForestWetRich |    1 |
+| Vicia sativa         | OpenWetPoor   |    1 |
+| Vicia sativa         | OpenWetRich   |    1 |
+| Vicia sativa         | ForestDryRich |    1 |
+| Vicia sepium         | ForestWetRich |    1 |
+| Vicia sepium         | ForestDryRich |    1 |
+| Vicia sepium         | OpenDryPoor   |    1 |
+| Vicia sepium         | OpenWetRich   |    1 |
+| Vicia sepium         | OpenWetPoor   |    1 |
+| Vicia sepium         | OpenDryRich   |    1 |
+
+<span id="tab:lookuptab"></span>Table 3.8: dummy variable that shows
+which species can inhabit each habitat type
 
 ## 3.3 Generating summary biodiversity statistics
 
@@ -451,85 +487,87 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target Landuses
-#> ● completed target Raster [7.149 seconds]
+#> ● completed target Landuses [7.359 seconds]
 #> ▶ dispatched target shp
-#> ● completed target Landuses [0 seconds]
-#> ▶ dispatched target file
 #> ● completed target shp [0 seconds]
-#> ● completed target file [0.001 seconds]
+#> ▶ dispatched target file
+#> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [10.465 seconds]
+#> ● completed target Raster [7.637 seconds]
+#> ● completed target data [0.658 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [8.179 seconds]
+#> ● completed target Clean [1.203 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.219 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.356 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.344 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.512 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.113 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.242 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.039 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.274 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.034 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.213 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.042 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.161 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_69210fc440d13855 [0.173 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.043 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.221 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.624 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.517 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.75 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.141 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.137 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.92 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [1.7 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.155 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.115 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.427 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.937 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [1.059 seconds]
-#> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.322 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.284 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.375 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [2.261 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.347 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.631 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.747 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_cae8301e59fc4e01 [0.054 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch Presences_e65f4227e8299cc4 [1.392 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
 #> ● completed branch buffer_0a8436ee3d4f2644 [0.046 seconds]
-#> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.483 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.051 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [0.352 seconds]
+#> ● completed branch Presences_88937156c1302a12 [1.063 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.036 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.043 seconds]
 #> ● completed pattern buffer
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.124 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.722 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [18.38 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [17.45 seconds]
 #> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [4.941 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [5.83 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed target Phylo_Tree [43.023 seconds]
-#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.431 seconds]
+#> ● completed target Phylo_Tree [44.533 seconds]
 #> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.837 seconds]
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.005 seconds]
+#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.784 seconds]
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.376 seconds]
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.426 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.331 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [10.974 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.514 seconds]
-#> ▶ ended pipeline [1.463 minutes]
+#> ● completed target Thresholds [0.572 seconds]
+#> ▶ dispatched target LookUpTable
+#> ● completed target LookUpTable [0.01 seconds]
+#> ▶ ended pipeline [1.272 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
@@ -540,17 +578,30 @@ run_workflow(
 
 The run_workflow function creates a pipeline that:
 
-1- Reads the data from the specified file path. 2- Filters the data
-using the provided filter expression. 3- Cleans the species names to
-match the GBIF taxonomic backbone. 4- Counts the species presences
-within the specified geographic area (in this case, Aarhus). 5-
-Generates a buffer around the species presences within the specified
-distance, for a template raster. 6- Predicts habitat suitability for
-each species across different land-use types using the
-ModelAndPredictFunc, which models habitat preferences and provides
-continuous predictions. 7- Generates a phyllogenetic tree for the
-species in the species list. 8- Generates a visual representation of the
-workflow (if plot = TRUE).
+1.  Reads the data from the specified file path.
+
+2.  Filters the data using the provided filter expression.
+
+3.  Cleans the species names to match the GBIF taxonomic backbone.
+
+4.  Counts the species presences within the specified geographic area
+    (in this case, Aarhus).
+
+5.  Generates a buffer around the species presences within the specified
+    distance, for a template raster.
+
+6.  Predicts habitat suitability for each species across different
+    land-use types using the ModelAndPredictFunc, which models habitat
+    preferences and provides continuous predictions.
+
+7.  Generates a threshold for each species based on presences and the
+    models that where build.
+
+8.  Build a lookup table for each species with the suitable habitats.
+
+9.  Generates a phyllogenetic tree for the species in the species list.
+
+10. Generates a visual representation of the workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the
 dependencies between steps using targets::tar_visnetwork(). The result

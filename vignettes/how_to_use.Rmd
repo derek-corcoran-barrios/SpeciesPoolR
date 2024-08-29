@@ -28,7 +28,8 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of the SpeciesPoolR package is to generate potential species pools and their summary metrics in a spatial way. You can install the package directly from GitHub:
+The goal of the SpeciesPoolR package is to generate potential species pools and their summary metrics in a spatial way.
+You can install the package directly from GitHub:
 
 ```{r, eval=FALSE}
 #install.packages("remotes")
@@ -45,9 +46,26 @@ library(SpeciesPoolR)
 
 ## Rare species are common and important
 
-In ecological research, the debate on whether rare species outnumber common species within communities is pivotal for understanding biodiversity and guiding conservation efforts. Numerous studies have shown that rare species typically dominate large ecological assemblages, although common species often exert a more substantial influence on overall species richness patterns [@Magurran2003Explaining; @Bregovic2019Contribution; @Schalkwyk2019Contribution]. This complexity underscores the need for innovative approaches in studying biodiversity, particularly since rare species are challenging to model using traditional Species Distribution Models (SDMs) due to their low occurrence rates [@Boyd2022Eco-evolutionary].
+In ecological research, the debate on whether rare species outnumber common species within communities is pivotal for understanding biodiversity and guiding conservation efforts.
+Numerous studies have shown that rare species typically dominate large ecological assemblages, although common species often exert a more substantial influence on overall species richness patterns [@Magurran2003Explaining; @Bregovic2019Contribution; @Schalkwyk2019Contribution].
+This complexity underscores the need for innovative approaches in studying biodiversity, particularly since rare species are challenging to model using traditional Species Distribution Models (SDMs) due to their low occurrence rates [@Boyd2022Eco-evolutionary].
 
-Given the limitations of SDMs in capturing the dynamics of rare species, it is essential to develop alternative methods for integrating these species into biodiversity assessments and conservation planning. Although rare species contribute uniquely to functional diversity and ecosystem stability, especially in specific habitats [@Chapman2018Both; @Saterberg2019A], their elusiveness in ecological models presents a significant challenge. The question of the minimum number of presence records required for reliable SDMs is crucial. Research has shown that while as few as 10-15 presence observations can produce nonrandom models for some species [@Stoa2019How], others require higher thresholds—ranging from 14 to 25 records depending on the species' prevalence and geographic range [@Proosdij2016Minimum; @Sampaio2023Accurate]. These findings suggest that even sparse datasets can be useful, but the threshold varies significantly depending on species traits and habitat characteristics. Therefore, researchers must explore novel analytical frameworks and conservation strategies that better accommodate the ecological importance of rare species, thereby enhancing our ability to manage and preserve biodiversity effectively [@Reddin2015Between-taxon].
+Given the limitations of SDMs in capturing the dynamics of rare species, it is essential to develop alternative methods for integrating these species into biodiversity assessments and conservation planning.
+Although rare species contribute uniquely to functional diversity and ecosystem stability, especially in specific habitats [@Chapman2018Both; @Saterberg2019A], their elusiveness in ecological models presents a significant challenge.
+The question of the minimum number of presence records required for reliable SDMs is crucial.
+Research has shown that while as few as 10-15 presence observations can produce nonrandom models for some species [@Stoa2019How], others require higher thresholds—ranging from 14 to 25 records depending on the species' prevalence and geographic range [@Proosdij2016Minimum; @Sampaio2023Accurate].
+These findings suggest that even sparse datasets can be useful, but the threshold varies significantly depending on species traits and habitat characteristics.
+Therefore, researchers must explore novel analytical frameworks and conservation strategies that better accommodate the ecological importance of rare species, thereby enhancing our ability to manage and preserve biodiversity effectively [@Reddin2015Between-taxon].
+
+In highly degraded habitats, such as Denmark, where over 60% of the land is dominated by agriculture and less than 10% remains as natural habitat, traditional SDMs may face further limitations.
+The scarcity of natural habitats means that presence records are often skewed towards human-modified landscapes, complicating the modeling of species' ecological preferences.
+In such contexts, where the majority of occurrences may not reflect the species' natural behaviors or habitat use, relying on complex SDMs could lead to misleading predictions.
+Instead, simpler algorithms that incorporate basic dispersal mechanisms and habitat filtering might be more effective.
+By reducing assumptions about habitat preferences, these methods can provide a more realistic framework for conservation planning, particularly when dealing with the restoration of agricultural lands into natural habitats.
+
+For rare species, and indeed for many others, this approach may offer a more practical solution in scenarios where detailed ecological data is sparse or unreliable.
+Studies have suggested that in such landscapes, simplistic models that prioritize dispersal and broad habitat suitability over intricate ecological niches can better capture species' potential distributions and their responses to environmental changes [@GUISAN_2006; @Thuiller_2005], an example to this approach would be range bagging [@drake2015range].
+This pragmatic approach is especially pertinent when planning conservation actions in areas where habitat degradation has left little intact nature, and it ensures that even under data constraints, effective biodiversity management can still be pursued.
 
 # Using SpeciesPoolR Manually
 
@@ -55,7 +73,9 @@ Given the limitations of SDMs in capturing the dynamics of rare species, it is e
 
 ### Step 1: Reading and Filtering Data
 
-If you are going to use each of the functions of the SpeciesPoolR manually and sequentially, the first step would be to read in a species list from either a CSV or an XLSX file. You can use the get_data function for this. The function allows you to filter your data in a dplyr-like style:
+If you are going to use each of the functions of the SpeciesPoolR manually and sequentially, the first step would be to read in a species list from either a CSV or an XLSX file.
+You can use the get_data function for this.
+The function allows you to filter your data in a dplyr-like style:
 
 ```{r ReadInData}
 f <- system.file("ex/Species_List.csv", package="SpeciesPoolR")
@@ -75,7 +95,8 @@ knitr::kable(filtered_data, caption = "Species that will be used to generate spe
 
 ### Step 2: Taxonomic Harmonization
 
-Next, you should perform taxonomic harmonization to ensure that the species names you use are recognized by the GBIF taxonomic backbone. This can be done using the Clean_Taxa function:
+Next, you should perform taxonomic harmonization to ensure that the species names you use are recognized by the GBIF taxonomic backbone.
+This can be done using the Clean_Taxa function:
 
 ```{r CleanSpecies}
 Clean_Species <- SpeciesPoolR::Clean_Taxa(filtered_data$Species)
@@ -89,7 +110,10 @@ knitr::kable(Clean_Species, caption = "Taxonomicallty harmonized dataset")
 
 ### Step 3: Counting Species Presences
 
-After harmonizing the species names, it's important to obtain the number of occurrences of each species in your study area, especially if you plan to calculate rarity. You can do this using the `count_presences` function. This function allows you to filter occurrences by country or by a shapefile. Below is an example for Denmark:
+After harmonizing the species names, it's important to obtain the number of occurrences of each species in your study area, especially if you plan to calculate rarity.
+You can do this using the `count_presences` function.
+This function allows you to filter occurrences by country or by a shapefile.
+Below is an example for Denmark:
 
 ```{r countdenmark}
 # Assuming Clean_Species is your data frame
@@ -102,7 +126,8 @@ The resulting data frame of species presences in Denmark is shown in table \@ref
 knitr::kable(Count_DK, caption = "Counts of presences for the different species within Denmark")
 ```
 
-Alternatively, you can filter by a specific region using a shapefile. For example, to count species presences within Aarhus commune:
+Alternatively, you can filter by a specific region using a shapefile.
+For example, to count species presences within Aarhus commune:
 
 ```{r AarhusCount}
 shp <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
@@ -135,7 +160,8 @@ there we end up with `r nrow(Presences)` presences for our `r nrow(Count_Aarhus)
 
 ### Step 1 Creating Buffers Around Species Presences
 
-Once you have identified the species presences within your area of interest, the next step is to create spatial buffers around these occurrences. These buffers represent the potential dispersal range of each species, helping to assess areas where the species might establish itself given a specified dispersal distance.
+Once you have identified the species presences within your area of interest, the next step is to create spatial buffers around these occurrences.
+These buffers represent the potential dispersal range of each species, helping to assess areas where the species might establish itself given a specified dispersal distance.
 
 To create these buffers, you'll use a raster file as a template to rasterize the buffers and specify the distance (in meters) representing the species' dispersal range.
 
@@ -145,9 +171,11 @@ Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
 buffer500 <- make_buffer_rasterized(Presences, file = Raster, dist = 500)
 ```
 
-In this example, the make_buffer_rasterized function generates a 500-meter buffer around each occurrence point in the Presences dataset. The function utilizes the provided raster file as a template for rasterizing these buffers.
+In this example, the make_buffer_rasterized function generates a 500-meter buffer around each occurrence point in the Presences dataset.
+The function utilizes the provided raster file as a template for rasterizing these buffers.
 
-The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species. Table \@ref(tab:showbuffer500) displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.
+The resulting buffer500 data frame indicates which raster cells are covered by the buffer for each species.
+Table \@ref(tab:showbuffer500) displays the first 10 observations of this data frame, providing a detailed view of the buffer’s overlap with raster cells, listing each cell and the corresponding species within that buffer.
 
 ```{r showbuffer500, echo=FALSE}
 knitr::kable(head(buffer500, 10), caption = "Raster cells within the 500-meter buffer of each species")
@@ -157,9 +185,12 @@ This table provides a detailed view of how the buffer overlaps with the raster c
 
 ### Step 2: Habitat Filtering
 
-After creating the buffers, the next logical step is to filter these areas based on habitat suitability. This allows you to focus on specific land-use types or habitats where the species is more likely to thrive. Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.
+After creating the buffers, the next logical step is to filter these areas based on habitat suitability.
+This allows you to focus on specific land-use types or habitats where the species is more likely to thrive.
+Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.
 
-To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster. This comprehensive function encompasses several critical steps:
+To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster.
+This comprehensive function encompasses several critical steps:
 
 1- *Grouping Data by Species*: The presence data is grouped by species using `group_split`, ensuring that each species is modeled individually.
 
@@ -167,7 +198,8 @@ To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence 
 
 3- *Sampling Background Data*: Background points are also sampled from the same land-use raster, providing a contrast to the presence data.
 
-4- *Modeling Habitat Suitability*: The presence and background data are combined and passed to the `ModelSpecies` function. This function fits a MaxEnt model to predict habitat suitability across the different land-use types.
+4- *Modeling Habitat Suitability*: The presence and background data are combined and passed to the `ModelSpecies` function.
+This function fits a MaxEnt model to predict habitat suitability across the different land-use types.
 
 5- *Predicting Suitability*: The fitted model is then used to predict habitat suitability for each species across all available land-use types.
 
@@ -175,7 +207,8 @@ To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence 
 Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
 ```
 
-The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types. Table \@ref(tab:tablespeciespred) shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.
+The resulting Habitats data frame contains continuous suitability predictions for each species across various land-use types.
+Table \@ref(tab:tablespeciespred) shows the first 9 observations, illustrating the predicted habitat suitability scores for the first species in each land-use type.
 
 ```{r tablespeciespred}
 knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.")
@@ -183,18 +216,37 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 
 ### Step 3: Generating Habitat Suitability Thresholds
 
-While continuous predictions provide a detailed picture of habitat suitability, it is often useful to classify these predictions into binary suitability thresholds. Thresholds can help determine areas where species presence is more likely or unlikely based on habitat preferences.
+While continuous predictions provide a detailed picture of habitat suitability, it is often useful to classify these predictions into binary suitability thresholds.
+Thresholds can help determine areas where species presence is more likely or unlikely based on habitat preferences.
 
-The create_thresholds function facilitates this by generating thresholds based on the modeled land-use preferences, using the 90th, 95th, and 99th percentiles of the predicted suitability values. These thresholds represent the commission rates, helping to define the probability cutoff above which a land-use type is considered suitable for a species.
+The create_thresholds function facilitates this by generating thresholds based on the modeled land-use preferences, using the 90th, 95th, and 99th percentiles of the predicted suitability values.
+These thresholds represent the commission rates, helping to define the probability cutoff above which a land-use type is considered suitable for a species.
 
 Here’s how you can generate these thresholds for the species in your dataset:
 
-```{r thresholds, eval=FALSE}
-
+```{r thresholds}
+Thresholds <- create_thresholds(Model = Habitats, reference = Presences, file = Raster)
 ```
 
+This will generate de data set with the threshold for the comission rates of 90, 95 and 99th percentile for each species that can be seen in Table \@ref(tab:thresholdtables).
+
+```{r thresholdtables, echo=FALSE}
+knitr::kable(Thresholds, digits = 3, caption = "Threshold based on commission rate for the species that are used above")
+```
 
 This step produces a data frame containing the thresholds for each species, which can then be used to classify habitat suitability into binary categories, helping you to identify core habitats or areas of higher conservation value.
+
+After we have the continuous thresholds we can generate a lookup table to see which species can inhabit in each landuse type
+
+```{r generateLookup}
+LookupTable <- Generate_Lookup(Model = Habitats, Thresholds = Thresholds)
+```
+
+This creates Table \@ref(tab:lookuptab), notice how it only shows for each species which habitats are available not the ones that are not.
+
+```{r lookuptab, echo = F}
+knitr::kable(LookupTable, caption = "dummy variable that shows which species can inhabit each habitat type")
+```
 
 ## Generating summary biodiversity statistics
 
@@ -208,12 +260,15 @@ In this case we use the `generate_tree` from SpeciesPoolR to do so:
 tree <- generate_tree(Count_Aarhus)
 ```
 
-
 # Running the SpeciesPoolR Workflow
 
-If you prefer to automate the process and run the `SpeciesPoolR` workflow as a pipeline, you can use the `run_workflow` function. This function sets up a `targets` workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis. This approach is especially useful for larger datasets or when you want to ensure reproducibility.
+If you prefer to automate the process and run the `SpeciesPoolR` workflow as a pipeline, you can use the `run_workflow` function.
+This function sets up a `targets` workflow that sequentially executes the steps for cleaning species data, counting species presences, and performing spatial analysis.
+This approach is especially useful for larger datasets or when you want to ensure reproducibility.
 
-To run the workflow, you can use the following code. We'll use the same species filter as before, focusing on the `Plantae` kingdom, `Magnoliopsida` class, and `Fabaceae` family. Additionally, we'll focus on the Aarhus commune using a shapefile.
+To run the workflow, you can use the following code.
+We'll use the same species filter as before, focusing on the `Plantae` kingdom, `Magnoliopsida` class, and `Fabaceae` family.
+Additionally, we'll focus on the Aarhus commune using a shapefile.
 
 ```{r run_workflow}
 shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
@@ -229,23 +284,35 @@ run_workflow(
 )
 ```
 
-
 ## How It Works
 
 The run_workflow function creates a pipeline that:
 
-1- Reads the data from the specified file path.
-2- Filters the data using the provided filter expression.
-3- Cleans the species names to match the GBIF taxonomic backbone.
-4- Counts the species presences within the specified geographic area (in this case, Aarhus).
-5- Generates a buffer around the species presences within the specified distance, for a template raster.
-6- Predicts habitat suitability for each species across different land-use types using the ModelAndPredictFunc, which models habitat preferences and provides continuous predictions.
-7- Generates a phyllogenetic tree for the species in the species list.
-8- Generates a visual representation of the workflow (if plot = TRUE).
+1.  Reads the data from the specified file path.
 
-You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork(). The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
+2.  Filters the data using the provided filter expression.
 
-This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data. It also makes it easier to rerun the workflow with different parameters or datasets.
+3.  Cleans the species names to match the GBIF taxonomic backbone.
+
+4.  Counts the species presences within the specified geographic area (in this case, Aarhus).
+
+5.  Generates a buffer around the species presences within the specified distance, for a template raster.
+
+6.  Predicts habitat suitability for each species across different land-use types using the ModelAndPredictFunc, which models habitat preferences and provides continuous predictions.
+
+7.  Generates a threshold for each species based on presences and the models that where build.
+
+8.  Build a lookup table for each species with the suitable habitats.
+
+9.  Generates a phyllogenetic tree for the species in the species list.
+
+10. Generates a visual representation of the workflow (if plot = TRUE).
+
+You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork().
+The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
+
+This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data.
+It also makes it easier to rerun the workflow with different parameters or datasets.
 
 ```{r removefiles, include=FALSE}
 unlink("_targets/", recursive = T, force = T)

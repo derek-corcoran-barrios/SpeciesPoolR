@@ -64,6 +64,7 @@ run_workflow <- function(workers = 2,
                    pattern = map(Presences)),
         targets::tar_target(ModelAndPredict, ModelAndPredictFunc(Presences, file = Landuses), pattern = map(Presences)),
         targets::tar_target(Thresholds, create_thresholds(Model = ModelAndPredict, reference = Presences, file = Landuses)),
+        targets::tar_target(LookUpTable, Generate_Lookup(Model = ModelAndPredict, Thresholds = Thresholds)),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
         )
     },
