@@ -115,6 +115,31 @@ traits and habitat characteristics. Therefore, researchers must explore
 novel analytical frameworks and conservation strategies that better
 accommodate the ecological importance of rare species, thereby enhancing
 our ability to manage and preserve biodiversity effectively <span class="citation">(Reddin, Bothwell, and Lennon 2015)</span>.</p>
+<p>In highly degraded habitats, such as Denmark, where over 60% of the
+land is dominated by agriculture and less than 10% remains as natural
+habitat, traditional SDMs may face further limitations. The scarcity of
+natural habitats means that presence records are often skewed towards
+human-modified landscapes, complicating the modeling of species’
+ecological preferences. In such contexts, where the majority of
+occurrences may not reflect the species’ natural behaviors or habitat
+use, relying on complex SDMs could lead to misleading predictions.
+Instead, simpler algorithms that incorporate basic dispersal mechanisms
+and habitat filtering might be more effective. By reducing assumptions
+about habitat preferences, these methods can provide a more realistic
+framework for conservation planning, particularly when dealing with the
+restoration of agricultural lands into natural habitats.</p>
+<p>For rare species, and indeed for many others, this approach may offer
+a more practical solution in scenarios where detailed ecological data is
+sparse or unreliable. Studies have suggested that in such landscapes,
+simplistic models that prioritize dispersal and broad habitat
+suitability over intricate ecological niches can better capture species’
+potential distributions and their responses to environmental changes
+<span class="citation">(GUISAN et al. 2006; Thuiller et al.
+2005)</span>, an example to this approach would be range bagging <span class="citation">(Drake 2015)</span>. This pragmatic approach is
+especially pertinent when planning conservation actions in areas where
+habitat degradation has left little intact nature, and it ensures that
+even under data constraints, effective biodiversity management can still
+be pursued.</p>
 </div>
 </div>
 <div class="section level2">
@@ -578,19 +603,19 @@ in the area, this is done automatically in the workflow version:</p>
 <code class="sourceCode R"><span><span class="va">Presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_presences.html">get_presences</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">Count_Aarhus</span><span class="op">$</span><span class="va">species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"</span></span>
 <span><span class="co">#&gt; Starting species 1</span></span>
-<span><span class="co">#&gt; 1 of 7 ready! 2024-08-29 09:19:53.811874</span></span>
+<span><span class="co">#&gt; 1 of 7 ready! 2024-08-29 09:53:43.818172</span></span>
 <span><span class="co">#&gt; Starting species 2</span></span>
-<span><span class="co">#&gt; 2 of 7 ready! 2024-08-29 09:19:54.231139</span></span>
+<span><span class="co">#&gt; 2 of 7 ready! 2024-08-29 09:53:44.220605</span></span>
 <span><span class="co">#&gt; Starting species 3</span></span>
-<span><span class="co">#&gt; 3 of 7 ready! 2024-08-29 09:19:55.422907</span></span>
+<span><span class="co">#&gt; 3 of 7 ready! 2024-08-29 09:53:45.261518</span></span>
 <span><span class="co">#&gt; Starting species 4</span></span>
-<span><span class="co">#&gt; 4 of 7 ready! 2024-08-29 09:19:55.864145</span></span>
+<span><span class="co">#&gt; 4 of 7 ready! 2024-08-29 09:53:45.681557</span></span>
 <span><span class="co">#&gt; Starting species 5</span></span>
-<span><span class="co">#&gt; 5 of 7 ready! 2024-08-29 09:19:56.605539</span></span>
+<span><span class="co">#&gt; 5 of 7 ready! 2024-08-29 09:53:46.313156</span></span>
 <span><span class="co">#&gt; Starting species 6</span></span>
-<span><span class="co">#&gt; 6 of 7 ready! 2024-08-29 09:19:57.042669</span></span>
+<span><span class="co">#&gt; 6 of 7 ready! 2024-08-29 09:53:46.742944</span></span>
 <span><span class="co">#&gt; Starting species 7</span></span>
-<span><span class="co">#&gt; 7 of 7 ready! 2024-08-29 09:19:57.468204</span></span></code></pre></div>
+<span><span class="co">#&gt; 7 of 7 ready! 2024-08-29 09:53:47.165413</span></span></code></pre></div>
 <p>there we end up with 1073 presences for our 7 species.</p>
 </div>
 </div>
@@ -794,10 +819,176 @@ probability cutoff above which a land-use type is considered suitable
 for a species.</p>
 <p>Here’s how you can generate these thresholds for the species in your
 dataset:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Thresholds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_thresholds.html">create_thresholds</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">Habitats</span>, reference <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span></code></pre></div>
+<p>This will generate de data set with the threshold for the comission
+rates of 90, 95 and 99th percentile for each species that can be seen in
+Table @ref(tab:thresholdtables).</p>
+<table class="table">
+<caption>Threshold based on commission rate for the species that are
+used above</caption>
+<thead><tr class="header">
+<th align="left">species</th>
+<th align="right">Thres_99</th>
+<th align="right">Thres_95</th>
+<th align="right">Thres_90</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Anthyllis vulneraria</td>
+<td align="right">0.512</td>
+<td align="right">0.512</td>
+<td align="right">0.512</td>
+</tr>
+<tr class="even">
+<td align="left">Genista tinctoria</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
+</tr>
+<tr class="odd">
+<td align="left">Lathyrus japonicus</td>
+<td align="right">0.407</td>
+<td align="right">0.407</td>
+<td align="right">0.407</td>
+</tr>
+<tr class="even">
+<td align="left">Lathyrus latifolius</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sativa</td>
+<td align="right">0.404</td>
+<td align="right">0.404</td>
+<td align="right">0.404</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sepium</td>
+<td align="right">0.289</td>
+<td align="right">0.289</td>
+<td align="right">0.289</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia villosa</td>
+<td align="right">0.633</td>
+<td align="right">0.633</td>
+<td align="right">0.633</td>
+</tr>
+</tbody>
+</table>
 <p>This step produces a data frame containing the thresholds for each
 species, which can then be used to classify habitat suitability into
 binary categories, helping you to identify core habitats or areas of
 higher conservation value.</p>
+<p>After we have the continuous thresholds we can generate a lookup
+table to see which species can inhabit in each landuse type</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">LookupTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Generate_Lookup.html">Generate_Lookup</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">Habitats</span>, Thresholds <span class="op">=</span> <span class="va">Thresholds</span><span class="op">)</span></span></code></pre></div>
+<p>This creates Table @ref(tab:lookuptab), notice how it only shows for
+each species which habitats are available not the ones that are not.</p>
+<table class="table">
+<caption>dummy variable that shows which species can inhabit each
+habitat type</caption>
+<thead><tr class="header">
+<th align="left">species</th>
+<th align="left">Landuse</th>
+<th align="right">Pres</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">OpenDryRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">OpenDryPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">ForestWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">OpenWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Anthyllis vulneraria</td>
+<td align="left">OpenWetPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Lathyrus japonicus</td>
+<td align="left">OpenDryPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sativa</td>
+<td align="left">OpenDryPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sativa</td>
+<td align="left">OpenDryRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sativa</td>
+<td align="left">OpenWetPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sativa</td>
+<td align="left">OpenWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sativa</td>
+<td align="left">ForestWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sativa</td>
+<td align="left">ForestDryRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sepium</td>
+<td align="left">ForestWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sepium</td>
+<td align="left">ForestDryRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sepium</td>
+<td align="left">OpenDryPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sepium</td>
+<td align="left">OpenWetRich</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Vicia sepium</td>
+<td align="left">OpenWetPoor</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Vicia sepium</td>
+<td align="left">OpenDryRich</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section level3">
@@ -814,7 +1005,7 @@ Qian 2019; Zanne et al. 2014)</span>, this means that we can only use
 this functions in species pools of plants.</p>
 <p>In this case we use the <code>generate_tree</code> from SpeciesPoolR
 to do so:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_tree.html">generate_tree</a></span><span class="op">(</span><span class="va">Count_Aarhus</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "All species in sp.list are present on tree."</span></span></code></pre></div>
 </div>
@@ -835,7 +1026,7 @@ same species filter as before, focusing on the <code>Plantae</code>
 kingdom, <code>Magnoliopsida</code> class, and <code>Fabaceae</code>
 family. Additionally, we’ll focus on the Aarhus commune using a
 shapefile.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span><span class="va">Raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
@@ -849,104 +1040,116 @@ shapefile.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">▶ dispatched target Raster</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Landuses</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Raster [3.641 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Raster [3.703 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target shp</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target shp [0 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target file</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target file [0 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target data</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Landuses [3.683 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Landuses [3.773 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target data [0.16 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Clean</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Clean [1.334 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Clean [1.434 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.725 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.877 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.801 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.9 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.204 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.191 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.209 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.183 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.178 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.157 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.183 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.156 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.178 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.183 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.158 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.157 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Count_Presences</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target More_than_zero</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target More_than_zero [0.001 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_af64bac105a08467 [1.371 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_af64bac105a08467 [1.272 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.056 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.058 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_c112b37cd15959d6 [2.325 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_c112b37cd15959d6 [2.002 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_626a53b08dfe709d [0.056 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.468 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_310adeccf6b44725 [0.608 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_310adeccf6b44725 [0.43 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.163 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_b226446ac3154351 [0.13 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.352 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.138 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.635 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.597 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.42 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.026 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.027 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.021 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.677 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.022 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Phylo_Tree</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_88937156c1302a12 [0.404 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_88937156c1302a12 [0.412 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Presences</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.019 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern buffer</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.693 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.701 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_626a53b08dfe709d</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [9.436 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [10.4 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [9.262 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_b226446ac3154351</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Phylo_Tree [21.878 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [2.621 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [2.638 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Phylo_Tree [22.214 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.43 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.547 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [10.769 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.202 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [6.626 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.166 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [6.304 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern ModelAndPredict</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Thresholds</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Thresholds [0.292 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ ended pipeline [41.291 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Thresholds [0.267 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target LookUpTable</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target LookUpTable [0.004 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ ended pipeline [41.671 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; Warning message:</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages. </span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; </span></span></span></code></pre></div>
 <div class="visNetwork html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"name":["buffer","Clean","Count_Presences","data","file","Landuses","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"type":["pattern","stem","pattern","stem","stem","stem","pattern","stem","stem","pattern","stem","stem","stem"],"description":[null,null,null,null,null,null,null,null,null,null,null,null,null],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.471,1.334,2.661,0.16,0,3.683,30.408,0.001,21.878,7.408,3.641,0,0.292],"bytes":[26989,583,1676,525,16964,3169,2201,335,654,17109,3169,25548,311],"branches":[7,null,8,null,null,null,7,null,null,7,null,null,null],"label":["buffer","Clean","Count_Presences","data","file","Landuses","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["buffer","Clean","Count_Presences","data","file","Landuses","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"level":[7,3,4,2,1,1,7,5,6,6,1,1,8],"shape":["square","dot","square","dot","dot","dot","square","dot","dot","square","dot","dot","dot"]},"edges":{"from":["file","Clean","shp","More_than_zero","shp","Count_Presences","More_than_zero","Presences","Raster","Landuses","ModelAndPredict","Presences","Landuses","Presences","data"],"to":["data","Count_Presences","Count_Presences","Presences","Presences","More_than_zero","Phylo_Tree","buffer","buffer","Thresholds","Thresholds","Thresholds","ModelAndPredict","ModelAndPredict","Clean"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Pattern","Stem"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","square","dot"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><div class="section level3">
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"name":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"type":["pattern","stem","pattern","stem","stem","stem","stem","pattern","stem","stem","pattern","stem","stem","stem"],"description":[null,null,null,null,null,null,null,null,null,null,null,null,null,null],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.45,1.434,2.779,0.16,0,3.773,0.004,30.387,0.001,22.214,6.565,3.703,0,0.267],"bytes":[26989,583,1676,525,16964,3169,323,2201,335,654,17109,3169,25548,311],"branches":[7,null,8,null,null,null,null,7,null,null,7,null,null,null],"label":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"level":[7,3,4,2,1,1,9,7,5,6,6,1,1,8],"shape":["square","dot","square","dot","dot","dot","dot","square","dot","dot","square","dot","dot","dot"]},"edges":{"from":["file","Clean","shp","More_than_zero","shp","Count_Presences","More_than_zero","ModelAndPredict","Thresholds","Presences","Raster","Landuses","ModelAndPredict","Presences","Landuses","Presences","data"],"to":["data","Count_Presences","Count_Presences","Presences","Presences","More_than_zero","Phylo_Tree","LookUpTable","LookUpTable","buffer","buffer","Thresholds","Thresholds","Thresholds","ModelAndPredict","ModelAndPredict","Clean"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Pattern","Stem"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","square","dot"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><div class="section level3">
 <h3 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
 </h3>
 <p>The run_workflow function creates a pipeline that:</p>
-<p>1- Reads the data from the specified file path. 2- Filters the data
-using the provided filter expression. 3- Cleans the species names to
-match the GBIF taxonomic backbone. 4- Counts the species presences
-within the specified geographic area (in this case, Aarhus). 5-
-Generates a buffer around the species presences within the specified
-distance, for a template raster. 6- Predicts habitat suitability for
-each species across different land-use types using the
-ModelAndPredictFunc, which models habitat preferences and provides
-continuous predictions. 7- Generates a phyllogenetic tree for the
-species in the species list. 8- Generates a visual representation of the
-workflow (if plot = TRUE).</p>
+<ol style="list-style-type: decimal">
+<li><p>Reads the data from the specified file path.</p></li>
+<li><p>Filters the data using the provided filter expression.</p></li>
+<li><p>Cleans the species names to match the GBIF taxonomic
+backbone.</p></li>
+<li><p>Counts the species presences within the specified geographic area
+(in this case, Aarhus).</p></li>
+<li><p>Generates a buffer around the species presences within the
+specified distance, for a template raster.</p></li>
+<li><p>Predicts habitat suitability for each species across different
+land-use types using the ModelAndPredictFunc, which models habitat
+preferences and provides continuous predictions.</p></li>
+<li><p>Generates a threshold for each species based on presences and the
+models that where build.</p></li>
+<li><p>Build a lookup table for each species with the suitable
+habitats.</p></li>
+<li><p>Generates a phyllogenetic tree for the species in the species
+list.</p></li>
+<li><p>Generates a visual representation of the workflow (if plot =
+TRUE).</p></li>
+</ol>
 <p>You can monitor the progress of the workflow and visualize the
 dependencies between steps using targets::tar_visnetwork(). The result
 will be similar to running the steps manually but with the added
@@ -977,6 +1180,17 @@ Chapman, Abbie S. A., V. Tunnicliffe, and A. Bates. 2018. <span>“Both
 Rare and Common Species Make Unique Contributions to Functional
 Diversity in an Ecosystem Unaffected by Human Activities.”</span>
 <em>Diversity and Distributions</em> 24: 568–78. <a href="https://doi.org/10.1111/ddi.12712" class="external-link">https://doi.org/10.1111/ddi.12712</a>.
+</div>
+<div id="ref-drake2015range" class="csl-entry">
+Drake, John M. 2015. <span>“Range Bagging: A New Method for Ecological
+Niche Modelling from Presence-Only Data.”</span> <em>Journal of the
+Royal Society Interface</em> 12 (107): 20150086.
+</div>
+<div id="ref-GUISAN_2006" class="csl-entry">
+GUISAN, ANTOINE, OLIVIER BROENNIMANN, ROBIN ENGLER, MATHIAS VUST, NIGEL
+G. YOCCOZ, ANTHONY LEHMANN, and NIKLAUS E. ZIMMERMANN. 2006.
+<span>“Using Niche‐based Models to Improve the Sampling of Rare
+Species.”</span> <em>Conservation Biology</em> 20 (2): 501–11. <a href="https://doi.org/10.1111/j.1523-1739.2006.00354.x" class="external-link">https://doi.org/10.1111/j.1523-1739.2006.00354.x</a>.
 </div>
 <div id="ref-Jin2019" class="csl-entry">
 Jin, Yi, and Hong Qian. 2019. <span>“V.PhyloMaker: An r Package That Can
@@ -1019,6 +1233,12 @@ Støa, Bente, R. Halvorsen, J. Stokland, and V. I. Gusarov. 2019.
 <span>“How Much Is Enough? Influence of Number of Presence Observations
 on the Performance of Species Distribution Models.”</span>
 <em>Sommerfeltia</em> 39: 1–28. <a href="https://doi.org/10.2478/som-2019-0001" class="external-link">https://doi.org/10.2478/som-2019-0001</a>.
+</div>
+<div id="ref-Thuiller_2005" class="csl-entry">
+Thuiller, Wilfried, Sandra Lavorel, Miguel B. Araújo, Martin T. Sykes,
+and I. Colin Prentice. 2005. <span>“Climate Change Threats to Plant
+Diversity in Europe.”</span> <em>Proceedings of the National Academy of
+Sciences</em> 102 (23): 8245–50. <a href="https://doi.org/10.1073/pnas.0409902102" class="external-link">https://doi.org/10.1073/pnas.0409902102</a>.
 </div>
 <div id="ref-Zanne2014" class="csl-entry">
 Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman,
