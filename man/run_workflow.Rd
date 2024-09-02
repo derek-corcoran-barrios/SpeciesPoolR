@@ -10,6 +10,7 @@ run_workflow(
   file_path,
   rastertemp,
   rasterLU,
+  LanduseSuitability,
   dist = 500,
   filter = NULL,
   country = NULL,
@@ -27,6 +28,8 @@ run_workflow(
 \item{rastertemp}{A file path to the raster file that will be used as a template for rasterizing the buffers.}
 
 \item{rasterLU}{A file path to the raster file that has the landuses that exist in the area that will be modeled.}
+
+\item{LanduseSuitability}{A string representing the file path to the raster file containing land-use binary suitability data.}
 
 \item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
 

@@ -13,6 +13,7 @@
 #' @param shapefile Path to a shapefile defining the area of interest for counting species presences. Default is NULL.
 #' @param rastertemp A file path to the raster file that will be used as a template for rasterizing the buffers.
 #' @param rasterLU A file path to the raster file that has the landuses that exist in the area that will be modeled.
+#' @param LanduseSuitability	A string representing the file path to the raster file containing land-use binary suitability data.
 #' @param dist A numeric value specifying the buffer distance in meters. Default is 500 meters.
 #' @param plot if TRUE (default) it will run the `targets::tar_visnetwork()` to plot the workflow
 #' @return Executes the `targets` pipeline.
@@ -26,6 +27,7 @@ run_workflow <- function(workers = 2,
                          file_path,
                          rastertemp,
                          rasterLU,
+                         LanduseSuitability,
                          dist = 500,
                          filter = NULL,
                          country = NULL,
@@ -51,6 +53,7 @@ run_workflow <- function(workers = 2,
         targets::tar_target(shp, command = !!shapefile, format = "file"),
         targets::tar_target(Raster, command = !!rastertemp, format = "file"),
         targets::tar_target(Landuses, command = !!rasterLU, format = "file"),
+        targets::tar_target(LanduseSuitability, !!LanduseSuitability,format = "file"),
         targets::tar_target(Clean, SpeciesPoolR::Clean_Taxa(data$Species)),
         targets::tar_target(Count_Presences,
                             count_presences(Clean, country = !!country, shapefile = shp),
@@ -65,6 +68,7 @@ run_workflow <- function(workers = 2,
         targets::tar_target(ModelAndPredict, ModelAndPredictFunc(Presences, file = Landuses), pattern = map(Presences)),
         targets::tar_target(Thresholds, create_thresholds(Model = ModelAndPredict, reference = Presences, file = Landuses)),
         targets::tar_target(LookUpTable, Generate_Lookup(Model = ModelAndPredict, Thresholds = Thresholds)),
+        targets::tar_target(Long_LU_table, generate_long_landuse_table(path = !!LanduseSuitability)),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
         )
     },

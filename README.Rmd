@@ -71,11 +71,105 @@ For rare species, and indeed for many others, this approach may offer a more pra
 Studies have suggested that in such landscapes, simplistic models that prioritize dispersal and broad habitat suitability over intricate ecological niches can better capture species' potential distributions and their responses to environmental changes [@GUISAN_2006; @Thuiller_2005], an example to this approach would be range bagging [@drake2015range].
 This pragmatic approach is especially pertinent when planning conservation actions in areas where habitat degradation has left little intact nature, and it ensures that even under data constraints, effective biodiversity management can still be pursued.
 
+# Required Data Files
+
+To effectively execute the `SpeciesPoolR` workflow, a set of essential data files must be provided. These files contain the necessary spatial and taxonomic information that underpin the various analytical steps in the package. Below, we detail each required file and its role within the workflow.
+
+## Species List File
+
+- **File Type**: CSV or Excel file
+
+- **Description**: The species list file serves as the foundational dataset, comprising the species of interest for your analysis. At a minimum, this file must include a column for the scientific names of species (`Species`). Additional taxonomic columns, such as `Kingdom`, `Class`, and `Family`, may also be included to facilitate filtering and subgroup analyses.
+
+An example of this file is provided within the package and can be accessed using the following code:
+
+```{r examplespecieslist}
+exampleSpecies <- system.file("ex/Species_List.csv", package="SpeciesPoolR")
+print(exampleSpecies)
+```
+
+This dataset is further discussed in the section on [Reading and Filtering Data](#step-1-reading-and-filtering-data), with a filtered subset displayed in Table \@ref(tab:tablespecies).
+
+## Shapefile 
+
+- **File Type**: Shapefile (.shp)
+  
+- **Description**: The shapefile delineates the geographic area of interest, which can range from a broad region, such as a country, to a more specific locality, such as a nature reserve. This file is utilized to spatially constrain species occurrences, ensuring that only those within the defined boundaries are included in the analysis.
+  
+If a shapefile is unavailable, a two-letter country code (e.g., "DK" for Denmark) may be provided as an alternative to specify the area of interest.
+  
+An example shapefile is included in the package and can be accessed as follows:
+
+```{r exampleshapefile}
+shp <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
+print(shp)
+```
+
+The shapefile's application is illustrated in the section on [Counting Species Presences](#step-3-counting-species-presences), where it is used to delineate the boundaries of Aarhus commune, as shown in Figure \@ref(fig:plotshapefile).
+
+```{r plotshapefile, echo = F, message=FALSE, error=FALSE, warning=FALSE, fig.cap= "Outline of the comune of Aarhus"}
+library(terra)
+Aarhus <- terra::vect(shp)
+plot(Aarhus)
+```
+
+
+## Raster Template File
+
+- **File Type**: Raster file (e.g., .tif)
+
+- **Description**: The raster template file is employed as a spatial reference for rasterizing species presence buffers. It must cover the entire area of interest and possess a resolution appropriate for the intended analysis. This template ensures consistent spatial alignment across all raster-based operations.
+
+You can explore an example of this file using the following code:
+
+```{r exampletemplate}
+template <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+print(template)
+```
+
+The raster template's role in buffer creation is further explained in the section on [Creating Buffers Around Species Presences](#step-1-creating-buffers-around-species-presences), with an example shown in Figure \@ref(fig:plottemplate).
+
+```{r plottemplate, echo = F, message=FALSE, error=FALSE, warning=FALSE, fig.cap= "Raster of the Aarhus comune, the package will use Non NA cells as part of the template"}
+library(terra)
+Template <- terra::rast(template)
+plot(Template)
+```
+
+
+##  Land-Use Raster File
+
+- **File Type**: Raster file (e.g., .tif)
+  
+- **Description**: This file contains land-use classifications for the study area, where each raster cell is assigned to a specific land-use category (e.g., forest, wetland, urban). This data is crucial for modeling habitat suitability, enabling the filtering of species occurrences based on the prevalent land uses within their potential habitats.
+  
+An example file is provided in the package:
+
+```{r LUexample}
+LU <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+print(LU)
+```
+
+The land-use raster is identical to the template shown in Figure \@ref(fig:plottemplate).
+
+## Land-Use Suitability Raster File
+
+- **File Type**: Raster file (e.g., .tif)
+  
+- **Description**: This file comprises binary suitability values for various land-use types within the study area, indicating whether each land-use type is suitable (value = 1) or unsuitable (value = 0) for the habitat of interest. The data is subsequently transformed into a long-format table, which is integral to the habitat filtering and species distribution modeling processes.
+  
+An example raster file is available in the package, and its application is discussed in the section on [Preparing Land-Use Data](#preparing-land-use-data). A visualization of this file is presented in Figure \@ref(fig:plotexampleLU).
+
+```{r plotexampleLU, echo = F, message=FALSE, error=FALSE, warning=FALSE, fig.cap= "Landuse suitability for 8 different landuses in the aarhus commune"}
+HabSut <- system.file("ex/HabSut.tif", package = "SpeciesPoolR")
+HabSut <- terra::rast(HabSut)
+plot(HabSut)
+```
+
 # Using SpeciesPoolR Manually
 
 ## Importing and Downloading Species Presences
 
-### Step 1: Reading and Filtering Data
+### Step 1: Reading and Filtering Data {#step-1-reading-and-filtering-data}
 
 If you are going to use each of the functions of the SpeciesPoolR manually and sequentially, the first step would be to read in a species list from either a CSV or an XLSX file.
 You can use the get_data function for this.
@@ -195,7 +289,9 @@ Habitat filtering typically involves using raster data to refine or subset the b
 
 #### Preparing Land-Use Data
 
-Before you can apply habitat filtering, you need to prepare a long-format land-use table that matches each raster cell to its corresponding habitat types. This is done using the generate_long_landuse_table function, which takes the path to your raster file and transforms it into a long-format data frame. The function also filters the data to include only those cells where the suitability value is 1 for at least one land-use type.
+Before you can apply habitat filtering, you need to prepare a long-format land-use table that matches each raster cell to its corresponding habitat types.
+This is done using the generate_long_landuse_table function, which takes the path to your raster file and transforms it into a long-format data frame.
+The function also filters the data to include only those cells where the suitability value is 1 for at least one land-use type.
 
 ```{r long_LU_table}
 # Get path for habitat suitability
@@ -213,7 +309,8 @@ knitr::kable(head(long_LU_table, 10), caption = "First 10 observations of landus
 
 #### Applying Habitat Filtering
 
-Once you have the long-format land-use table, you can proceed with habitat filtering. To achieve this, you’ll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster.
+Once you have the long-format land-use table, you can proceed with habitat filtering.
+To achieve this, you’ll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster.
 This comprehensive function encompasses several critical steps:
 
 1- *Grouping Data by Species*: The presence data is grouped by species using `group_split`, ensuring that each species is modeled individually.
@@ -297,6 +394,8 @@ Additionally, we'll focus on the Aarhus commune using a shapefile.
 ```{r run_workflow}
 shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
 Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+HabSut <- system.file("ex/HabSut.tif", package = "SpeciesPoolR")
+
 
 run_workflow(
   file_path = system.file("ex/Species_List.csv", package = "SpeciesPoolR"),
@@ -304,7 +403,8 @@ run_workflow(
   shapefile = shp,
   dist = 500,
   rastertemp = Raster,
-  rasterLU = Raster
+  rasterLU = Raster,
+  LanduseSuitability = HabSut
 )
 ```
 

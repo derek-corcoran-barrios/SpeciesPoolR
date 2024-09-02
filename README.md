@@ -3,17 +3,24 @@
 - [2 Motivation for the pacakge](#2-motivation-for-the-pacakge)
   - [2.1 Rare species are common and
     important](#21-rare-species-are-common-and-important)
-- [3 Using SpeciesPoolR Manually](#3-using-speciespoolr-manually)
-  - [3.1 Importing and Downloading Species
-    Presences](#31-importing-and-downloading-species-presences)
-  - [3.2 Creating Spatial Buffers and Habitat
-    Filtering](#32-creating-spatial-buffers-and-habitat-filtering)
-  - [3.3 Generating summary biodiversity
-    statistics](#33-generating-summary-biodiversity-statistics)
-- [4 Running the SpeciesPoolR
-  Workflow](#4-running-the-speciespoolr-workflow)
-  - [4.1 How It Works](#41-how-it-works)
-- [5 References](#5-references)
+- [3 Required Data Files](#3-required-data-files)
+  - [3.1 Species List File](#31-species-list-file)
+  - [3.2 Shapefile](#32-shapefile)
+  - [3.3 Raster Template File](#33-raster-template-file)
+  - [3.4 Land-Use Raster File](#34-land-use-raster-file)
+  - [3.5 Land-Use Suitability Raster
+    File](#35-land-use-suitability-raster-file)
+- [4 Using SpeciesPoolR Manually](#4-using-speciespoolr-manually)
+  - [4.1 Importing and Downloading Species
+    Presences](#41-importing-and-downloading-species-presences)
+  - [4.2 Creating Spatial Buffers and Habitat
+    Filtering](#42-creating-spatial-buffers-and-habitat-filtering)
+  - [4.3 Generating summary biodiversity
+    statistics](#43-generating-summary-biodiversity-statistics)
+- [5 Running the SpeciesPoolR
+  Workflow](#5-running-the-speciespoolr-workflow)
+  - [5.1 How It Works](#51-how-it-works)
+- [6 References](#6-references)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -103,11 +110,171 @@ habitat degradation has left little intact nature, and it ensures that
 even under data constraints, effective biodiversity management can still
 be pursued.
 
-# 3 Using SpeciesPoolR Manually
+# 3 Required Data Files
 
-## 3.1 Importing and Downloading Species Presences
+To effectively execute the `SpeciesPoolR` workflow, a set of essential
+data files must be provided. These files contain the necessary spatial
+and taxonomic information that underpin the various analytical steps in
+the package. Below, we detail each required file and its role within the
+workflow.
 
-### 3.1.1 Step 1: Reading and Filtering Data
+## 3.1 Species List File
+
+- **File Type**: CSV or Excel file
+
+- **Description**: The species list file serves as the foundational
+  dataset, comprising the species of interest for your analysis. At a
+  minimum, this file must include a column for the scientific names of
+  species (`Species`). Additional taxonomic columns, such as `Kingdom`,
+  `Class`, and `Family`, may also be included to facilitate filtering
+  and subgroup analyses.
+
+An example of this file is provided within the package and can be
+accessed using the following code:
+
+``` r
+exampleSpecies <- system.file("ex/Species_List.csv", package="SpeciesPoolR")
+print(exampleSpecies)
+#> [1] "/home/au687614/R/x86_64-pc-linux-gnu-library/4.4/SpeciesPoolR/ex/Species_List.csv"
+```
+
+This dataset is further discussed in the section on [Reading and
+Filtering Data](#411-step-1-reading-and-filtering-data), with a filtered
+subset displayed in Table <a href="#tab:tablespecies">4.1</a>.
+
+## 3.2 Shapefile
+
+- **File Type**: Shapefile (.shp)
+
+- **Description**: The shapefile delineates the geographic area of
+  interest, which can range from a broad region, such as a country, to a
+  more specific locality, such as a nature reserve. This file is
+  utilized to spatially constrain species occurrences, ensuring that
+  only those within the defined boundaries are included in the analysis.
+
+If a shapefile is unavailable, a two-letter country code (e.g., “DK” for
+Denmark) may be provided as an alternative to specify the area of
+interest.
+
+An example shapefile is included in the package and can be accessed as
+follows:
+
+``` r
+shp <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
+print(shp)
+#> [1] "/home/au687614/R/x86_64-pc-linux-gnu-library/4.4/SpeciesPoolR/ex/Aarhus.shp"
+```
+
+The shapefile’s application is illustrated in the section on [Counting
+Species Presences](#413-step-3-counting-species-presences), where it is
+used to delineate the boundaries of Aarhus commune, as shown in Figure
+<a href="#fig:plotshapefile">3.1</a>.
+
+<div class="figure">
+
+<img src="man/figures/README-plotshapefile-1.png" alt="Outline of the comune of Aarhus" width="100%" />
+
+<p class="caption">
+
+<span id="fig:plotshapefile"></span>Figure 3.1: Outline of the comune of
+Aarhus
+
+</p>
+
+</div>
+
+## 3.3 Raster Template File
+
+- **File Type**: Raster file (e.g., .tif)
+
+- **Description**: The raster template file is employed as a spatial
+  reference for rasterizing species presence buffers. It must cover the
+  entire area of interest and possess a resolution appropriate for the
+  intended analysis. This template ensures consistent spatial alignment
+  across all raster-based operations.
+
+You can explore an example of this file using the following code:
+
+``` r
+template <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+print(template)
+#> [1] "/home/au687614/R/x86_64-pc-linux-gnu-library/4.4/SpeciesPoolR/ex/LU_Aarhus.tif"
+```
+
+The raster template’s role in buffer creation is further explained in
+the section on [Creating Buffers Around Species
+Presences](#421-step-1-creating-buffers-around-species-presences), with
+an example shown in Figure <a href="#fig:plottemplate">3.2</a>.
+
+<div class="figure">
+
+<img src="man/figures/README-plottemplate-1.png" alt="Raster of the Aarhus comune, the package will use Non NA cells as part of the template" width="100%" />
+
+<p class="caption">
+
+<span id="fig:plottemplate"></span>Figure 3.2: Raster of the Aarhus
+comune, the package will use Non NA cells as part of the template
+
+</p>
+
+</div>
+
+## 3.4 Land-Use Raster File
+
+- **File Type**: Raster file (e.g., .tif)
+
+- **Description**: This file contains land-use classifications for the
+  study area, where each raster cell is assigned to a specific land-use
+  category (e.g., forest, wetland, urban). This data is crucial for
+  modeling habitat suitability, enabling the filtering of species
+  occurrences based on the prevalent land uses within their potential
+  habitats.
+
+An example file is provided in the package:
+
+``` r
+LU <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+print(LU)
+#> [1] "/home/au687614/R/x86_64-pc-linux-gnu-library/4.4/SpeciesPoolR/ex/LU_Aarhus.tif"
+```
+
+The land-use raster is identical to the template shown in Figure
+<a href="#fig:plottemplate">3.2</a>.
+
+## 3.5 Land-Use Suitability Raster File
+
+- **File Type**: Raster file (e.g., .tif)
+
+- **Description**: This file comprises binary suitability values for
+  various land-use types within the study area, indicating whether each
+  land-use type is suitable (value = 1) or unsuitable (value = 0) for
+  the habitat of interest. The data is subsequently transformed into a
+  long-format table, which is integral to the habitat filtering and
+  species distribution modeling processes.
+
+An example raster file is available in the package, and its application
+is discussed in the section on [Preparing Land-Use
+Data](#4221-preparing-land-use-data). A visualization of this file is
+presented in Figure <a href="#fig:plotexampleLU">3.3</a>.
+
+<div class="figure">
+
+<img src="man/figures/README-plotexampleLU-1.png" alt="Landuse suitability for 8 different landuses in the aarhus commune" width="100%" />
+
+<p class="caption">
+
+<span id="fig:plotexampleLU"></span>Figure 3.3: Landuse suitability for
+8 different landuses in the aarhus commune
+
+</p>
+
+</div>
+
+# 4 Using SpeciesPoolR Manually
+
+## 4.1 Importing and Downloading Species Presences
+
+### 4.1.1 Step 1: Reading and Filtering Data
 
 If you are going to use each of the functions of the SpeciesPoolR
 manually and sequentially, the first step would be to read in a species
@@ -127,7 +294,7 @@ filtered_data <- get_data(
 
 This will generate a dataset that can be used subsequently to count
 species presences and download species data as seen in table
-<a href="#tab:tablespecies">3.1</a>
+<a href="#tab:tablespecies">4.1</a>
 
 | redlist_2010 | Kingdom | Phyllum       | Class         | Order   | Family   | Genus     | Species               |
 |:-------------|:--------|:--------------|:--------------|:--------|:---------|:----------|:----------------------|
@@ -141,10 +308,10 @@ species presences and download species data as seen in table
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    |
 | NA           | Plantae | Magnoliophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         |
 
-<span id="tab:tablespecies"></span>Table 3.1: Species that will be used
+<span id="tab:tablespecies"></span>Table 4.1: Species that will be used
 to generate species pools
 
-### 3.1.2 Step 2: Taxonomic Harmonization
+### 4.1.2 Step 2: Taxonomic Harmonization
 
 Next, you should perform taxonomic harmonization to ensure that the
 species names you use are recognized by the GBIF taxonomic backbone.
@@ -155,7 +322,7 @@ Clean_Species <- SpeciesPoolR::Clean_Taxa(filtered_data$Species)
 ```
 
 The resulting data frame, with harmonized species names, is shown in
-table <a href="#tab:cleantable">3.2</a>
+table <a href="#tab:cleantable">4.2</a>
 
 | Taxa                  | matched_name2         | confidence | canonicalName         | kingdom | phylum       | class         | order   | family   | genus     | species               | rank    |
 |:----------------------|:----------------------|-----------:|:----------------------|:--------|:-------------|:--------------|:--------|:---------|:----------|:----------------------|:--------|
@@ -168,10 +335,10 @@ table <a href="#tab:cleantable">3.2</a>
 | Lathyrus japonicus    | Lathyrus japonicus    |         99 | Lathyrus japonicus    | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Lathyrus  | Lathyrus japonicus    | SPECIES |
 | Vicia villosa         | Vicia villosa         |         97 | Vicia villosa         | Plantae | Tracheophyta | Magnoliopsida | Fabales | Fabaceae | Vicia     | Vicia villosa         | SPECIES |
 
-<span id="tab:cleantable"></span>Table 3.2: Taxonomicallty harmonized
+<span id="tab:cleantable"></span>Table 4.2: Taxonomicallty harmonized
 dataset
 
-### 3.1.3 Step 3: Counting Species Presences
+### 4.1.3 Step 3: Counting Species Presences
 
 After harmonizing the species names, it’s important to obtain the number
 of occurrences of each species in your study area, especially if you
@@ -185,7 +352,7 @@ Count_DK <- count_presences(Clean_Species, country = "DK")
 ```
 
 The resulting data frame of species presences in Denmark is shown in
-table <a href="#tab:tableCountDenmark">3.3</a>
+table <a href="#tab:tableCountDenmark">4.3</a>
 
 ``` r
 knitr::kable(Count_DK, caption = "Counts of presences for the different species within Denmark")
@@ -202,7 +369,7 @@ knitr::kable(Count_DK, caption = "Counts of presences for the different species 
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  3904 |
 | Fabaceae | Vicia     | Vicia villosa         |   243 |
 
-<span id="tab:tableCountDenmark"></span>Table 3.3: Counts of presences
+<span id="tab:tableCountDenmark"></span>Table 4.3: Counts of presences
 for the different species within Denmark
 
 Alternatively, you can filter by a specific region using a shapefile.
@@ -215,7 +382,7 @@ Count_Aarhus <- count_presences(Clean_Species, shapefile = shp)
 ```
 
 The resulting data.frame for Aarhus commune is shown int table
-<a href="#tab:tableCountAarhus">3.4</a>
+<a href="#tab:tableCountAarhus">4.4</a>
 
 | family   | genus     | species               |   N |
 |:---------|:----------|:----------------------|----:|
@@ -228,7 +395,7 @@ The resulting data.frame for Aarhus commune is shown int table
 | Fabaceae | Lathyrus  | Lathyrus japonicus    |  39 |
 | Fabaceae | Vicia     | Vicia villosa         |  10 |
 
-<span id="tab:tableCountAarhus"></span>Table 3.4: Counts of presences
+<span id="tab:tableCountAarhus"></span>Table 4.4: Counts of presences
 for the different species within Aarhus commune
 
 Now it is recommended to eliminate species that have no occurrences in
@@ -249,9 +416,9 @@ Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
 
 there we end up with 1074 presences for our 7 species.
 
-## 3.2 Creating Spatial Buffers and Habitat Filtering
+## 4.2 Creating Spatial Buffers and Habitat Filtering
 
-### 3.2.1 Step 1 Creating Buffers Around Species Presences
+### 4.2.1 Step 1 Creating Buffers Around Species Presences
 
 Once you have identified the species presences within your area of
 interest, the next step is to create spatial buffers around these
@@ -276,7 +443,7 @@ rasterizing these buffers.
 
 The resulting buffer500 data frame indicates which raster cells are
 covered by the buffer for each species. Table
-<a href="#tab:showbuffer500">3.5</a> displays the first 10 observations
+<a href="#tab:showbuffer500">4.5</a> displays the first 10 observations
 of this data frame, providing a detailed view of the buffer’s overlap
 with raster cells, listing each cell and the corresponding species
 within that buffer.
@@ -294,14 +461,14 @@ within that buffer.
 |  164 | Vicia sepium |
 |  165 | Vicia sepium |
 
-<span id="tab:showbuffer500"></span>Table 3.5: Raster cells within the
+<span id="tab:showbuffer500"></span>Table 4.5: Raster cells within the
 500-meter buffer of each species
 
 This table provides a detailed view of how the buffer overlaps with the
 raster cells, listing each cell and the corresponding species present
 within that buffer.
 
-### 3.2.2 Step 2: Habitat Filtering
+### 4.2.2 Step 2: Habitat Filtering
 
 After creating the buffers, the next logical step is to filter these
 areas based on habitat suitability. This allows you to focus on specific
@@ -309,7 +476,7 @@ land-use types or habitats where the species is more likely to thrive.
 Habitat filtering typically involves using raster data to refine or
 subset the buffer areas according to the desired habitat criteria.
 
-#### 3.2.2.1 Preparing Land-Use Data
+#### 4.2.2.1 Preparing Land-Use Data
 
 Before you can apply habitat filtering, you need to prepare a
 long-format land-use table that matches each raster cell to its
@@ -328,7 +495,7 @@ long_LU_table <- generate_long_landuse_table(path = HabSut)
 ```
 
 This is crucial for the next steps, the result is shown in table
-<a href="#tab:longtablehab">3.6</a>, as it links each raster cell to
+<a href="#tab:longtablehab">4.6</a>, as it links each raster cell to
 potential habitats, enabling you to match species occurrences to
 suitable environments within their buffer zones.
 
@@ -345,10 +512,10 @@ suitable environments within their buffer zones.
 |  217 | OpenDryPoor |
 |  218 | OpenDryPoor |
 
-<span id="tab:longtablehab"></span>Table 3.6: First 10 observations of
+<span id="tab:longtablehab"></span>Table 4.6: First 10 observations of
 landuse suitability per cell
 
-#### 3.2.2.2 Applying Habitat Filtering
+#### 4.2.2.2 Applying Habitat Filtering
 
 Once you have the long-format land-use table, you can proceed with
 habitat filtering. To achieve this, you’ll use the
@@ -380,7 +547,7 @@ Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
 
 The resulting Habitats data frame contains continuous suitability
 predictions for each species across various land-use types. Table
-<a href="#tab:tablespeciespred">3.7</a> shows the first 9 observations,
+<a href="#tab:tablespeciespred">4.7</a> shows the first 9 observations,
 illustrating the predicted habitat suitability scores for the first
 species in each land-use type.
 
@@ -392,20 +559,20 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6743700 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6743700 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6743700 | Anthyllis vulneraria |
-| Exclude       | 0.5073091 | Anthyllis vulneraria |
-| ForestDryRich | 0.3768599 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2284649 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6890609 | Anthyllis vulneraria |
+| ForestWetRich | 0.6890609 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6890609 | Anthyllis vulneraria |
+| Exclude       | 0.5139094 | Anthyllis vulneraria |
+| ForestDryRich | 0.3824502 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2390028 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
-<span id="tab:tablespeciespred"></span>Table 3.7: Predicted habitat
+<span id="tab:tablespeciespred"></span>Table 4.7: Predicted habitat
 suitability scores across various land-use types for the first species.
 The values represent continuous predictions, indicating the relative
 likelihood of species presence in each land-use category.
 
-### 3.2.3 Step 3: Generating Habitat Suitability Thresholds
+### 4.2.3 Step 3: Generating Habitat Suitability Thresholds
 
 While continuous predictions provide a detailed picture of habitat
 suitability, it is often useful to classify these predictions into
@@ -428,19 +595,19 @@ Thresholds <- create_thresholds(Model = Habitats, reference = Presences, file = 
 
 This will generate de data set with the threshold for the comission
 rates of 90, 95 and 99th percentile for each species that can be seen in
-Table <a href="#tab:thresholdtables">3.8</a>.
+Table <a href="#tab:thresholdtables">4.8</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.507 |    0.507 |    0.507 |
+| Anthyllis vulneraria |    0.514 |    0.514 |    0.514 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
-| Vicia sativa         |    0.405 |    0.405 |    0.405 |
-| Vicia sepium         |    0.294 |    0.294 |    0.294 |
+| Vicia sativa         |    0.402 |    0.402 |    0.402 |
+| Vicia sepium         |    0.296 |    0.296 |    0.296 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
-<span id="tab:thresholdtables"></span>Table 3.8: Threshold based on
+<span id="tab:thresholdtables"></span>Table 4.8: Threshold based on
 commission rate for the species that are used above
 
 This step produces a data frame containing the thresholds for each
@@ -455,7 +622,7 @@ to see which species can inhabit in each landuse type
 LookupTable <- Generate_Lookup(Model = Habitats, Thresholds = Thresholds)
 ```
 
-This creates Table <a href="#tab:lookuptab">3.9</a>, notice how it only
+This creates Table <a href="#tab:lookuptab">4.9</a>, notice how it only
 shows for each species which habitats are available not the ones that
 are not.
 
@@ -463,15 +630,15 @@ are not.
 |:---------------------|:--------------|-----:|
 | Anthyllis vulneraria | OpenDryRich   |    1 |
 | Anthyllis vulneraria | OpenDryPoor   |    1 |
-| Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetRich   |    1 |
+| Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetPoor   |    1 |
 | Lathyrus japonicus   | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryRich   |    1 |
-| Vicia sativa         | OpenWetRich   |    1 |
-| Vicia sativa         | ForestWetRich |    1 |
 | Vicia sativa         | OpenWetPoor   |    1 |
+| Vicia sativa         | ForestWetRich |    1 |
+| Vicia sativa         | OpenWetRich   |    1 |
 | Vicia sativa         | ForestDryRich |    1 |
 | Vicia sepium         | ForestWetRich |    1 |
 | Vicia sepium         | ForestDryRich |    1 |
@@ -480,12 +647,12 @@ are not.
 | Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenDryRich   |    1 |
 
-<span id="tab:lookuptab"></span>Table 3.9: dummy variable that shows
+<span id="tab:lookuptab"></span>Table 4.9: dummy variable that shows
 which species can inhabit each habitat type
 
-## 3.3 Generating summary biodiversity statistics
+## 4.3 Generating summary biodiversity statistics
 
-### 3.3.1 Step 1 Generating Phylogenetic diversity metrics
+### 4.3.1 Step 1 Generating Phylogenetic diversity metrics
 
 In order to generate Phylogenetic Diversity measures, the first step is
 to generate a phylogenetic tree with the species we have, for that we
@@ -501,7 +668,7 @@ tree <- generate_tree(Count_Aarhus)
 #> [1] "All species in sp.list are present on tree."
 ```
 
-# 4 Running the SpeciesPoolR Workflow
+# 5 Running the SpeciesPoolR Workflow
 
 If you prefer to automate the process and run the `SpeciesPoolR`
 workflow as a pipeline, you can use the `run_workflow` function. This
@@ -518,6 +685,8 @@ on the Aarhus commune using a shapefile.
 ``` r
 shp <- system.file("ex/Aarhus.shp", package = "SpeciesPoolR")
 Raster <- system.file("ex/LU_Aarhus.tif", package="SpeciesPoolR")
+HabSut <- system.file("ex/HabSut.tif", package = "SpeciesPoolR")
+
 
 run_workflow(
   file_path = system.file("ex/Species_List.csv", package = "SpeciesPoolR"),
@@ -525,98 +694,103 @@ run_workflow(
   shapefile = shp,
   dist = 500,
   rastertemp = Raster,
-  rasterLU = Raster
+  rasterLU = Raster,
+  LanduseSuitability = HabSut
 )
 #> ▶ dispatched target Raster
+#> ▶ dispatched target LanduseSuitability
+#> ● completed target Raster [4.575 seconds]
 #> ▶ dispatched target Landuses
-#> ● completed target Raster [8.218 seconds]
+#> ● completed target LanduseSuitability [0 seconds]
 #> ▶ dispatched target shp
 #> ● completed target Landuses [0 seconds]
 #> ▶ dispatched target file
 #> ● completed target shp [0 seconds]
+#> ▶ dispatched target Long_LU_table
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target data [0.809 seconds]
+#> ● completed target Long_LU_table [0.061 seconds]
+#> ● completed target data [10.223 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.301 seconds]
+#> ● completed target Clean [5.564 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.296 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.843 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.146 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.9 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.083 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.647 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_69210fc440d13855 [0.072 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.709 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.07 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.513 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.049 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.705 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.062 seconds]
-#> ● completed branch Count_Presences_52d72a5ad405e933 [8.249 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.591 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.474 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.006 seconds]
+#> ● completed target More_than_zero [0.001 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.643 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.964 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.142 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.114 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [1.009 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [2.4 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.138 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.066 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.455 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.809 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [0.833 seconds]
-#> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.404 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.132 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.424 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [2.397 seconds]
+#> ▶ dispatched branch buffer_edb09c8ec5c9a988
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.133 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.684 seconds]
-#> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.756 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.725 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.101 seconds]
+#> ● completed branch buffer_cae8301e59fc4e01 [0.043 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch buffer_cae8301e59fc4e01 [0.098 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [1.172 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.042 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [0.549 seconds]
+#> ● completed branch Presences_88937156c1302a12 [1.027 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.054 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.02 seconds]
 #> ● completed pattern buffer
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.751 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.65 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [25.977 seconds]
-#> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [27.366 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [12.246 seconds]
 #> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed target Phylo_Tree [56.36 seconds]
-#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_b226446ac3154351 [6.842 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [3.837 seconds]
+#> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
+#> ● completed target Phylo_Tree [29.575 seconds]
 #> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.044 seconds]
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.873 seconds]
+#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [14.103 seconds]
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.386 seconds]
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [13.738 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.223 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [8.718 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.848 seconds]
+#> ● completed target Thresholds [0.314 seconds]
 #> ▶ dispatched target LookUpTable
-#> ● completed target LookUpTable [0.01 seconds]
-#> ▶ ended pipeline [1.616 minutes]
+#> ● completed target LookUpTable [0.004 seconds]
+#> ▶ ended pipeline [1.165 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
 
 <img src="man/figures/README-run_workflow-1.png" width="100%" />
 
-## 4.1 How It Works
+## 5.1 How It Works
 
 The run_workflow function creates a pipeline that:
 
@@ -655,7 +829,7 @@ ensures that all steps are consistently applied to your data. It also
 makes it easier to rerun the workflow with different parameters or
 datasets.
 
-# 5 References
+# 6 References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
