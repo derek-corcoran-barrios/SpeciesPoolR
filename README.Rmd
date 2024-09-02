@@ -458,9 +458,11 @@ The run_workflow function creates a pipeline that:
 
 8.  Build a lookup table for each species with the suitable habitats.
 
-9.  Generates a phyllogenetic tree for the species in the species list.
+9. Lastly it generates a potential presences files from the look-up table, buffered presences, and the potential habitat table.
 
-10. Generates a visual representation of the workflow (if plot = TRUE).
+10.  Generates a phyllogenetic tree for the species in the species list.
+
+11. Generates a visual representation of the workflow (if plot = TRUE).
 
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork().
 The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
