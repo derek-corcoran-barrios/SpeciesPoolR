@@ -118,7 +118,7 @@ make_final_presences <- function(Long_LU_table, Long_Buffer_gbif, LookUpTable) {
     FeasibleCells <- Long_Buffer_gbif[cell %chin% unique(Available_Cells$cell)]
 
     # Join all three data.tables
-    result <- FeasibleCells[Available_Cells, on = "cell", nomatch = 0]
+    result <- FeasibleCells[Available_Cells, on = "cell", nomatch = 0, allow.cartesian = TRUE]
     result2 <- result[Feasible_Landuses, on = .(Habitat, species), nomatch = 0, allow.cartesian = TRUE]
     result2[, Habitat := NULL]
   }

@@ -365,6 +365,36 @@ This creates Table \@ref(tab:lookuptab), notice how it only shows for each speci
 knitr::kable(LookupTable, caption = "dummy variable that shows which species can inhabit each habitat type")
 ```
 
+### Step 4: Generating Final Species Presences
+  
+  In this final step, we apply the `make_final_presences` function to filter the buffered species presences. This filtering process is done in three stages:
+  
+1. **Lookup Table Filtering:** The function first ensures that each species is only considered in habitats where it can persist based on the species-habitat suitability mappings in the lookup table.
+
+2. **Land-Use Table Filtering:** Next, it filters these suitable habitats to include only those cells where the specific habitat type could exist, based on the long-format land-use table.
+
+3. **Buffer Zone Filtering:** Finally, it restricts the potential species occurrences to areas where the species is likely to disperse, as indicated by the spatial buffers generated around species presence points.
+
+The result is a highly refined dataset that specifies, for each species, the exact cells and habitat types where it can potentially occur, combining habitat suitability, land-use distribution, and species dispersal capability.
+
+```{r createfinalpresences}
+final_presences <- make_final_presences(Long_LU_table = long_LU_table, 
+                                        Long_Buffer_gbif = buffer500,
+                                        LookUpTable = LookupTable)
+```
+
+The resulting `final_presences` table provides detailed information on the potential distribution of each species. It specifies which cells and habitats are suitable for each species, ensuring that only the most plausible locations are considered. In table @\ref(tab:finalpresences), you can see the first 15 observations from this final dataset, which represent the potential habitats where each species could thrive, whereas in table @\ref(tab:summaryfinalpresences), you can see a summary of the number of cells that each species could thrive on each habitat type.
+  
+```{r finalpresences, echo=FALSE}
+knitr::kable(head(final_presences, 15), caption = "First 15 rows of the final presences dataset, showing the cells and land-use types where each species can potentially occur")
+```
+
+
+```{r summaryfinalpresences, echo=FALSE}
+final_presences |> dplyr::group_by(Landuse, species) |> dplyr::summarise(N = dplyr::n()) |> dplyr::arrange(dplyr::desc(N)) |> knitr::kable(caption = "Summary of number of cells that each species can thrive in for each habitat type")
+```
+
+
 ## Generating summary biodiversity statistics
 
 ### Step 1 Generating Phylogenetic diversity metrics
@@ -406,27 +436,31 @@ run_workflow(
 
 ## How It Works
 
-The run_workflow function creates a pipeline that:
+The `run_workflow` function creates a pipeline that:
 
-1.  Reads the data from the specified file path.
+1. **Reads the data** from the specified file path.
 
-2.  Filters the data using the provided filter expression.
+2. **Filters the data** using the provided filter expression.
 
-3.  Cleans the species names to match the GBIF taxonomic backbone.
+3. **Cleans the species names** to match the GBIF taxonomic backbone.
 
-4.  Counts the species presences within the specified geographic area (in this case, Aarhus).
+4. **Counts the species presences** within the specified geographic area (in this case, Aarhus).
 
-5.  Generates a buffer around the species presences within the specified distance, for a template raster.
+5. **Generates a buffer** around the species presences within the specified distance, using a template raster.
 
-6.  Predicts habitat suitability for each species across different land-use types using the ModelAndPredictFunc, which models habitat preferences and provides continuous predictions.
+6. **Prepares the land-use data** by generating a long-format table that matches each raster cell to its corresponding habitat types.
 
-7.  Generates a threshold for each species based on presences and the models that where build.
+7. **Predicts habitat suitability** for each species across different land-use types using the `ModelAndPredictFunc`, which models habitat preferences and provides continuous predictions.
 
-8.  Build a lookup table for each species with the suitable habitats.
+8. **Generates habitat suitability thresholds** for each species based on the predicted suitability scores, using the `create_thresholds` function to define the 90th, 95th, and 99th percentile thresholds.
 
-9.  Generates a phyllogenetic tree for the species in the species list.
+9. **Builds a lookup table** to determine the land-use types each species can inhabit based on the thresholds.
 
-10. Generates a visual representation of the workflow (if plot = TRUE).
+10. **Generates the final species presences** by filtering the buffered presences according to both the lookup table and the long land-use table, ensuring each species' potential distribution is consistent with its habitat preferences.
+
+11. **Generates a phylogenetic tree** for the species in the species list, using the `generate_tree` function.
+
+12. **Generates a visual representation** of the workflow if `plot = TRUE`.
 
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork().
 The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
