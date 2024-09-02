@@ -462,9 +462,13 @@ The `run_workflow` function creates a pipeline that:
 
 10. **Generates the final species presences** by filtering the buffered presences according to both the lookup table and the long land-use table, ensuring each species' potential distribution is consistent with its habitat preferences.
 
-11. **Generates a phylogenetic tree** for the species in the species list, using the `generate_tree` function.
+11. **Export final presences as csv** the final presences of each species and landuse are exported to the folder `Field_Final_Presences` as csv files.
 
-12. **Generates a visual representation** of the workflow if `plot = TRUE`.
+12. **Calculate rarity weights** Calculates a Rarity weight for the counts of species that have more than zero presences.
+
+12. **Generates a phylogenetic tree** for the species in the species list, using the `generate_tree` function.
+
+13. **Generates a visual representation** of the workflow if `plot = TRUE`.
 
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork().
 The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
@@ -475,6 +479,7 @@ It also makes it easier to rerun the workflow with different parameters or datas
 ```{r removefiles, include=FALSE}
 unlink("_targets/", recursive = T, force = T)
 file.remove("_targets.R")
+unlink("Field_Final_Presences/", recursive = T, force = T)
 ```
 
 # References

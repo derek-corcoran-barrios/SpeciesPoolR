@@ -17,6 +17,7 @@ Imports:
     maxnet,
     picante,
     purrr,
+    Rarity,
     readr,
     readxl,
     rgbif,
@@ -32,7 +33,7 @@ Imports:
 Depends: 
     R (>= 2.10)
 LazyData: true
-Remotes:  
+Remotes: 
     jinyizju/V.PhyloMaker
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues

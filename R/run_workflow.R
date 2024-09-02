@@ -70,7 +70,22 @@ run_workflow <- function(workers = 2,
         targets::tar_target(LookUpTable, Generate_Lookup(Model = ModelAndPredict, Thresholds = Thresholds)),
         targets::tar_target(Long_LU_table, generate_long_landuse_table(path = Landusesuitability)),
         targets::tar_target(Final_Presences, make_final_presences(Long_LU_table, buffer, LookUpTable)),
-        targets::tar_target(Phylo_Tree, generate_tree(More_than_zero))
+        targets::tar_target(
+          unique_species,
+          unique(Final_Presences$species)
+        ),
+        targets::tar_target(
+          unique_habitats,
+          unique(Final_Presences$Landuse)
+        ),
+        targets::tar_target(
+          export_presences,
+          export_final_presences(Final_Presences[species == unique_species, ], folder = "Field_Final_Presences"),
+          pattern = map(unique_species),
+          format = "file"
+        ),
+        targets::tar_target(Phylo_Tree, generate_tree(More_than_zero)),
+        targets::tar_target(rarity_weight, calc_rarity_weight(More_than_zero))
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected
