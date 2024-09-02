@@ -53,7 +53,7 @@ generate_long_landuse_table <- function(path) {
   # Convert to data.table and reshape to long format
   DF <- as.data.table(DF) |>
     melt(id.vars = "cell",
-         measure.vars = c("ForestDryPoor", "ForestDryRich", "ForestWetPoor", "ForestWetRich", "OpenDryPoor", "OpenDryRich", "OpenWetPoor", "OpenWetRich"),
+         measure.vars = setdiff(names(DF), "cell"),
          variable.name = "Habitat",
          value.name = "Suitability", na.rm = TRUE)
 

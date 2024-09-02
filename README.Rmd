@@ -193,7 +193,27 @@ After creating the buffers, the next logical step is to filter these areas based
 This allows you to focus on specific land-use types or habitats where the species is more likely to thrive.
 Habitat filtering typically involves using raster data to refine or subset the buffer areas according to the desired habitat criteria.
 
-To achieve this, you'll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster.
+#### Preparing Land-Use Data
+
+Before you can apply habitat filtering, you need to prepare a long-format land-use table that matches each raster cell to its corresponding habitat types. This is done using the generate_long_landuse_table function, which takes the path to your raster file and transforms it into a long-format data frame. The function also filters the data to include only those cells where the suitability value is 1 for at least one land-use type.
+
+```{r long_LU_table}
+# Get path for habitat suitability
+HabSut <- system.file("ex/HabSut.tif", package = "SpeciesPoolR")
+
+# Generate the long-format land-use table
+long_LU_table <- generate_long_landuse_table(path = HabSut)
+```
+
+This is crucial for the next steps, the result is shown in table \@ref(tab:longtablehab), as it links each raster cell to potential habitats, enabling you to match species occurrences to suitable environments within their buffer zones.
+
+```{r longtablehab, echo=FALSE}
+knitr::kable(head(long_LU_table, 10), caption = "First 10 observations of landuse suitability per cell")
+```
+
+#### Applying Habitat Filtering
+
+Once you have the long-format land-use table, you can proceed with habitat filtering. To achieve this, you’ll use the `ModelAndPredictFunc`, which takes the presence data frame (e.g., Presences) obtained through the get_presences function and the land-use raster.
 This comprehensive function encompasses several critical steps:
 
 1- *Grouping Data by Species*: The presence data is grouped by species using `group_split`, ensuring that each species is modeled individually.

@@ -247,7 +247,7 @@ Presences <- get_presences(species = Count_Aarhus$species, shapefile = shp)
 #> [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"
 ```
 
-there we end up with 1073 presences for our 7 species.
+there we end up with 1074 presences for our 7 species.
 
 ## 3.2 Creating Spatial Buffers and Habitat Filtering
 
@@ -309,10 +309,52 @@ land-use types or habitats where the species is more likely to thrive.
 Habitat filtering typically involves using raster data to refine or
 subset the buffer areas according to the desired habitat criteria.
 
-To achieve this, you’ll use the `ModelAndPredictFunc`, which takes the
-presence data frame (e.g., Presences) obtained through the get_presences
-function and the land-use raster. This comprehensive function
-encompasses several critical steps:
+#### 3.2.2.1 Preparing Land-Use Data
+
+Before you can apply habitat filtering, you need to prepare a
+long-format land-use table that matches each raster cell to its
+corresponding habitat types. This is done using the
+generate_long_landuse_table function, which takes the path to your
+raster file and transforms it into a long-format data frame. The
+function also filters the data to include only those cells where the
+suitability value is 1 for at least one land-use type.
+
+``` r
+# Get path for habitat suitability
+HabSut <- system.file("ex/HabSut.tif", package = "SpeciesPoolR")
+
+# Generate the long-format land-use table
+long_LU_table <- generate_long_landuse_table(path = HabSut)
+```
+
+This is crucial for the next steps, the result is shown in table
+<a href="#tab:longtablehab">3.6</a>, as it links each raster cell to
+potential habitats, enabling you to match species occurrences to
+suitable environments within their buffer zones.
+
+| cell | Habitat     |
+|-----:|:------------|
+|   79 | OpenDryPoor |
+|   80 | OpenDryPoor |
+|   81 | OpenDryPoor |
+|   82 | OpenDryPoor |
+|   83 | OpenDryPoor |
+|  214 | OpenDryPoor |
+|  215 | OpenDryPoor |
+|  216 | OpenDryPoor |
+|  217 | OpenDryPoor |
+|  218 | OpenDryPoor |
+
+<span id="tab:longtablehab"></span>Table 3.6: First 10 observations of
+landuse suitability per cell
+
+#### 3.2.2.2 Applying Habitat Filtering
+
+Once you have the long-format land-use table, you can proceed with
+habitat filtering. To achieve this, you’ll use the
+`ModelAndPredictFunc`, which takes the presence data frame (e.g.,
+Presences) obtained through the get_presences function and the land-use
+raster. This comprehensive function encompasses several critical steps:
 
 1- *Grouping Data by Species*: The presence data is grouped by species
 using `group_split`, ensuring that each species is modeled individually.
@@ -338,7 +380,7 @@ Habitats <- ModelAndPredictFunc(DF = Presences, file = Raster)
 
 The resulting Habitats data frame contains continuous suitability
 predictions for each species across various land-use types. Table
-<a href="#tab:tablespeciespred">3.6</a> shows the first 9 observations,
+<a href="#tab:tablespeciespred">3.7</a> shows the first 9 observations,
 illustrating the predicted habitat suitability scores for the first
 species in each land-use type.
 
@@ -350,15 +392,15 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6726202 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6726202 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6726202 | Anthyllis vulneraria |
-| Exclude       | 0.5103812 | Anthyllis vulneraria |
-| ForestDryRich | 0.3203061 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2439111 | Anthyllis vulneraria |
+| ForestWetRich | 0.6743700 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6743700 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6743700 | Anthyllis vulneraria |
+| Exclude       | 0.5073091 | Anthyllis vulneraria |
+| ForestDryRich | 0.3768599 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2284649 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
-<span id="tab:tablespeciespred"></span>Table 3.6: Predicted habitat
+<span id="tab:tablespeciespred"></span>Table 3.7: Predicted habitat
 suitability scores across various land-use types for the first species.
 The values represent continuous predictions, indicating the relative
 likelihood of species presence in each land-use category.
@@ -386,19 +428,19 @@ Thresholds <- create_thresholds(Model = Habitats, reference = Presences, file = 
 
 This will generate de data set with the threshold for the comission
 rates of 90, 95 and 99th percentile for each species that can be seen in
-Table <a href="#tab:thresholdtables">3.7</a>.
+Table <a href="#tab:thresholdtables">3.8</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.510 |    0.510 |    0.510 |
+| Anthyllis vulneraria |    0.507 |    0.507 |    0.507 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
 | Vicia sativa         |    0.405 |    0.405 |    0.405 |
-| Vicia sepium         |    0.288 |    0.288 |    0.288 |
+| Vicia sepium         |    0.294 |    0.294 |    0.294 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
-<span id="tab:thresholdtables"></span>Table 3.7: Threshold based on
+<span id="tab:thresholdtables"></span>Table 3.8: Threshold based on
 commission rate for the species that are used above
 
 This step produces a data frame containing the thresholds for each
@@ -413,7 +455,7 @@ to see which species can inhabit in each landuse type
 LookupTable <- Generate_Lookup(Model = Habitats, Thresholds = Thresholds)
 ```
 
-This creates Table <a href="#tab:lookuptab">3.8</a>, notice how it only
+This creates Table <a href="#tab:lookuptab">3.9</a>, notice how it only
 shows for each species which habitats are available not the ones that
 are not.
 
@@ -427,9 +469,9 @@ are not.
 | Lathyrus japonicus   | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryRich   |    1 |
+| Vicia sativa         | OpenWetRich   |    1 |
 | Vicia sativa         | ForestWetRich |    1 |
 | Vicia sativa         | OpenWetPoor   |    1 |
-| Vicia sativa         | OpenWetRich   |    1 |
 | Vicia sativa         | ForestDryRich |    1 |
 | Vicia sepium         | ForestWetRich |    1 |
 | Vicia sepium         | ForestDryRich |    1 |
@@ -438,7 +480,7 @@ are not.
 | Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenDryRich   |    1 |
 
-<span id="tab:lookuptab"></span>Table 3.8: dummy variable that shows
+<span id="tab:lookuptab"></span>Table 3.9: dummy variable that shows
 which species can inhabit each habitat type
 
 ## 3.3 Generating summary biodiversity statistics
@@ -487,87 +529,87 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target Landuses
-#> ● completed target Landuses [7.359 seconds]
+#> ● completed target Raster [8.218 seconds]
 #> ▶ dispatched target shp
-#> ● completed target shp [0 seconds]
+#> ● completed target Landuses [0 seconds]
 #> ▶ dispatched target file
+#> ● completed target shp [0 seconds]
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Raster [7.637 seconds]
-#> ● completed target data [0.658 seconds]
+#> ● completed target data [0.809 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.203 seconds]
+#> ● completed target Clean [1.301 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.356 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.296 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.512 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.146 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.242 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.083 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.274 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.072 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_69210fc440d13855 [0.213 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.07 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.161 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.049 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.221 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.624 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.062 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [8.249 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.002 seconds]
+#> ● completed target More_than_zero [0.006 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.75 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.643 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.137 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.142 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [1.7 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [1.009 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.115 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.138 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.937 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.455 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.284 seconds]
-#> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_daf8d6353bc80f0c [2.261 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.833 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.347 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.404 seconds]
+#> ▶ dispatched branch Presences_e65f4227e8299cc4
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.424 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.747 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.054 seconds]
-#> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_e65f4227e8299cc4 [1.392 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.684 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.046 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.756 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.101 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch buffer_cae8301e59fc4e01 [0.098 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [1.063 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.549 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.043 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.054 seconds]
 #> ● completed pattern buffer
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.722 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.751 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [17.45 seconds]
-#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [5.83 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [25.977 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed target Phylo_Tree [44.533 seconds]
-#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.005 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [27.366 seconds]
+#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
+#> ● completed target Phylo_Tree [56.36 seconds]
 #> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.784 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [6.842 seconds]
+#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.044 seconds]
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.331 seconds]
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [10.974 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.386 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [13.738 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.572 seconds]
+#> ● completed target Thresholds [0.848 seconds]
 #> ▶ dispatched target LookUpTable
 #> ● completed target LookUpTable [0.01 seconds]
-#> ▶ ended pipeline [1.272 minutes]
+#> ▶ ended pipeline [1.616 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
