@@ -143,6 +143,139 @@ be pursued.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="required-data-files">Required Data Files<a class="anchor" aria-label="anchor" href="#required-data-files"></a>
+</h2>
+<p>To effectively execute the <code>SpeciesPoolR</code> workflow, a set
+of essential data files must be provided. These files contain the
+necessary spatial and taxonomic information that underpin the various
+analytical steps in the package. Below, we detail each required file and
+its role within the workflow.</p>
+<div class="section level3">
+<h3 id="species-list-file">Species List File<a class="anchor" aria-label="anchor" href="#species-list-file"></a>
+</h3>
+<ul>
+<li><p><strong>File Type</strong>: CSV or Excel file</p></li>
+<li><p><strong>Description</strong>: The species list file serves as the
+foundational dataset, comprising the species of interest for your
+analysis. At a minimum, this file must include a column for the
+scientific names of species (<code>Species</code>). Additional taxonomic
+columns, such as <code>Kingdom</code>, <code>Class</code>, and
+<code>Family</code>, may also be included to facilitate filtering and
+subgroup analyses.</p></li>
+</ul>
+<p>An example of this file is provided within the package and can be
+accessed using the following code:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">exampleSpecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">exampleSpecies</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/SpeciesPoolR/ex/Species_List.csv"</span></span></code></pre></div>
+<p>This dataset is further discussed in the section on <a href="#step-1-reading-and-filtering-data">Reading and Filtering
+Data</a>, with a filtered subset displayed in Table
+@ref(tab:tablespecies).</p>
+</div>
+<div class="section level3">
+<h3 id="shapefile">Shapefile<a class="anchor" aria-label="anchor" href="#shapefile"></a>
+</h3>
+<ul>
+<li><p><strong>File Type</strong>: Shapefile (.shp)</p></li>
+<li><p><strong>Description</strong>: The shapefile delineates the
+geographic area of interest, which can range from a broad region, such
+as a country, to a more specific locality, such as a nature reserve.
+This file is utilized to spatially constrain species occurrences,
+ensuring that only those within the defined boundaries are included in
+the analysis.</p></li>
+</ul>
+<p>If a shapefile is unavailable, a two-letter country code (e.g., “DK”
+for Denmark) may be provided as an alternative to specify the area of
+interest.</p>
+<p>An example shapefile is included in the package and can be accessed
+as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">shp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/SpeciesPoolR/ex/Aarhus.shp"</span></span></code></pre></div>
+<p>The shapefile’s application is illustrated in the section on <a href="#step-3-counting-species-presences">Counting Species
+Presences</a>, where it is used to delineate the boundaries of Aarhus
+commune, as shown in Figure @ref(fig:plotshapefile).</p>
+<div class="figure">
+<img src="how_to_use_files/figure-html/plotshapefile-1.png" alt="Outline of the comune of Aarhus" width="700"><p class="caption">
+Outline of the comune of Aarhus
+</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="raster-template-file">Raster Template File<a class="anchor" aria-label="anchor" href="#raster-template-file"></a>
+</h3>
+<ul>
+<li><p><strong>File Type</strong>: Raster file (e.g., .tif)</p></li>
+<li><p><strong>Description</strong>: The raster template file is
+employed as a spatial reference for rasterizing species presence
+buffers. It must cover the entire area of interest and possess a
+resolution appropriate for the intended analysis. This template ensures
+consistent spatial alignment across all raster-based
+operations.</p></li>
+</ul>
+<p>You can explore an example of this file using the following code:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">template</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">template</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/SpeciesPoolR/ex/LU_Aarhus.tif"</span></span></code></pre></div>
+<p>The raster template’s role in buffer creation is further explained in
+the section on <a href="#step-1-creating-buffers-around-species-presences">Creating
+Buffers Around Species Presences</a>, with an example shown in Figure
+@ref(fig:plottemplate).</p>
+<div class="figure">
+<img src="how_to_use_files/figure-html/plottemplate-1.png" alt="Raster of the Aarhus comune, the package will use Non NA cells as part of the template" width="700"><p class="caption">
+Raster of the Aarhus comune, the package will use Non NA cells as part
+of the template
+</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="land-use-raster-file">Land-Use Raster File<a class="anchor" aria-label="anchor" href="#land-use-raster-file"></a>
+</h3>
+<ul>
+<li><p><strong>File Type</strong>: Raster file (e.g., .tif)</p></li>
+<li><p><strong>Description</strong>: This file contains land-use
+classifications for the study area, where each raster cell is assigned
+to a specific land-use category (e.g., forest, wetland, urban). This
+data is crucial for modeling habitat suitability, enabling the filtering
+of species occurrences based on the prevalent land uses within their
+potential habitats.</p></li>
+</ul>
+<p>An example file is provided in the package:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">LU</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">LU</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/SpeciesPoolR/ex/LU_Aarhus.tif"</span></span></code></pre></div>
+<p>The land-use raster is identical to the template shown in Figure
+@ref(fig:plottemplate).</p>
+</div>
+<div class="section level3">
+<h3 id="land-use-suitability-raster-file">Land-Use Suitability Raster File<a class="anchor" aria-label="anchor" href="#land-use-suitability-raster-file"></a>
+</h3>
+<ul>
+<li><p><strong>File Type</strong>: Raster file (e.g., .tif)</p></li>
+<li><p><strong>Description</strong>: This file comprises binary
+suitability values for various land-use types within the study area,
+indicating whether each land-use type is suitable (value = 1) or
+unsuitable (value = 0) for the habitat of interest. The data is
+subsequently transformed into a long-format table, which is integral to
+the habitat filtering and species distribution modeling
+processes.</p></li>
+</ul>
+<p>An example raster file is available in the package, and its
+application is discussed in the section on <a href="#preparing-land-use-data">Preparing Land-Use Data</a>. A
+visualization of this file is presented in Figure
+@ref(fig:plotexampleLU).</p>
+<div class="figure">
+<img src="how_to_use_files/figure-html/plotexampleLU-1.png" alt="Landuse suitability for 8 different landuses in the aarhus commune" width="700"><p class="caption">
+Landuse suitability for 8 different landuses in the aarhus commune
+</p>
+</div>
+</div>
+</div>
+<div class="section level2">
 <h2 id="using-speciespoolr-manually">Using SpeciesPoolR Manually<a class="anchor" aria-label="anchor" href="#using-speciespoolr-manually"></a>
 </h2>
 <div class="section level3">
@@ -156,7 +289,7 @@ manually and sequentially, the first step would be to read in a species
 list from either a CSV or an XLSX file. You can use the get_data
 function for this. The function allows you to filter your data in a
 dplyr-like style:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span></span>
 <span>   file <span class="op">=</span> <span class="va">f</span>,</span>
@@ -296,7 +429,7 @@ species presences and download species data as seen in table
 <p>Next, you should perform taxonomic harmonization to ensure that the
 species names you use are recognized by the GBIF taxonomic backbone.
 This can be done using the Clean_Taxa function:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Clean_Species</span> <span class="op">&lt;-</span> <span class="fu">SpeciesPoolR</span><span class="fu">::</span><span class="fu"><a href="../reference/Clean_Taxa.html">Clean_Taxa</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(Taxa)`</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(matched_name2)`</span></span></code></pre></div>
@@ -457,12 +590,12 @@ you plan to calculate rarity. You can do this using the
 <code>count_presences</code> function. This function allows you to
 filter occurrences by country or by a shapefile. Below is an example for
 Denmark:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Assuming Clean_Species is your data frame</span></span>
 <span><span class="va">Count_DK</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, country <span class="op">=</span> <span class="st">"DK"</span><span class="op">)</span></span></code></pre></div>
 <p>The resulting data frame of species presences in Denmark is shown in
 table @ref(tab:tableCountDenmark)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Count_DK</span>, caption <span class="op">=</span> <span class="st">"Counts of presences for the different species within Denmark"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Counts of presences for the different species within
@@ -526,7 +659,7 @@ Denmark</caption>
 </table>
 <p>Alternatively, you can filter by a specific region using a shapefile.
 For example, to count species presences within Aarhus commune:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/count_presences.html">count_presences</a></span><span class="op">(</span><span class="va">Clean_Species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span></code></pre></div>
@@ -594,28 +727,33 @@ commune</caption>
 </table>
 <p>Now it is recommended to eliminate species that have no occurrences
 in the area, this is done automatically in the workflow version:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'data.table'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:terra':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     shift</span></span>
 <span><span class="va">Count_Aarhus</span> <span class="op">&lt;-</span> <span class="va">Count_Aarhus</span><span class="op">[</span><span class="va">N</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></code></pre></div>
 <p>So that then we can retrieve the species presences using the function
 <code><a href="../reference/get_presences.html">SpeciesPoolR::get_presences</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_presences.html">get_presences</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">Count_Aarhus</span><span class="op">$</span><span class="va">species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"</span></span>
 <span><span class="co">#&gt; Starting species 1</span></span>
-<span><span class="co">#&gt; 1 of 7 ready! 2024-09-02 04:13:37.406947</span></span>
+<span><span class="co">#&gt; 1 of 7 ready! 2024-09-02 07:09:09.635891</span></span>
 <span><span class="co">#&gt; Starting species 2</span></span>
-<span><span class="co">#&gt; 2 of 7 ready! 2024-09-02 04:13:37.837723</span></span>
+<span><span class="co">#&gt; 2 of 7 ready! 2024-09-02 07:09:10.017879</span></span>
 <span><span class="co">#&gt; Starting species 3</span></span>
-<span><span class="co">#&gt; 3 of 7 ready! 2024-09-02 04:13:39.189322</span></span>
+<span><span class="co">#&gt; 3 of 7 ready! 2024-09-02 07:09:10.947118</span></span>
 <span><span class="co">#&gt; Starting species 4</span></span>
-<span><span class="co">#&gt; 4 of 7 ready! 2024-09-02 04:13:39.643114</span></span>
+<span><span class="co">#&gt; 4 of 7 ready! 2024-09-02 07:09:11.3334</span></span>
 <span><span class="co">#&gt; Starting species 5</span></span>
-<span><span class="co">#&gt; 5 of 7 ready! 2024-09-02 04:13:40.448507</span></span>
+<span><span class="co">#&gt; 5 of 7 ready! 2024-09-02 07:09:11.925758</span></span>
 <span><span class="co">#&gt; Starting species 6</span></span>
-<span><span class="co">#&gt; 6 of 7 ready! 2024-09-02 04:13:40.899492</span></span>
+<span><span class="co">#&gt; 6 of 7 ready! 2024-09-02 07:09:12.316639</span></span>
 <span><span class="co">#&gt; Starting species 7</span></span>
-<span><span class="co">#&gt; 7 of 7 ready! 2024-09-02 04:13:41.318942</span></span></code></pre></div>
+<span><span class="co">#&gt; 7 of 7 ready! 2024-09-02 07:09:12.687429</span></span></code></pre></div>
 <p>there we end up with 1074 presences for our 7 species.</p>
 </div>
 </div>
@@ -633,7 +771,7 @@ itself given a specified dispersal distance.</p>
 <p>To create these buffers, you’ll use a raster file as a template to
 rasterize the buffers and specify the distance (in meters) representing
 the species’ dispersal range.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">buffer500</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_buffer_rasterized.html">make_buffer_rasterized</a></span><span class="op">(</span><span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span>, dist <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
@@ -708,10 +846,85 @@ areas based on habitat suitability. This allows you to focus on specific
 land-use types or habitats where the species is more likely to thrive.
 Habitat filtering typically involves using raster data to refine or
 subset the buffer areas according to the desired habitat criteria.</p>
-<p>To achieve this, you’ll use the <code>ModelAndPredictFunc</code>,
-which takes the presence data frame (e.g., Presences) obtained through
-the get_presences function and the land-use raster. This comprehensive
-function encompasses several critical steps:</p>
+<div class="section level5">
+<h5 id="preparing-land-use-data">Preparing Land-Use Data<a class="anchor" aria-label="anchor" href="#preparing-land-use-data"></a>
+</h5>
+<p>Before you can apply habitat filtering, you need to prepare a
+long-format land-use table that matches each raster cell to its
+corresponding habitat types. This is done using the
+generate_long_landuse_table function, which takes the path to your
+raster file and transforms it into a long-format data frame. The
+function also filters the data to include only those cells where the
+suitability value is 1 for at least one land-use type.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get path for habitat suitability</span></span>
+<span><span class="va">HabSut</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/HabSut.tif"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate the long-format land-use table</span></span>
+<span><span class="va">long_LU_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_long_landuse_table.html">generate_long_landuse_table</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">HabSut</span><span class="op">)</span></span></code></pre></div>
+<p>This is crucial for the next steps, the result is shown in table
+@ref(tab:longtablehab), as it links each raster cell to potential
+habitats, enabling you to match species occurrences to suitable
+environments within their buffer zones.</p>
+<table class="table">
+<caption>First 10 observations of landuse suitability per cell</caption>
+<thead><tr class="header">
+<th align="right">cell</th>
+<th align="left">Habitat</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">79</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="even">
+<td align="right">80</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="odd">
+<td align="right">81</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="even">
+<td align="right">82</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="odd">
+<td align="right">83</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="even">
+<td align="right">214</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="odd">
+<td align="right">215</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="even">
+<td align="right">216</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="odd">
+<td align="right">217</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+<tr class="even">
+<td align="right">218</td>
+<td align="left">OpenDryPoor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level5">
+<h5 id="applying-habitat-filtering">Applying Habitat Filtering<a class="anchor" aria-label="anchor" href="#applying-habitat-filtering"></a>
+</h5>
+<p>Once you have the long-format land-use table, you can proceed with
+habitat filtering. To achieve this, you’ll use the
+<code>ModelAndPredictFunc</code>, which takes the presence data frame
+(e.g., Presences) obtained through the get_presences function and the
+land-use raster. This comprehensive function encompasses several
+critical steps:</p>
 <p>1- <em>Grouping Data by Species</em>: The presence data is grouped by
 species using <code>group_split</code>, ensuring that each species is
 modeled individually.</p>
@@ -727,7 +940,7 @@ the different land-use types.</p>
 <p>5- <em>Predicting Suitability</em>: The fitted model is then used to
 predict habitat suitability for each species across all available
 land-use types.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Habitats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ModelAndPredictFunc.html">ModelAndPredictFunc</a></span><span class="op">(</span>DF <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: [spatSample] fewer values returned than requested</span></span>
 <span><span class="co">#&gt; Warning: [spatSample] fewer values returned than requested</span></span>
@@ -742,7 +955,7 @@ predictions for each species across various land-use types. Table
 @ref(tab:tablespeciespred) shows the first 9 observations, illustrating
 the predicted habitat suitability scores for the first species in each
 land-use type.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Habitats</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>,<span class="op">]</span>, caption <span class="op">=</span> <span class="st">"Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category."</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Predicted habitat suitability scores across various land-use
@@ -803,6 +1016,7 @@ each land-use category.</caption>
 </tbody>
 </table>
 </div>
+</div>
 <div class="section level4">
 <h4 id="step-3-generating-habitat-suitability-thresholds">Step 3: Generating Habitat Suitability Thresholds<a class="anchor" aria-label="anchor" href="#step-3-generating-habitat-suitability-thresholds"></a>
 </h4>
@@ -819,7 +1033,7 @@ probability cutoff above which a land-use type is considered suitable
 for a species.</p>
 <p>Here’s how you can generate these thresholds for the species in your
 dataset:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Thresholds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_thresholds.html">create_thresholds</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">Habitats</span>, reference <span class="op">=</span> <span class="va">Presences</span>, file <span class="op">=</span> <span class="va">Raster</span><span class="op">)</span></span></code></pre></div>
 <p>This will generate de data set with the threshold for the comission
 rates of 90, 95 and 99th percentile for each species that can be seen in
@@ -884,7 +1098,7 @@ binary categories, helping you to identify core habitats or areas of
 higher conservation value.</p>
 <p>After we have the continuous thresholds we can generate a lookup
 table to see which species can inhabit in each landuse type</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">LookupTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Generate_Lookup.html">Generate_Lookup</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">Habitats</span>, Thresholds <span class="op">=</span> <span class="va">Thresholds</span><span class="op">)</span></span></code></pre></div>
 <p>This creates Table @ref(tab:lookuptab), notice how it only shows for
 each species which habitats are available not the ones that are not.</p>
@@ -1005,7 +1219,7 @@ Qian 2019; Zanne et al. 2014)</span>, this means that we can only use
 this functions in species pools of plants.</p>
 <p>In this case we use the <code>generate_tree</code> from SpeciesPoolR
 to do so:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_tree.html">generate_tree</a></span><span class="op">(</span><span class="va">Count_Aarhus</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "All species in sp.list are present on tree."</span></span></code></pre></div>
 </div>
@@ -1026,9 +1240,11 @@ same species filter as before, focusing on the <code>Plantae</code>
 kingdom, <code>Magnoliopsida</code> class, and <code>Fabaceae</code>
 family. Additionally, we’ll focus on the Aarhus commune using a
 shapefile.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Aarhus.shp"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
 <span><span class="va">Raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/LU_Aarhus.tif"</span>, package<span class="op">=</span><span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span><span class="va">HabSut</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/HabSut.tif"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span></span>
+<span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/run_workflow.html">run_workflow</a></span><span class="op">(</span></span>
 <span>  file_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex/Species_List.csv"</span>, package <span class="op">=</span> <span class="st">"SpeciesPoolR"</span><span class="op">)</span>,</span>
@@ -1036,96 +1252,101 @@ shapefile.</p>
 <span>  shapefile <span class="op">=</span> <span class="va">shp</span>,</span>
 <span>  dist <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  rastertemp <span class="op">=</span> <span class="va">Raster</span>,</span>
-<span>  rasterLU <span class="op">=</span> <span class="va">Raster</span></span>
+<span>  rasterLU <span class="op">=</span> <span class="va">Raster</span>,</span>
+<span>  LanduseSuitability <span class="op">=</span> <span class="va">HabSut</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">▶ dispatched target Raster</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target LanduseSuitability</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target LanduseSuitability [3.79 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Landuses</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Raster [3.68 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Raster [3.809 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target shp</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Landuses [3.664 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Landuses [0 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target file</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target shp [0 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target file [0 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Long_LU_table</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target file [0.001 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target data</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target data [0.159 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Long_LU_table [0.057 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target data [0.166 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Clean</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Clean [1.463 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Clean [0.979 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.737 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.635 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.801 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.653 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.205 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.153 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.203 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.152 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.178 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.124 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.177 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.125 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.177 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.178 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.125 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.126 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Count_Presences</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target More_than_zero</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target More_than_zero [0.001 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target More_than_zero [0 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_af64bac105a08467 [1.357 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_af64bac105a08467 [1.06 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.056 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.057 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_c112b37cd15959d6 [2.209 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_c112b37cd15959d6 [1.725 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_626a53b08dfe709d [0.057 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_626a53b08dfe709d [0.124 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_310adeccf6b44725 [0.441 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_310adeccf6b44725 [0.409 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_b226446ac3154351 [0.145 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.603 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.189 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.14 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_b226446ac3154351 [0.101 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.15 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.435 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.394 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.022 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.02 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.814 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.661 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.023 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.022 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Phylo_Tree</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_88937156c1302a12 [0.409 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch Presences_88937156c1302a12 [0.368 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern Presences</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.019 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.02 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern buffer</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.663 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.69 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_626a53b08dfe709d</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [9.327 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [9.524 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_b226446ac3154351</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [2.58 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [3.778 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Phylo_Tree [22.365 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Phylo_Tree [22.157 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.6 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.529 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [10.859 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [11.045 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.14 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [6.033 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.154 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [6.522 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed pattern ModelAndPredict</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target Thresholds</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Thresholds [0.253 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target Thresholds [0.264 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ▶ dispatched target LookUpTable</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; ● completed target LookUpTable [0.004 seconds]</span></span></span>
-<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ ended pipeline [41.974 seconds]</span></span></span>
+<span><span class="co"><span style="color: #BB0000;">#&gt; ▶ ended pipeline [40.879 seconds]</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; Warning message:</span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages. </span></span></span>
 <span><span class="co"><span style="color: #BB0000;">#&gt; </span></span></span></code></pre></div>
 <div class="visNetwork html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"name":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"type":["pattern","stem","pattern","stem","stem","stem","stem","pattern","stem","stem","pattern","stem","stem","stem"],"description":[null,null,null,null,null,null,null,null,null,null,null,null,null,null],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.462,1.463,2.656,0.159,0,3.664,0.004,30.202,0.001,22.365,7.268,3.68,0,0.253],"bytes":[26989,583,1676,525,16964,3169,323,2200,335,654,17127,3169,25548,311],"branches":[7,null,8,null,null,null,null,7,null,null,7,null,null,null],"label":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["buffer","Clean","Count_Presences","data","file","Landuses","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"level":[7,3,4,2,1,1,9,7,5,6,6,1,1,8],"shape":["square","dot","square","dot","dot","dot","dot","square","dot","dot","square","dot","dot","dot"]},"edges":{"from":["file","Clean","shp","More_than_zero","shp","Count_Presences","More_than_zero","ModelAndPredict","Thresholds","Presences","Raster","Landuses","ModelAndPredict","Presences","Landuses","Presences","data"],"to":["data","Count_Presences","Count_Presences","Presences","Presences","More_than_zero","Phylo_Tree","LookUpTable","LookUpTable","buffer","buffer","Thresholds","Thresholds","Thresholds","ModelAndPredict","ModelAndPredict","Clean"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Pattern","Stem"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","square","dot"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><div class="section level3">
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"name":["buffer","Clean","Count_Presences","data","file","Landuses","LanduseSuitability","Long_LU_table","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"type":["pattern","stem","pattern","stem","stem","stem","stem","stem","stem","pattern","stem","stem","pattern","stem","stem","stem"],"description":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.494,0.979,2.093,0.166,0.001,0,3.79,0.057,0.004,32.242,0,22.157,5.806,3.809,0,0.264],"bytes":[26989,583,1676,525,16964,3169,20886,12080,323,2200,335,654,17127,3169,25548,311],"branches":[7,null,8,null,null,null,null,null,null,7,null,null,7,null,null,null],"label":["buffer","Clean","Count_Presences","data","file","Landuses","LanduseSuitability","Long_LU_table","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["buffer","Clean","Count_Presences","data","file","Landuses","LanduseSuitability","Long_LU_table","LookUpTable","ModelAndPredict","More_than_zero","Phylo_Tree","Presences","Raster","shp","Thresholds"],"level":[7,3,4,2,1,1,0,0,9,7,5,6,6,1,1,8],"shape":["square","dot","square","dot","dot","dot","dot","dot","dot","square","dot","dot","square","dot","dot","dot"]},"edges":{"from":["file","Clean","shp","More_than_zero","shp","Count_Presences","More_than_zero","ModelAndPredict","Thresholds","Presences","Raster","Landuses","ModelAndPredict","Presences","Landuses","Presences","data"],"to":["data","Count_Presences","Count_Presences","Presences","Presences","More_than_zero","Phylo_Tree","LookUpTable","LookUpTable","buffer","buffer","Thresholds","Thresholds","Thresholds","ModelAndPredict","ModelAndPredict","Clean"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Pattern","Stem"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","square","dot"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><div class="section level3">
 <h3 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
 </h3>
 <p>The run_workflow function creates a pipeline that:</p>
