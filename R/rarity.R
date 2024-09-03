@@ -8,15 +8,6 @@
 #'
 #' @importFrom Rarity rWeights
 #'
-#' @examples
-#' # Example usage:
-#' species_data <- data.frame(
-#'   species = c("Species1", "Species2", "Species3"),
-#'   N = c(10, 5, 1)
-#' )
-#' rarity_weights <- calc_rarity_weight(species_data)
-#' print(rarity_weights)
-#'
 #' @export
 calc_rarity_weight <- function(df) {
 
@@ -41,17 +32,6 @@ calc_rarity_weight <- function(df) {
 #' @importFrom stringr str_replace_all
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @importFrom Rarity Irr
-#'
-#' @examples
-#' # Example usage:
-#' final_presences <- data.frame(
-#'   cell = c(1, 2, 1, 3),
-#'   species = c("Species1", "Species2", "Species3", "Species1"),
-#'   Landuse = c("Forest", "Grassland", "Forest", "Wetland")
-#' )
-#' rarity_weights <- calc_rarity_weight(final_presences)
-#' rarity_index <- calc_rarity(final_presences, rarity_weights)
-#' print(rarity_index)
 #'
 #' @export
 calc_rarity <- function(Fin, RW) {
