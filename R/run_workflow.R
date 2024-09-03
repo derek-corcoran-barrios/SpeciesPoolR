@@ -85,7 +85,9 @@ run_workflow <- function(workers = 2,
           format = "file"
         ),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero)),
-        targets::tar_target(rarity_weight, calc_rarity_weight(More_than_zero))
+        targets::tar_target(rarity_weight, calc_rarity_weight(More_than_zero)),
+        targets::tar_target(rarity, calc_rarity(Final_Presences[Landuse == unique_habitats,], rarity_weight),
+                            pattern = map(unique_habitats))
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected

@@ -557,14 +557,14 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 
 | Landuse       |      Pred | species              |
 |:--------------|----------:|:---------------------|
-| OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6834772 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6834772 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6834772 | Anthyllis vulneraria |
-| Exclude       | 0.5123782 | Anthyllis vulneraria |
-| ForestDryRich | 0.2881232 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2527079 | Anthyllis vulneraria |
+| OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6798732 | Anthyllis vulneraria |
+| ForestWetRich | 0.6798732 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6798732 | Anthyllis vulneraria |
+| Exclude       | 0.5089190 | Anthyllis vulneraria |
+| ForestDryRich | 0.3072582 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2293484 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 4.7: Predicted habitat
@@ -599,12 +599,12 @@ Table <a href="#tab:thresholdtables">4.8</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.512 |    0.512 |    0.512 |
+| Anthyllis vulneraria |    0.509 |    0.509 |    0.509 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
-| Vicia sativa         |    0.392 |    0.392 |    0.392 |
-| Vicia sepium         |    0.282 |    0.282 |    0.282 |
+| Vicia sativa         |    0.394 |    0.394 |    0.394 |
+| Vicia sepium         |    0.291 |    0.291 |    0.291 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
 <span id="tab:thresholdtables"></span>Table 4.8: Threshold based on
@@ -628,17 +628,17 @@ are not.
 
 | species              | Landuse       | Pres |
 |:---------------------|:--------------|-----:|
-| Anthyllis vulneraria | OpenDryPoor   |    1 |
 | Anthyllis vulneraria | OpenDryRich   |    1 |
-| Anthyllis vulneraria | ForestWetRich |    1 |
+| Anthyllis vulneraria | OpenDryPoor   |    1 |
 | Anthyllis vulneraria | OpenWetRich   |    1 |
+| Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetPoor   |    1 |
 | Lathyrus japonicus   | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryRich   |    1 |
 | Vicia sativa         | OpenWetPoor   |    1 |
-| Vicia sativa         | ForestWetRich |    1 |
 | Vicia sativa         | OpenWetRich   |    1 |
+| Vicia sativa         | ForestWetRich |    1 |
 | Vicia sativa         | ForestDryRich |    1 |
 | Vicia sepium         | ForestWetRich |    1 |
 | Vicia sepium         | ForestDryRich |    1 |
@@ -689,23 +689,23 @@ represent the potential habitats where each species could thrive,
 whereas in table @(tab:summaryfinalpresences), you can see a summary of
 the number of cells that each species could thrive on each habitat type.
 
-|  cell | species              | Landuse     |
-|------:|:---------------------|:------------|
-|  3373 | Anthyllis vulneraria | OpenDryPoor |
-|  7724 | Anthyllis vulneraria | OpenDryPoor |
-|  9140 | Anthyllis vulneraria | OpenDryPoor |
-|  9227 | Anthyllis vulneraria | OpenDryPoor |
-|  9499 | Anthyllis vulneraria | OpenDryPoor |
-| 10016 | Anthyllis vulneraria | OpenDryPoor |
-| 10170 | Anthyllis vulneraria | OpenDryPoor |
-| 10547 | Anthyllis vulneraria | OpenDryPoor |
-| 10548 | Anthyllis vulneraria | OpenDryPoor |
-| 10677 | Anthyllis vulneraria | OpenDryPoor |
-| 10679 | Anthyllis vulneraria | OpenDryPoor |
-| 10682 | Anthyllis vulneraria | OpenDryPoor |
-| 10683 | Anthyllis vulneraria | OpenDryPoor |
-| 10697 | Anthyllis vulneraria | OpenDryPoor |
-| 10699 | Anthyllis vulneraria | OpenDryPoor |
+| cell | species              | Landuse     |
+|-----:|:---------------------|:------------|
+| 1018 | Anthyllis vulneraria | OpenDryRich |
+| 1557 | Anthyllis vulneraria | OpenDryRich |
+| 1825 | Anthyllis vulneraria | OpenDryRich |
+| 2093 | Anthyllis vulneraria | OpenDryRich |
+| 2215 | Anthyllis vulneraria | OpenDryRich |
+| 2216 | Anthyllis vulneraria | OpenDryRich |
+| 2218 | Anthyllis vulneraria | OpenDryRich |
+| 2351 | Anthyllis vulneraria | OpenDryRich |
+| 2352 | Anthyllis vulneraria | OpenDryRich |
+| 2353 | Anthyllis vulneraria | OpenDryRich |
+| 2354 | Anthyllis vulneraria | OpenDryRich |
+| 2486 | Anthyllis vulneraria | OpenDryRich |
+| 2488 | Anthyllis vulneraria | OpenDryRich |
+| 2489 | Anthyllis vulneraria | OpenDryRich |
+| 2620 | Anthyllis vulneraria | OpenDryRich |
 
 <span id="tab:finalpresences"></span>Table 4.10: First 15 rows of the
 final presences dataset, showing the cells and land-use types where each
@@ -783,106 +783,119 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target Landuses
-#> ● completed target Raster [6.801 seconds]
+#> ● completed target Landuses [6.951 seconds]
 #> ▶ dispatched target shp
-#> ● completed target Landuses [0 seconds]
+#> ● completed target shp [0 seconds]
 #> ▶ dispatched target file
-#> ● completed target shp [0.001 seconds]
-#> ▶ dispatched target Landusesuitability
-#> ● completed target file [0 seconds]
+#> ● completed target file [0.001 seconds]
 #> ▶ dispatched target data
+#> ● completed target Raster [7.555 seconds]
+#> ▶ dispatched target Landusesuitability
 #> ● completed target Landusesuitability [0 seconds]
 #> ▶ dispatched target Long_LU_table
-#> ● completed target Long_LU_table [6.834 seconds]
-#> ● completed target data [10.362 seconds]
+#> ● completed target Long_LU_table [0.169 seconds]
+#> ● completed target data [0.572 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.508 seconds]
+#> ● completed target Clean [1.447 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.17 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.122 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.116 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.077 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.355 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.251 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.043 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.035 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.046 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.036 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.035 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.03 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_69210fc440d13855 [0.141 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.11 seconds]
 #> ● completed branch Count_Presences_37d1f8d5f74d852c [0.035 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
 #> ● completed target More_than_zero [0.001 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.558 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.447 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.131 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.088 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.987 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.934 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.189 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.22 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.443 seconds]
-#> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.136 seconds]
-#> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch Presences_daf8d6353bc80f0c [1.066 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [1.089 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.316 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.466 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.214 seconds]
+#> ▶ dispatched branch Presences_e65f4227e8299cc4
+#> ● completed branch buffer_b226446ac3154351 [0.268 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.574 seconds]
-#> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.06 seconds]
-#> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.467 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.587 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.049 seconds]
-#> ▶ dispatched target Phylo_Tree
-#> ● completed branch Presences_88937156c1302a12 [0.383 seconds]
-#> ● completed pattern Presences
-#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.038 seconds]
-#> ● completed pattern buffer
+#> ● completed branch buffer_cae8301e59fc4e01 [0.043 seconds]
+#> ▶ dispatched branch Presences_88937156c1302a12
+#> ● completed branch Presences_e65f4227e8299cc4 [0.725 seconds]
+#> ▶ dispatched branch buffer_0a8436ee3d4f2644
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.044 seconds]
 #> ▶ dispatched target rarity_weight
 #> ● completed target rarity_weight [0.005 seconds]
+#> ▶ dispatched target Phylo_Tree
+#> ● completed branch Presences_88937156c1302a12 [0.4 seconds]
+#> ● completed pattern Presences
+#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.05 seconds]
+#> ● completed pattern buffer
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.266 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.541 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [18.059 seconds]
-#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [5.805 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [17.339 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed target Phylo_Tree [44.902 seconds]
-#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.532 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.725 seconds]
+#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
+#> ● completed target Phylo_Tree [43.78 seconds]
 #> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.889 seconds]
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.161 seconds]
+#> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
+#> ● completed branch ModelAndPredict_b226446ac3154351 [5.409 seconds]
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.328 seconds]
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.3 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.265 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.311 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.464 seconds]
+#> ● completed target Thresholds [0.529 seconds]
 #> ▶ dispatched target LookUpTable
-#> ● completed target LookUpTable [0.011 seconds]
+#> ● completed target LookUpTable [0.03 seconds]
 #> ▶ dispatched target Final_Presences
-#> ● completed target Final_Presences [0.016 seconds]
+#> ● completed target Final_Presences [0.031 seconds]
 #> ▶ dispatched target unique_habitats
 #> ▶ dispatched target unique_species
-#> ● completed target unique_habitats [0.001 seconds]
+#> ● completed target unique_habitats [0 seconds]
 #> ● completed target unique_species [0.001 seconds]
+#> ▶ dispatched branch rarity_fcb1676d3b2f6824
+#> ▶ dispatched branch rarity_47ea97700de70215
+#> ● completed branch rarity_47ea97700de70215 [0.084 seconds]
+#> ▶ dispatched branch rarity_405e1cf7d36edc08
+#> ● completed branch rarity_fcb1676d3b2f6824 [0.199 seconds]
+#> ▶ dispatched branch rarity_f4a6e9a8f4837219
+#> ● completed branch rarity_405e1cf7d36edc08 [0.085 seconds]
+#> ▶ dispatched branch rarity_bee04486eb86e311
+#> ● completed branch rarity_bee04486eb86e311 [0.094 seconds]
+#> ▶ dispatched branch rarity_77d9a26761e4a007
+#> ● completed branch rarity_f4a6e9a8f4837219 [0.147 seconds]
 #> ▶ dispatched branch export_presences_e0501a6e2e4e8857
+#> ● completed branch rarity_77d9a26761e4a007 [0.097 seconds]
+#> ● completed pattern rarity
 #> ▶ dispatched branch export_presences_9cb7df6f909cc656
-#> ● completed branch export_presences_e0501a6e2e4e8857 [0.352 seconds]
+#> ● completed branch export_presences_e0501a6e2e4e8857 [0.389 seconds]
 #> ▶ dispatched branch export_presences_b7bf78e1c1a430c9
-#> ● completed branch export_presences_9cb7df6f909cc656 [0.542 seconds]
-#> ● completed branch export_presences_b7bf78e1c1a430c9 [0.291 seconds]
+#> ● completed branch export_presences_9cb7df6f909cc656 [0.401 seconds]
+#> ● completed branch export_presences_b7bf78e1c1a430c9 [0.236 seconds]
 #> ● completed pattern export_presences
-#> ▶ ended pipeline [1.383 minutes]
+#> ▶ ended pipeline [1.234 minutes]
 #> Warning message:
 #> 3 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
@@ -928,13 +941,16 @@ The `run_workflow` function creates a pipeline that:
     species and landuse are exported to the folder
     `Field_Final_Presences` as csv files.
 
-12. **Calculate rarity weights** Calculates a Rarity weight for the
+12. **Calculates rarity weights** Calculates a Rarity weight for the
     counts of species that have more than zero presences.
 
-13. **Generates a phylogenetic tree** for the species in the species
+13. **Calculates Rarity** Calculates and index of relative rarity for
+    each cell on each potential landuse for the cell.
+
+14. **Generates a phylogenetic tree** for the species in the species
     list, using the `generate_tree` function.
 
-14. **Generates a visual representation** of the workflow if
+15. **Generates a visual representation** of the workflow if
     `plot = TRUE`.
 
 You can monitor the progress of the workflow and visualize the
