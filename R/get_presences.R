@@ -145,7 +145,7 @@ get_presences <- function(species, country = NULL, shapefile = NULL){
   scientificName <- decimalLatitude <- decimalLongitude <- family <- genus <- NULL
   geometry <- NULL
 
-  if(!is.null(shapefile)){
+  if(!is.null(shapefile) & is.null(country)){
     try({
       geometry <- terra::vect(shapefile) |>
         terra::minRect() |>

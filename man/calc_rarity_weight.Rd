@@ -15,13 +15,3 @@ A data frame with rarity weights for each species, calculated using the \code{rW
 \description{
 This function calculates rarity weights for a given set of species occurrences using the \code{rWeights} function from the \code{Rarity} package. The weights are based on the species' occurrences and are used to assess their rarity within the dataset.
 }
-\examples{
-# Example usage:
-species_data <- data.frame(
-  species = c("Species1", "Species2", "Species3"),
-  N = c(10, 5, 1)
-)
-rarity_weights <- calc_rarity_weight(species_data)
-print(rarity_weights)
-
-}

@@ -17,15 +17,3 @@ A data frame containing the Index of Relative Rarity (Irr) for each cell, along 
 \description{
 This function calculates the Index of Relative Rarity (Irr) for species assemblages based on their occurrences in specific land-use types. It uses the rarity weights calculated from the \code{calc_rarity_weight} function.
 }
-\examples{
-# Example usage:
-final_presences <- data.frame(
-  cell = c(1, 2, 1, 3),
-  species = c("Species1", "Species2", "Species3", "Species1"),
-  Landuse = c("Forest", "Grassland", "Forest", "Wetland")
-)
-rarity_weights <- calc_rarity_weight(final_presences)
-rarity_index <- calc_rarity(final_presences, rarity_weights)
-print(rarity_index)
-
-}

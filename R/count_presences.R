@@ -40,7 +40,7 @@
 
 count_presences <- function(species, shapefile = NULL, country = NULL){
   # Calculate geometry if a shapefile is provided
-  geometry <- if (!is.null(shapefile)) {
+  geometry <- if (!is.null(shapefile) & is.null(country)) {
     terra::vect(shapefile) |>
       terra::minRect() |>
       terra::geom(wkt = TRUE)
