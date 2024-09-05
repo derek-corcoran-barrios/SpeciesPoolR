@@ -71,7 +71,8 @@ run_workflow <- function(workers = 2,
         targets::tar_target(Thresholds, create_thresholds(Model = ModelAndPredict, reference = Presences, file = Landuses)),
         targets::tar_target(LookUpTable, Generate_Lookup(Model = ModelAndPredict, Thresholds = Thresholds)),
         targets::tar_target(Long_LU_table, generate_long_landuse_table(path = Landusesuitability)),
-        targets::tar_target(Final_Presences, make_final_presences(Long_LU_table, buffer, LookUpTable)),
+        targets::tar_target(Final_Presences, make_final_presences(Long_LU_table,
+                                                                  buffer, LookUpTable), pattern = map(buffer)),
         targets::tar_target(
           unique_species,
           unique(Final_Presences$species)

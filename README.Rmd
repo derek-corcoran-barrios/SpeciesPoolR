@@ -335,6 +335,10 @@ Table \@ref(tab:tablespeciespred) shows the first 9 observations, illustrating t
 knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores across various land-use types for the first species. The values represent continuous predictions, indicating the relative likelihood of species presence in each land-use category.")
 ```
 
+#### Maximum Entropy Model for Land Use Selection
+
+To assess the land use preferences of the target species, we employed a customized Maximum Entropy (MaxEnt) model. This model was developed not as a traditional Species Distribution Model (SDM), but as a lookup table to evaluate the relative selection of land use types. We began by identifying species presence locations and extracting the corresponding land use categories. A minimum convex polygon (MCP) was constructed around these presence points and expanded by 15% to define the background area. Random sampling within this background area provided a distribution of land use types for comparison. The MaxEnt model was then built to evaluate the ratio of the probability density of land use types at presence locations (P(z)) to that at background locations (Q(z)). This ratio, P(z)/Q(z), allowed us to identify land use types that were disproportionately selected by the species. The model utilized a cloglog transformation to convert these ratios into probabilities, providing insights into the species' land use preferences. The final output was a predictive model indicating the probability of land use selection by the species, highlighting areas where the observed land use differed from that expected based on background availability.
+
 ### Step 3: Generating Habitat Suitability Thresholds
 
 While continuous predictions provide a detailed picture of habitat suitability, it is often useful to classify these predictions into binary suitability thresholds.
