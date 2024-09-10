@@ -66,18 +66,6 @@
     <p>A data table with the filtered species presences. The returned data table includes the <code>cell</code> identifier and the corresponding <code>species</code> that can thrive in that cell based on the habitat suitability.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Assuming you have the following objects from previous steps:</span></span></span>
-<span class="r-in"><span><span class="co"># Long_LU_table - The long-format land-use suitability table</span></span></span>
-<span class="r-in"><span><span class="co"># Long_Buffer_gbif - The buffer data frame of species presences</span></span></span>
-<span class="r-in"><span><span class="co"># LookUpTable - The lookup table mapping species to suitable habitats</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">final_presences</span> <span class="op">&lt;-</span> <span class="fu">make_final_presences</span><span class="op">(</span><span class="va">Long_LU_table</span>, <span class="va">Long_Buffer_gbif</span>, <span class="va">LookUpTable</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'Long_Buffer_gbif' not found</span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
