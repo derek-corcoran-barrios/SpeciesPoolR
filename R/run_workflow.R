@@ -34,7 +34,7 @@ run_workflow <- function(workers = 2,
                          shapefile = NULL,
                          plot = TRUE) {
 
-  Clean <- Count_Presences <- Final_Presences <- Landuse <- Landuses <- Landusesuitability <- Long_LU_table <- LookUpTable <- ModelAndPredict <- More_than_zero <- N <- PhyloDiversity <- Phylo_Tree <- Presences <- Raster <- Thresholds <- buffer <- data <- export_presences <- output_Rarity <- rarity <- rarity_weight <- shp <- species <- unique_habitats <- unique_species <- NULL
+  Clean <- Count_Presences <- Final_Presences <- Landuse <- Landuses <- Landusesuitability <- Long_LU_table <- LookUpTable <- ModelAndPredict <- More_than_zero <- N <- PhyloDiversity <- Phylo_Tree <- Presences <- Raster <- Thresholds <- buffer <- data <- export_presences <- output_Rarity <- output_Richness <- rarity <- rarity_weight <- shp <- species <- unique_habitats <- unique_species <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(
@@ -97,7 +97,10 @@ run_workflow <- function(workers = 2,
         targets::tar_target(name = output_Rarity,
                    command = export_rarity(Results = rarity, path = Raster),
                    map(rarity),
-                   format = "file")
+                   format = "file"),
+        targets::tar_target(name = output_Richness,
+                   command = export_richness(Results = PhyloDiversity, path = Raster),
+                   map(PhyloDiversity))
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected

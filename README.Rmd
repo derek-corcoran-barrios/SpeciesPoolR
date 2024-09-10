@@ -484,6 +484,13 @@ The result will be similar to running the steps manually but with the added bene
 This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data.
 It also makes it easier to rerun the workflow with different parameters or datasets.
 
+The files generated are 
+
+```{r}
+list.files(path = "Results/", recursive = T)
+```
+
+
 ```{r removefiles, include=FALSE}
 unlink("_targets/", recursive = T, force = T)
 file.remove("_targets.R")

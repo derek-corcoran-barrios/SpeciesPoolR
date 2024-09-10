@@ -4,27 +4,16 @@
 \alias{export_richness}
 \title{Export Species Richness to Cloud-Optimized GeoTIFF}
 \usage{
-export_richness(Results, path, folder)
+export_richness(Results, path)
 }
 \arguments{
 \item{Results}{A data.table containing species richness results. This data.table must contain at least the columns
 \code{cell} and \code{SR}, where \code{cell} refers to the cell index in the raster and \code{SR} refers to the species richness value.}
 
 \item{path}{A character string specifying the file path to a raster template. This raster is used as a template for the output raster.}
-
-\item{folder}{A folder where to store the Cloud-Optimized GeoTIFF.}
 }
 \description{
 This function takes a data.table of species richness results and a path to a raster template.
 It generates a \code{SpatRaster} object using the \code{terra} package, populates it with the species richness values,
 and writes the result out as a Cloud-Optimized GeoTIFF.
-}
-\examples{
-\dontrun{
-  # Example usage:
-  data(Richness_PD)
-  template_path <- system.file("ex/LU.tif", package="SpeciesPoolR")
-  output_folder <- "Results/Richness"
-  output_path <- export_richness(Richness_PD, template_path, output_folder)
-}
 }
