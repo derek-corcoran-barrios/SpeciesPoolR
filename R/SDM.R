@@ -248,6 +248,7 @@ ModelAndPredictFunc <- function(DF, file) {
 #' @export
 
 create_thresholds <- function(Model, reference, file) {
+  species <- process_species <- Pred <- NULL
   # Find species that are present in both Model and reference
   common_species <- intersect(unique(Model$species), unique(reference$species))
 

@@ -18,6 +18,8 @@
 #'
 #' @export
 generate_landuse_table <- function(path) {
+
+  cell <- NULL
   DF <- terra::rast(path) |>
     terra::as.data.frame(cells = TRUE) |>
     dplyr::filter(rowSums(dplyr::across(-cell, ~. == 1)) > 0)
@@ -46,6 +48,7 @@ generate_landuse_table <- function(path) {
 #' @export
 generate_long_landuse_table <- function(path) {
   # Convert raster to data frame and filter for cells with at least one suitability value of 1
+  cell <- Habitat <- Pres <- Suitability <- NULL
   DF <- terra::rast(path) |>
     terra::as.data.frame(cells = TRUE) |>
     dplyr::filter(rowSums(dplyr::across(-cell, ~. == 1)) > 0)
@@ -79,17 +82,12 @@ generate_long_landuse_table <- function(path) {
 #'
 #' @importFrom data.table as.data.table %chin%
 #' @importFrom dplyr mutate
-#'
-#' @examples
-#' # Assuming you have the following objects from previous steps:
-#' # Long_LU_table - The long-format land-use suitability table
-#' # Long_Buffer_gbif - The buffer data frame of species presences
-#' # LookUpTable - The lookup table mapping species to suitable habitats
-#'
-#' final_presences <- make_final_presences(Long_LU_table, Long_Buffer_gbif, LookUpTable)
+#' @import data.table
 #'
 #' @export
-make_final_presences <- function(Long_LU_table, Long_Buffer_gbif, LookUpTable) {
+make_final_presences <- function(Long_LU_table, Long_Buffer_gbif, LookUpTable)
+  {
+  . <- cell <- Habitat <- Landuse <- Pres <- species <- NULL
   if (nrow(Long_Buffer_gbif) == 0) {
     result2 <- data.frame(matrix(ncol = 3, nrow = 0))
     colnames(result2) <- c("cell", "species", "Landuse")

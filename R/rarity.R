@@ -10,7 +10,6 @@
 #'
 #' @export
 calc_rarity_weight <- function(df) {
-
   occ <- df$N
   names(occ) <- df$species
 
@@ -35,6 +34,7 @@ calc_rarity_weight <- function(df) {
 #'
 #' @export
 calc_rarity <- function(Fin, RW) {
+  Pres <- species <- cell <- NULL
   Fin <- as.data.table(Fin)
   Landuse <- unique(Fin$Landuse)
 

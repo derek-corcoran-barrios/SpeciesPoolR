@@ -103,7 +103,7 @@ sparse or unreliable. Studies have suggested that in such landscapes,
 simplistic models that prioritize dispersal and broad habitat
 suitability over intricate ecological niches can better capture species’
 potential distributions and their responses to environmental changes
-(**GUISAN_2006?**; Thuiller et al. 2005), an example to this approach
+(Guisan et al. 2006; Thuiller et al. 2005), an example to this approach
 would be range bagging (Drake 2015). This pragmatic approach is
 especially pertinent when planning conservation actions in areas where
 habitat degradation has left little intact nature, and it ensures that
@@ -559,12 +559,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6865519 | Anthyllis vulneraria |
-| ForestWetRich | 0.6865519 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6865519 | Anthyllis vulneraria |
-| Exclude       | 0.5085293 | Anthyllis vulneraria |
-| ForestDryRich | 0.3191053 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2292275 | Anthyllis vulneraria |
+| ForestWetRich | 0.7027417 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.7027417 | Anthyllis vulneraria |
+| OpenWetRich   | 0.7027417 | Anthyllis vulneraria |
+| Exclude       | 0.5133834 | Anthyllis vulneraria |
+| ForestDryRich | 0.3359056 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2320890 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 4.7: Predicted habitat
@@ -620,12 +620,12 @@ Table <a href="#tab:thresholdtables">4.8</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.509 |    0.509 |    0.509 |
+| Anthyllis vulneraria |    0.513 |    0.513 |    0.513 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
-| Vicia sativa         |    0.401 |    0.401 |    0.401 |
-| Vicia sepium         |    0.295 |    0.295 |    0.295 |
+| Vicia sativa         |    0.404 |    0.404 |    0.404 |
+| Vicia sepium         |    0.290 |    0.290 |    0.290 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
 <span id="tab:thresholdtables"></span>Table 4.8: Threshold based on
@@ -651,9 +651,9 @@ are not.
 |:---------------------|:--------------|-----:|
 | Anthyllis vulneraria | OpenDryRich   |    1 |
 | Anthyllis vulneraria | OpenDryPoor   |    1 |
-| Anthyllis vulneraria | OpenWetRich   |    1 |
 | Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetPoor   |    1 |
+| Anthyllis vulneraria | OpenWetRich   |    1 |
 | Lathyrus japonicus   | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryRich   |    1 |
@@ -664,8 +664,8 @@ are not.
 | Vicia sepium         | ForestWetRich |    1 |
 | Vicia sepium         | ForestDryRich |    1 |
 | Vicia sepium         | OpenDryPoor   |    1 |
-| Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenWetRich   |    1 |
+| Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenDryRich   |    1 |
 
 <span id="tab:lookuptab"></span>Table 4.9: dummy variable that shows
@@ -804,158 +804,158 @@ run_workflow(
 )
 #> ▶ dispatched target Raster
 #> ▶ dispatched target Landuses
-#> ● completed target Raster [4.81 seconds]
+#> ● completed target Landuses [7.174 seconds]
 #> ▶ dispatched target shp
-#> ● completed target Landuses [0.001 seconds]
-#> ▶ dispatched target file
 #> ● completed target shp [0 seconds]
-#> ▶ dispatched target Landusesuitability
+#> ▶ dispatched target file
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
+#> ● completed target Raster [7.395 seconds]
+#> ▶ dispatched target Landusesuitability
 #> ● completed target Landusesuitability [0 seconds]
 #> ▶ dispatched target Long_LU_table
-#> ● completed target Long_LU_table [4.867 seconds]
-#> ● completed target data [10.323 seconds]
+#> ● completed target Long_LU_table [0.154 seconds]
+#> ● completed target data [0.604 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.057 seconds]
+#> ● completed target Clean [1.339 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.154 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.155 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.065 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.117 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [0.243 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.341 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.027 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.056 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.057 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.038 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_69210fc440d13855 [0.094 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [0.04 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_974105e269324d3e [0.032 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.034 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.142 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.036 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.003 seconds]
+#> ● completed target More_than_zero [0.002 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.46 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.508 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.149 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.138 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_c112b37cd15959d6 [0.719 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [0.879 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.117 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.281 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [0.398 seconds]
-#> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch Presences_daf8d6353bc80f0c [0.82 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [0.91 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_b226446ac3154351 [0.193 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.449 seconds]
+#> ▶ dispatched branch buffer_b226446ac3154351
+#> ● completed branch buffer_b226446ac3154351 [0.219 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.182 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.397 seconds]
 #> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_e65f4227e8299cc4 [0.559 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.689 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.444 seconds]
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.552 seconds]
 #> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.044 seconds]
-#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.04 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.06 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [0.364 seconds]
-#> ● completed pattern Presences
-#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.038 seconds]
-#> ● completed pattern buffer
+#> ● completed branch buffer_cae8301e59fc4e01 [0.059 seconds]
 #> ▶ dispatched target rarity_weight
 #> ● completed target rarity_weight [0.003 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.845 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.327 seconds]
+#> ● completed pattern Presences
+#> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.036 seconds]
+#> ● completed pattern buffer
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [0.81 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.095 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [12.981 seconds]
-#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [3.541 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [18.48 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed target Phylo_Tree [31.254 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [22.185 seconds]
+#> ▶ dispatched branch ModelAndPredict_b226446ac3154351
+#> ● completed target Phylo_Tree [43.206 seconds]
 #> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [15.29 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [6.165 seconds]
+#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.663 seconds]
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.2 seconds]
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [8.604 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.289 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.929 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.571 seconds]
+#> ● completed target Thresholds [0.691 seconds]
 #> ▶ dispatched target LookUpTable
-#> ● completed target LookUpTable [0.007 seconds]
+#> ● completed target LookUpTable [0.009 seconds]
 #> ▶ dispatched branch Final_Presences_ebf0f62f14548a82
 #> ▶ dispatched branch Final_Presences_344cc771c9264c2e
-#> ● completed branch Final_Presences_ebf0f62f14548a82 [0.02 seconds]
+#> ● completed branch Final_Presences_ebf0f62f14548a82 [0.021 seconds]
 #> ▶ dispatched branch Final_Presences_6f1885e07badc469
-#> ● completed branch Final_Presences_344cc771c9264c2e [0.016 seconds]
+#> ● completed branch Final_Presences_344cc771c9264c2e [0.041 seconds]
 #> ▶ dispatched branch Final_Presences_35ecd9eff835718c
-#> ● completed branch Final_Presences_6f1885e07badc469 [0.017 seconds]
+#> ● completed branch Final_Presences_35ecd9eff835718c [0.03 seconds]
 #> ▶ dispatched branch Final_Presences_af0c167a6a4b9998
-#> ● completed branch Final_Presences_35ecd9eff835718c [0.014 seconds]
+#> ● completed branch Final_Presences_6f1885e07badc469 [0.035 seconds]
 #> ▶ dispatched branch Final_Presences_5224d468624d4ebb
-#> ● completed branch Final_Presences_af0c167a6a4b9998 [0.023 seconds]
+#> ● completed branch Final_Presences_5224d468624d4ebb [0.049 seconds]
 #> ▶ dispatched branch Final_Presences_d203d619aa280fd1
-#> ● completed branch Final_Presences_5224d468624d4ebb [0.054 seconds]
-#> ● completed branch Final_Presences_d203d619aa280fd1 [0.051 seconds]
+#> ● completed branch Final_Presences_d203d619aa280fd1 [0.07 seconds]
+#> ● completed branch Final_Presences_af0c167a6a4b9998 [0.188 seconds]
 #> ● completed pattern Final_Presences
 #> ▶ dispatched target unique_habitats
 #> ▶ dispatched target unique_species
-#> ● completed target unique_habitats [0 seconds]
+#> ● completed target unique_habitats [0.001 seconds]
 #> ● completed target unique_species [0.001 seconds]
 #> ▶ dispatched branch rarity_405e1cf7d36edc08
 #> ▶ dispatched branch rarity_77d9a26761e4a007
-#> ● completed branch rarity_405e1cf7d36edc08 [0.097 seconds]
+#> ● completed branch rarity_405e1cf7d36edc08 [0.24 seconds]
 #> ▶ dispatched branch output_Rarity_2cf706eb0499c812
-#> ● completed branch rarity_77d9a26761e4a007 [0.105 seconds]
+#> ● completed branch rarity_77d9a26761e4a007 [0.238 seconds]
 #> ▶ dispatched branch output_Rarity_261466b6f238f521
-#> ● completed branch output_Rarity_2cf706eb0499c812 [0.072 seconds]
+#> ● completed branch output_Rarity_261466b6f238f521 [0.081 seconds]
 #> ▶ dispatched branch rarity_47ea97700de70215
-#> ● completed branch output_Rarity_261466b6f238f521 [0.093 seconds]
+#> ● completed branch output_Rarity_2cf706eb0499c812 [0.107 seconds]
 #> ▶ dispatched branch rarity_f4a6e9a8f4837219
-#> ● completed branch rarity_47ea97700de70215 [0.096 seconds]
+#> ● completed branch rarity_47ea97700de70215 [0.277 seconds]
 #> ▶ dispatched branch output_Rarity_c2db253b33fcf9d9
-#> ● completed branch rarity_f4a6e9a8f4837219 [0.106 seconds]
+#> ● completed branch rarity_f4a6e9a8f4837219 [0.354 seconds]
 #> ▶ dispatched branch output_Rarity_c1388be691e0be60
-#> ● completed branch output_Rarity_c2db253b33fcf9d9 [0.328 seconds]
+#> ● completed branch output_Rarity_c1388be691e0be60 [0.353 seconds]
 #> ▶ dispatched branch rarity_bee04486eb86e311
-#> ● completed branch output_Rarity_c1388be691e0be60 [0.316 seconds]
+#> ● completed branch output_Rarity_c2db253b33fcf9d9 [0.45 seconds]
 #> ▶ dispatched branch rarity_fcb1676d3b2f6824
-#> ● completed branch rarity_bee04486eb86e311 [0.025 seconds]
+#> ● completed branch rarity_bee04486eb86e311 [0.032 seconds]
+#> ▶ dispatched branch output_Rarity_7d8e043127d47e71
+#> ● completed branch output_Rarity_7d8e043127d47e71 [0.053 seconds]
 #> ▶ dispatched branch export_presences_b7bf78e1c1a430c9
-#> ● completed branch rarity_fcb1676d3b2f6824 [0.102 seconds]
+#> ● completed branch rarity_fcb1676d3b2f6824 [0.095 seconds]
 #> ● completed pattern rarity
 #> ▶ dispatched branch output_Rarity_c8f99e24ce7afc52
-#> ● completed branch output_Rarity_c8f99e24ce7afc52 [0.041 seconds]
+#> ● completed branch output_Rarity_c8f99e24ce7afc52 [0.083 seconds]
+#> ● completed pattern output_Rarity
 #> ▶ dispatched branch export_presences_9cb7df6f909cc656
-#> ● completed branch export_presences_b7bf78e1c1a430c9 [0.258 seconds]
+#> ● completed branch export_presences_b7bf78e1c1a430c9 [0.266 seconds]
 #> ▶ dispatched branch export_presences_e0501a6e2e4e8857
-#> ● completed branch export_presences_e0501a6e2e4e8857 [0.14 seconds]
+#> ● completed branch export_presences_e0501a6e2e4e8857 [0.15 seconds]
 #> ▶ dispatched branch PhyloDiversity_405e1cf7d36edc08
-#> ● completed branch export_presences_9cb7df6f909cc656 [0.337 seconds]
+#> ● completed branch export_presences_9cb7df6f909cc656 [0.441 seconds]
 #> ● completed pattern export_presences
 #> ▶ dispatched branch PhyloDiversity_77d9a26761e4a007
-#> ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.22 seconds]
+#> ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.402 seconds]
 #> ▶ dispatched branch PhyloDiversity_47ea97700de70215
-#> ● completed branch PhyloDiversity_47ea97700de70215 [0.029 seconds]
+#> ● completed branch PhyloDiversity_47ea97700de70215 [0.049 seconds]
 #> ▶ dispatched branch PhyloDiversity_f4a6e9a8f4837219
-#> ● completed branch PhyloDiversity_77d9a26761e4a007 [0.262 seconds]
+#> ● completed branch PhyloDiversity_77d9a26761e4a007 [0.409 seconds]
 #> ▶ dispatched branch PhyloDiversity_bee04486eb86e311
-#> ● completed branch PhyloDiversity_bee04486eb86e311 [0.058 seconds]
+#> ● completed branch PhyloDiversity_bee04486eb86e311 [0.109 seconds]
 #> ▶ dispatched branch PhyloDiversity_fcb1676d3b2f6824
-#> ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.19 seconds]
-#> ▶ dispatched branch output_Rarity_7d8e043127d47e71
-#> ● completed branch output_Rarity_7d8e043127d47e71 [0.042 seconds]
-#> ● completed pattern output_Rarity
-#> ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.663 seconds]
+#> ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.478 seconds]
+#> ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.529 seconds]
 #> ● completed pattern PhyloDiversity
-#> ▶ ended pipeline [1.089 minutes]
+#> ▶ ended pipeline [1.259 minutes]
 #> Warning message:
 #> 10 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
@@ -1063,6 +1063,15 @@ Ecosystem Unaffected by Human Activities.” *Diversity and Distributions*
 Drake, John M. 2015. “Range Bagging: A New Method for Ecological Niche
 Modelling from Presence-Only Data.” *Journal of the Royal Society
 Interface* 12 (107): 20150086.
+
+</div>
+
+<div id="ref-guisan2006using" class="csl-entry">
+
+Guisan, Antoine, Olivier Broennimann, Robin Engler, Mathias Vust, Nigel
+G Yoccoz, Anthony Lehmann, and Niklaus E Zimmermann. 2006. “Using
+Niche-Based Models to Improve the Sampling of Rare Species.”
+*Conservation Biology* 20 (2): 501–11.
 
 </div>
 

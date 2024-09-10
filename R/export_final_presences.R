@@ -11,6 +11,7 @@
 #'
 #' @export
 export_final_presences <- function(DF, folder) {
+  Landuse <- NULL
   Landuses <- unique(DF$Landuse)
   if(!dir.exists(folder)) {
     dir.create(folder)

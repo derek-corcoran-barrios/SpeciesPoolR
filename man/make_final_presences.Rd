@@ -19,12 +19,3 @@ A data table with the filtered species presences. The returned data table includ
 \description{
 This function takes a long-format land-use table, a buffer data frame of species presences, and a lookup table to determine which species can thrive in which habitats. It filters the species presences to include only those cells that are both within the species' buffer zones and have suitable habitats according to the lookup table.
 }
-\examples{
-# Assuming you have the following objects from previous steps:
-# Long_LU_table - The long-format land-use suitability table
-# Long_Buffer_gbif - The buffer data frame of species presences
-# LookUpTable - The lookup table mapping species to suitable habitats
-
-final_presences <- make_final_presences(Long_LU_table, Long_Buffer_gbif, LookUpTable)
-
-}

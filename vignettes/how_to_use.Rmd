@@ -64,7 +64,7 @@ Instead, simpler algorithms that incorporate basic dispersal mechanisms and habi
 By reducing assumptions about habitat preferences, these methods can provide a more realistic framework for conservation planning, particularly when dealing with the restoration of agricultural lands into natural habitats.
 
 For rare species, and indeed for many others, this approach may offer a more practical solution in scenarios where detailed ecological data is sparse or unreliable.
-Studies have suggested that in such landscapes, simplistic models that prioritize dispersal and broad habitat suitability over intricate ecological niches can better capture species' potential distributions and their responses to environmental changes [@GUISAN_2006; @Thuiller_2005], an example to this approach would be range bagging [@drake2015range].
+Studies have suggested that in such landscapes, simplistic models that prioritize dispersal and broad habitat suitability over intricate ecological niches can better capture species' potential distributions and their responses to environmental changes [@guisan2006using; @Thuiller_2005], an example to this approach would be range bagging [@drake2015range].
 This pragmatic approach is especially pertinent when planning conservation actions in areas where habitat degradation has left little intact nature, and it ensures that even under data constraints, effective biodiversity management can still be pursued.
 
 # Required Data Files

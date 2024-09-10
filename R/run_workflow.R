@@ -34,7 +34,7 @@ run_workflow <- function(workers = 2,
                          shapefile = NULL,
                          plot = TRUE) {
 
-  data <- Clean <- Count_Presences <- Presences <- shp <- More_than_zero <- N <- Landuses <- Raster <- buffer <- Phylo_Tree <- ModelAndPredict <- NULL
+  Clean <- Count_Presences <- Final_Presences <- Landuse <- Landuses <- Landusesuitability <- Long_LU_table <- LookUpTable <- ModelAndPredict <- More_than_zero <- N <- PhyloDiversity <- Phylo_Tree <- Presences <- Raster <- Thresholds <- buffer <- data <- export_presences <- output_Rarity <- rarity <- rarity_weight <- shp <- species <- unique_habitats <- unique_species <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(
