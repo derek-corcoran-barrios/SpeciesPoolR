@@ -44,8 +44,9 @@ calc_rarity <- function(Fin, RW) {
 
   Fin2 <- dcast(Fin, cell ~ species, value.var = "Pres", fill = 0)
   Fin2 <- tibble::column_to_rownames(as.data.frame(Fin2), "cell")
-  colnames(Fin2) <- stringr::str_replace_all(colnames(Fin2), "_", " ")
+  colnames(Fin2) <- stringr::str_replace_all(colnames(Fin2), "[^\\p{L}\\p{N}\\s]", " ")
   Fin2 <- t(Fin2)
+  rownames(RW) <- stringr::str_replace_all(rownames(RW), "[^\\p{L}\\p{N}\\s]", " ")
 
   Rarity <- Rarity::Irr(assemblages = Fin2, W = RW)
   Rarity <- as.data.frame(Rarity)

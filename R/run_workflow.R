@@ -88,9 +88,16 @@ run_workflow <- function(workers = 2,
           format = "file"
         ),
         targets::tar_target(Phylo_Tree, generate_tree(More_than_zero)),
+        targets::tar_target(PhyloDiversity,
+                   calc_pd(Final_Presences[Landuse == unique_habitats,], Phylo_Tree),
+                   pattern = map(unique_habitats)),
         targets::tar_target(rarity_weight, calc_rarity_weight(More_than_zero)),
         targets::tar_target(rarity, calc_rarity(Final_Presences[Landuse == unique_habitats,], rarity_weight),
-                            pattern = map(unique_habitats))
+                            pattern = map(unique_habitats)),
+        targets::tar_target(name = output_Rarity,
+                   command = export_rarity(Results = rarity, path = Raster),
+                   map(rarity),
+                   format = "file")
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected
