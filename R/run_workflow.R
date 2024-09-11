@@ -100,7 +100,12 @@ run_workflow <- function(workers = 2,
                    format = "file"),
         targets::tar_target(name = output_Richness,
                    command = export_richness(Results = PhyloDiversity, path = Raster),
-                   map(PhyloDiversity))
+                   map(PhyloDiversity),
+                   format = "file"),
+        targets::tar_target(name = output_PD,
+                   command = export_pd(Results = PhyloDiversity, path = Raster),
+                   map(PhyloDiversity),
+                   format = "file")
         )
     },
     tidy_eval = TRUE  # This ensures the !! operators work as expected

@@ -559,12 +559,12 @@ knitr::kable(Habitats[1:9,], caption = "Predicted habitat suitability scores acr
 |:--------------|----------:|:---------------------|
 | OpenDryRich   | 1.0000000 | Anthyllis vulneraria |
 | OpenDryPoor   | 1.0000000 | Anthyllis vulneraria |
-| ForestWetRich | 0.6838430 | Anthyllis vulneraria |
-| OpenWetRich   | 0.6838430 | Anthyllis vulneraria |
-| OpenWetPoor   | 0.6838430 | Anthyllis vulneraria |
-| Exclude       | 0.5108840 | Anthyllis vulneraria |
-| ForestDryRich | 0.3207105 | Anthyllis vulneraria |
-| ForestDryPoor | 0.2241332 | Anthyllis vulneraria |
+| OpenWetRich   | 0.6863723 | Anthyllis vulneraria |
+| ForestWetRich | 0.6863723 | Anthyllis vulneraria |
+| OpenWetPoor   | 0.6863723 | Anthyllis vulneraria |
+| Exclude       | 0.5143679 | Anthyllis vulneraria |
+| ForestDryRich | 0.2998771 | Anthyllis vulneraria |
+| ForestDryPoor | 0.2260377 | Anthyllis vulneraria |
 | Exclude       | 0.6335459 | Genista tinctoria    |
 
 <span id="tab:tablespeciespred"></span>Table 4.7: Predicted habitat
@@ -620,12 +620,12 @@ Table <a href="#tab:thresholdtables">4.8</a>.
 
 | species              | Thres_99 | Thres_95 | Thres_90 |
 |:---------------------|---------:|---------:|---------:|
-| Anthyllis vulneraria |    0.511 |    0.511 |    0.511 |
+| Anthyllis vulneraria |    0.514 |    0.514 |    0.514 |
 | Genista tinctoria    |    0.634 |    0.634 |    0.634 |
 | Lathyrus japonicus   |    0.407 |    0.407 |    0.407 |
 | Lathyrus latifolius  |    0.634 |    0.634 |    0.634 |
-| Vicia sativa         |    0.405 |    0.405 |    0.405 |
-| Vicia sepium         |    0.294 |    0.294 |    0.294 |
+| Vicia sativa         |    0.404 |    0.404 |    0.404 |
+| Vicia sepium         |    0.286 |    0.286 |    0.286 |
 | Vicia villosa        |    0.633 |    0.633 |    0.633 |
 
 <span id="tab:thresholdtables"></span>Table 4.8: Threshold based on
@@ -651,21 +651,21 @@ are not.
 |:---------------------|:--------------|-----:|
 | Anthyllis vulneraria | OpenDryRich   |    1 |
 | Anthyllis vulneraria | OpenDryPoor   |    1 |
-| Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetRich   |    1 |
+| Anthyllis vulneraria | ForestWetRich |    1 |
 | Anthyllis vulneraria | OpenWetPoor   |    1 |
 | Lathyrus japonicus   | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryPoor   |    1 |
 | Vicia sativa         | OpenDryRich   |    1 |
 | Vicia sativa         | OpenWetPoor   |    1 |
-| Vicia sativa         | OpenWetRich   |    1 |
 | Vicia sativa         | ForestWetRich |    1 |
+| Vicia sativa         | OpenWetRich   |    1 |
 | Vicia sativa         | ForestDryRich |    1 |
 | Vicia sepium         | ForestWetRich |    1 |
 | Vicia sepium         | ForestDryRich |    1 |
 | Vicia sepium         | OpenDryPoor   |    1 |
-| Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenWetRich   |    1 |
+| Vicia sepium         | OpenWetPoor   |    1 |
 | Vicia sepium         | OpenDryRich   |    1 |
 
 <span id="tab:lookuptab"></span>Table 4.9: dummy variable that shows
@@ -804,171 +804,184 @@ run_workflow(
 )
 #> ▶ dispatched target shp
 #> ▶ dispatched target Raster
-#> ● completed target shp [8.94 seconds]
+#> ● completed target shp [6.837 seconds]
 #> ▶ dispatched target Landuses
-#> ● completed target Landuses [0 seconds]
+#> ● completed target Raster [0.001 seconds]
 #> ▶ dispatched target file
+#> ● completed target Landuses [0 seconds]
+#> ▶ dispatched target Landusesuitability
 #> ● completed target file [0 seconds]
 #> ▶ dispatched target data
-#> ● completed target Raster [8.884 seconds]
-#> ▶ dispatched target Landusesuitability
 #> ● completed target Landusesuitability [0 seconds]
 #> ▶ dispatched target Long_LU_table
-#> ● completed target Long_LU_table [0.113 seconds]
-#> ● completed target data [0.665 seconds]
+#> ● completed target data [0.625 seconds]
 #> ▶ dispatched target Clean
-#> ● completed target Clean [1.531 seconds]
+#> ● completed target Long_LU_table [0.159 seconds]
+#> ● completed target Clean [1.501 seconds]
 #> ▶ dispatched branch Count_Presences_33538e94b3809372
 #> ▶ dispatched branch Count_Presences_52d72a5ad405e933
-#> ● completed branch Count_Presences_33538e94b3809372 [0.229 seconds]
+#> ● completed branch Count_Presences_33538e94b3809372 [0.196 seconds]
 #> ▶ dispatched branch Count_Presences_e70f77d9439a4770
-#> ● completed branch Count_Presences_e70f77d9439a4770 [0.855 seconds]
+#> ● completed branch Count_Presences_52d72a5ad405e933 [0.134 seconds]
 #> ▶ dispatched branch Count_Presences_dea4ef8633a449a1
-#> ● completed branch Count_Presences_52d72a5ad405e933 [1.168 seconds]
+#> ● completed branch Count_Presences_e70f77d9439a4770 [0.065 seconds]
 #> ▶ dispatched branch Count_Presences_69210fc440d13855
-#> ● completed branch Count_Presences_69210fc440d13855 [0.34 seconds]
+#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.074 seconds]
 #> ▶ dispatched branch Count_Presences_a61be030e01ebaf5
-#> ● completed branch Count_Presences_dea4ef8633a449a1 [0.398 seconds]
+#> ● completed branch Count_Presences_69210fc440d13855 [0.068 seconds]
 #> ▶ dispatched branch Count_Presences_974105e269324d3e
-#> ● completed branch Count_Presences_974105e269324d3e [0.121 seconds]
+#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.139 seconds]
 #> ▶ dispatched branch Count_Presences_37d1f8d5f74d852c
-#> ● completed branch Count_Presences_a61be030e01ebaf5 [0.14 seconds]
-#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.623 seconds]
+#> ● completed branch Count_Presences_37d1f8d5f74d852c [0.047 seconds]
+#> ● completed branch Count_Presences_974105e269324d3e [7.46 seconds]
 #> ● completed pattern Count_Presences
 #> ▶ dispatched target More_than_zero
-#> ● completed target More_than_zero [0.002 seconds]
+#> ● completed target More_than_zero [0.005 seconds]
 #> ▶ dispatched branch Presences_c112b37cd15959d6
 #> ▶ dispatched branch Presences_af64bac105a08467
-#> ● completed branch Presences_af64bac105a08467 [0.905 seconds]
+#> ● completed branch Presences_af64bac105a08467 [0.853 seconds]
 #> ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2
-#> ● completed branch Presences_c112b37cd15959d6 [1.935 seconds]
+#> ● completed branch Presences_c112b37cd15959d6 [1.321 seconds]
 #> ▶ dispatched branch ModelAndPredict_626a53b08dfe709d
-#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.476 seconds]
+#> ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.627 seconds]
 #> ▶ dispatched branch Presences_daf8d6353bc80f0c
-#> ● completed branch Presences_daf8d6353bc80f0c [2.269 seconds]
+#> ● completed branch Presences_daf8d6353bc80f0c [1.292 seconds]
 #> ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988
-#> ● completed branch ModelAndPredict_626a53b08dfe709d [20.212 seconds]
+#> ● completed branch ModelAndPredict_626a53b08dfe709d [17.553 seconds]
 #> ▶ dispatched branch Presences_310adeccf6b44725
-#> ● completed branch Presences_310adeccf6b44725 [1.195 seconds]
+#> ● completed branch Presences_310adeccf6b44725 [0.803 seconds]
 #> ▶ dispatched branch ModelAndPredict_b226446ac3154351
-#> ● completed branch ModelAndPredict_b226446ac3154351 [6.505 seconds]
+#> ● completed branch ModelAndPredict_b226446ac3154351 [5.909 seconds]
 #> ▶ dispatched branch Presences_e65f4227e8299cc4
-#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [25.631 seconds]
-#> ▶ dispatched branch Presences_d4b9dc68293bd5b2
-#> ● completed branch Presences_d4b9dc68293bd5b2 [0.869 seconds]
-#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
-#> ● completed branch Presences_e65f4227e8299cc4 [1.397 seconds]
+#> ● completed branch Presences_e65f4227e8299cc4 [0.909 seconds]
 #> ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644
-#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.936 seconds]
+#> ● completed branch ModelAndPredict_edb09c8ec5c9a988 [24.846 seconds]
+#> ▶ dispatched branch Presences_d4b9dc68293bd5b2
+#> ● completed branch Presences_d4b9dc68293bd5b2 [0.726 seconds]
+#> ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01
+#> ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.887 seconds]
 #> ▶ dispatched branch Presences_88937156c1302a12
-#> ● completed branch Presences_88937156c1302a12 [1.18 seconds]
+#> ● completed branch Presences_88937156c1302a12 [0.483 seconds]
 #> ● completed pattern Presences
 #> ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f
-#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.392 seconds]
+#> ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.324 seconds]
 #> ▶ dispatched target Phylo_Tree
-#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.237 seconds]
+#> ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.785 seconds]
 #> ● completed pattern ModelAndPredict
 #> ▶ dispatched target Thresholds
-#> ● completed target Thresholds [0.764 seconds]
+#> ● completed target Thresholds [0.748 seconds]
 #> ▶ dispatched target LookUpTable
-#> ● completed target LookUpTable [0.013 seconds]
+#> ● completed target LookUpTable [0.012 seconds]
 #> ▶ dispatched target rarity_weight
-#> ● completed target rarity_weight [0.004 seconds]
+#> ● completed target rarity_weight [0.003 seconds]
 #> ▶ dispatched branch buffer_0e19b8cb545404d2
-#> ● completed branch buffer_0e19b8cb545404d2 [0.152 seconds]
+#> ● completed branch buffer_0e19b8cb545404d2 [0.061 seconds]
 #> ▶ dispatched branch Final_Presences_344cc771c9264c2e
-#> ● completed branch Final_Presences_344cc771c9264c2e [0.156 seconds]
+#> ● completed branch Final_Presences_344cc771c9264c2e [0.013 seconds]
 #> ▶ dispatched branch buffer_626a53b08dfe709d
-#> ● completed branch buffer_626a53b08dfe709d [0.23 seconds]
+#> ● completed branch buffer_626a53b08dfe709d [0.294 seconds]
 #> ▶ dispatched branch Final_Presences_ebf0f62f14548a82
-#> ● completed branch Final_Presences_ebf0f62f14548a82 [0.293 seconds]
+#> ● completed branch Final_Presences_ebf0f62f14548a82 [0.014 seconds]
 #> ▶ dispatched branch buffer_edb09c8ec5c9a988
-#> ● completed branch buffer_edb09c8ec5c9a988 [0.146 seconds]
+#> ● completed branch buffer_edb09c8ec5c9a988 [0.073 seconds]
 #> ▶ dispatched branch Final_Presences_6f1885e07badc469
-#> ● completed branch Final_Presences_6f1885e07badc469 [0.077 seconds]
+#> ● completed branch Final_Presences_6f1885e07badc469 [0.049 seconds]
 #> ▶ dispatched branch buffer_b226446ac3154351
-#> ● completed branch buffer_b226446ac3154351 [0.058 seconds]
+#> ● completed branch buffer_b226446ac3154351 [0.056 seconds]
 #> ▶ dispatched branch Final_Presences_35ecd9eff835718c
-#> ● completed branch Final_Presences_35ecd9eff835718c [0.076 seconds]
-#> ▶ dispatched branch buffer_cae8301e59fc4e01
-#> ● completed branch buffer_cae8301e59fc4e01 [0.072 seconds]
-#> ▶ dispatched branch Final_Presences_5224d468624d4ebb
-#> ● completed branch Final_Presences_5224d468624d4ebb [0.031 seconds]
+#> ● completed branch Final_Presences_35ecd9eff835718c [0.016 seconds]
 #> ▶ dispatched branch buffer_0a8436ee3d4f2644
-#> ● completed branch buffer_0a8436ee3d4f2644 [0.086 seconds]
+#> ● completed branch buffer_0a8436ee3d4f2644 [0.051 seconds]
 #> ▶ dispatched branch Final_Presences_af0c167a6a4b9998
-#> ● completed branch Final_Presences_af0c167a6a4b9998 [0.162 seconds]
+#> ● completed branch Final_Presences_af0c167a6a4b9998 [0.02 seconds]
+#> ▶ dispatched branch buffer_cae8301e59fc4e01
+#> ● completed branch buffer_cae8301e59fc4e01 [0.043 seconds]
+#> ▶ dispatched branch Final_Presences_5224d468624d4ebb
+#> ● completed branch Final_Presences_5224d468624d4ebb [0.01 seconds]
 #> ▶ dispatched branch buffer_a0190cbfdf5f6f1f
-#> ● completed branch buffer_a0190cbfdf5f6f1f [0.06 seconds]
+#> ● completed branch buffer_a0190cbfdf5f6f1f [0.035 seconds]
 #> ● completed pattern buffer
 #> ▶ dispatched branch Final_Presences_d203d619aa280fd1
-#> ● completed branch Final_Presences_d203d619aa280fd1 [0.039 seconds]
+#> ● completed branch Final_Presences_d203d619aa280fd1 [0.011 seconds]
 #> ● completed pattern Final_Presences
 #> ▶ dispatched target unique_habitats
 #> ● completed target unique_habitats [0 seconds]
 #> ▶ dispatched branch rarity_405e1cf7d36edc08
-#> ● completed branch rarity_405e1cf7d36edc08 [0.209 seconds]
+#> ● completed branch rarity_405e1cf7d36edc08 [0.075 seconds]
 #> ▶ dispatched branch output_Rarity_2cf706eb0499c812
-#> ● completed branch output_Rarity_2cf706eb0499c812 [0.153 seconds]
+#> ● completed branch output_Rarity_2cf706eb0499c812 [0.067 seconds]
 #> ▶ dispatched target unique_species
-#> ● completed target unique_species [0.002 seconds]
+#> ● completed target unique_species [0 seconds]
 #> ▶ dispatched branch export_presences_b7bf78e1c1a430c9
-#> ● completed branch export_presences_b7bf78e1c1a430c9 [4.809 seconds]
+#> ● completed branch export_presences_b7bf78e1c1a430c9 [0.748 seconds]
 #> ▶ dispatched branch rarity_77d9a26761e4a007
-#> ● completed branch rarity_77d9a26761e4a007 [0.669 seconds]
+#> ● completed branch rarity_77d9a26761e4a007 [0.065 seconds]
 #> ▶ dispatched branch output_Rarity_261466b6f238f521
-#> ● completed branch output_Rarity_261466b6f238f521 [1.779 seconds]
+#> ● completed branch output_Rarity_261466b6f238f521 [0.342 seconds]
 #> ▶ dispatched branch rarity_47ea97700de70215
-#> ● completed branch rarity_47ea97700de70215 [0.365 seconds]
+#> ● completed branch rarity_47ea97700de70215 [0.026 seconds]
 #> ▶ dispatched branch output_Rarity_c2db253b33fcf9d9
-#> ● completed branch output_Rarity_c2db253b33fcf9d9 [0.236 seconds]
+#> ● completed branch output_Rarity_c2db253b33fcf9d9 [0.074 seconds]
 #> ▶ dispatched branch rarity_f4a6e9a8f4837219
-#> ● completed branch rarity_f4a6e9a8f4837219 [0.568 seconds]
+#> ● completed branch rarity_f4a6e9a8f4837219 [0.145 seconds]
 #> ▶ dispatched branch output_Rarity_c1388be691e0be60
-#> ● completed branch output_Rarity_c1388be691e0be60 [0.159 seconds]
+#> ● completed branch output_Rarity_c1388be691e0be60 [0.089 seconds]
 #> ▶ dispatched branch rarity_bee04486eb86e311
-#> ● completed branch rarity_bee04486eb86e311 [0.321 seconds]
+#> ● completed branch rarity_bee04486eb86e311 [0.11 seconds]
 #> ▶ dispatched branch output_Rarity_7d8e043127d47e71
-#> ● completed branch output_Rarity_7d8e043127d47e71 [0.146 seconds]
+#> ● completed branch output_Rarity_7d8e043127d47e71 [0.077 seconds]
 #> ▶ dispatched branch rarity_fcb1676d3b2f6824
-#> ● completed branch rarity_fcb1676d3b2f6824 [0.518 seconds]
+#> ● completed branch rarity_fcb1676d3b2f6824 [0.102 seconds]
 #> ● completed pattern rarity
 #> ▶ dispatched branch output_Rarity_c8f99e24ce7afc52
-#> ● completed branch output_Rarity_c8f99e24ce7afc52 [0.164 seconds]
+#> ● completed branch output_Rarity_c8f99e24ce7afc52 [0.07 seconds]
 #> ● completed pattern output_Rarity
 #> ▶ dispatched branch export_presences_9cb7df6f909cc656
-#> ● completed branch export_presences_9cb7df6f909cc656 [1.54 seconds]
+#> ● completed branch export_presences_9cb7df6f909cc656 [0.554 seconds]
 #> ▶ dispatched branch export_presences_e0501a6e2e4e8857
-#> ● completed branch export_presences_e0501a6e2e4e8857 [0.367 seconds]
+#> ● completed branch export_presences_e0501a6e2e4e8857 [0.321 seconds]
 #> ● completed pattern export_presences
-#> ● completed target Phylo_Tree [54.599 seconds]
+#> ● completed target Phylo_Tree [37.081 seconds]
 #> ▶ dispatched branch PhyloDiversity_405e1cf7d36edc08
 #> ▶ dispatched branch PhyloDiversity_77d9a26761e4a007
-#> ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.634 seconds]
-#> ▶ dispatched branch output_Richness_0fed6773594c8b8e
-#> ● completed branch PhyloDiversity_77d9a26761e4a007 [0.716 seconds]
-#> ▶ dispatched branch output_Richness_9080f2064a157266
-#> ● completed branch output_Richness_0fed6773594c8b8e [0.116 seconds]
+#> ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.271 seconds]
+#> ▶ dispatched branch output_PD_0fed6773594c8b8e
+#> ● completed branch output_PD_0fed6773594c8b8e [0.065 seconds]
 #> ▶ dispatched branch PhyloDiversity_47ea97700de70215
-#> ● completed branch output_Richness_9080f2064a157266 [0.113 seconds]
+#> ● completed branch PhyloDiversity_77d9a26761e4a007 [0.427 seconds]
+#> ▶ dispatched branch output_PD_9080f2064a157266
+#> ● completed branch PhyloDiversity_47ea97700de70215 [0.088 seconds]
+#> ▶ dispatched branch output_PD_5144605bf3a4ac38
+#> ● completed branch output_PD_9080f2064a157266 [0.088 seconds]
 #> ▶ dispatched branch PhyloDiversity_f4a6e9a8f4837219
-#> ● completed branch PhyloDiversity_47ea97700de70215 [0.068 seconds]
-#> ▶ dispatched branch output_Richness_5144605bf3a4ac38
-#> ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.72 seconds]
-#> ▶ dispatched branch output_Richness_d34599733447ab6e
-#> ● completed branch output_Richness_5144605bf3a4ac38 [0.581 seconds]
+#> ● completed branch output_PD_5144605bf3a4ac38 [0.065 seconds]
 #> ▶ dispatched branch PhyloDiversity_bee04486eb86e311
-#> ● completed branch output_Richness_d34599733447ab6e [0.065 seconds]
+#> ● completed branch PhyloDiversity_bee04486eb86e311 [0.081 seconds]
+#> ▶ dispatched branch output_PD_c0ee68bb087b85bd
+#> ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.298 seconds]
+#> ▶ dispatched branch output_PD_d34599733447ab6e
+#> ● completed branch output_PD_d34599733447ab6e [0.063 seconds]
 #> ▶ dispatched branch PhyloDiversity_fcb1676d3b2f6824
-#> ● completed branch PhyloDiversity_bee04486eb86e311 [0.094 seconds]
+#> ● completed branch output_PD_c0ee68bb087b85bd [0.294 seconds]
+#> ▶ dispatched branch output_Richness_0fed6773594c8b8e
+#> ● completed branch output_Richness_0fed6773594c8b8e [0.053 seconds]
+#> ▶ dispatched branch output_Richness_9080f2064a157266
+#> ● completed branch output_Richness_9080f2064a157266 [0.065 seconds]
+#> ▶ dispatched branch output_Richness_5144605bf3a4ac38
+#> ● completed branch output_Richness_5144605bf3a4ac38 [0.062 seconds]
 #> ▶ dispatched branch output_Richness_c0ee68bb087b85bd
-#> ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.599 seconds]
+#> ● completed branch output_Richness_c0ee68bb087b85bd [0.068 seconds]
+#> ▶ dispatched branch output_Richness_d34599733447ab6e
+#> ● completed branch output_Richness_d34599733447ab6e [0.089 seconds]
+#> ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.482 seconds]
 #> ● completed pattern PhyloDiversity
+#> ▶ dispatched branch output_PD_32f01d33f95b1de0
 #> ▶ dispatched branch output_Richness_32f01d33f95b1de0
-#> ● completed branch output_Richness_c0ee68bb087b85bd [0.087 seconds]
-#> ● completed branch output_Richness_32f01d33f95b1de0 [0.09 seconds]
+#> ● completed branch output_PD_32f01d33f95b1de0 [0.06 seconds]
+#> ● completed pattern output_PD
+#> ● completed branch output_Richness_32f01d33f95b1de0 [0.073 seconds]
 #> ● completed pattern output_Richness
-#> ▶ ended pipeline [2.305 minutes]
+#> ▶ ended pipeline [1.514 minutes]
 #> Warning message:
 #> 10 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
 ```
@@ -1026,7 +1039,11 @@ The `run_workflow` function creates a pipeline that:
 15. **Calculates phylogenetic phylogenetic diversity** for each cell in
     each potential landuse.
 
-16. **Generates a visual representation** of the workflow if
+16. **Exports phylogenetic phylogenetic diversity, species richness and
+    rarity** write out a cloud optimized geotiff of all diversity
+    metrics.
+
+17. **Generates a visual representation** of the workflow if
     `plot = TRUE`.
 
 You can monitor the progress of the workflow and visualize the
@@ -1041,21 +1058,7 @@ datasets.
 
 The files generated are
 
-``` r
-list.files(path = "Results/", recursive = T)
-#>  [1] "Rarity/Rarity_ForestDryRich.tfw"     "Rarity/Rarity_ForestDryRich.tif"    
-#>  [3] "Rarity/Rarity_ForestWetRich.tfw"     "Rarity/Rarity_ForestWetRich.tif"    
-#>  [5] "Rarity/Rarity_OpenDryPoor.tfw"       "Rarity/Rarity_OpenDryPoor.tif"      
-#>  [7] "Rarity/Rarity_OpenDryRich.tfw"       "Rarity/Rarity_OpenDryRich.tif"      
-#>  [9] "Rarity/Rarity_OpenWetPoor.tfw"       "Rarity/Rarity_OpenWetPoor.tif"      
-#> [11] "Rarity/Rarity_OpenWetRich.tfw"       "Rarity/Rarity_OpenWetRich.tif"      
-#> [13] "Richness/Richness_ForestDryRich.tfw" "Richness/Richness_ForestDryRich.tif"
-#> [15] "Richness/Richness_ForestWetRich.tfw" "Richness/Richness_ForestWetRich.tif"
-#> [17] "Richness/Richness_OpenDryPoor.tfw"   "Richness/Richness_OpenDryPoor.tif"  
-#> [19] "Richness/Richness_OpenDryRich.tfw"   "Richness/Richness_OpenDryRich.tif"  
-#> [21] "Richness/Richness_OpenWetPoor.tfw"   "Richness/Richness_OpenWetPoor.tif"  
-#> [23] "Richness/Richness_OpenWetRich.tfw"   "Richness/Richness_OpenWetRich.tif"
-```
+    #> Results
 
 # 6 References
 

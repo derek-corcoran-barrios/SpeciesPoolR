@@ -476,7 +476,9 @@ The `run_workflow` function creates a pipeline that:
 
 15. **Calculates phylogenetic phylogenetic diversity** for each cell in each potential landuse.
 
-16. **Generates a visual representation** of the workflow if `plot = TRUE`.
+16. **Exports phylogenetic phylogenetic diversity, species richness and rarity** write out a cloud optimized geotiff of all diversity metrics.
+
+17. **Generates a visual representation** of the workflow if `plot = TRUE`.
 
 You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork().
 The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.
@@ -486,8 +488,9 @@ It also makes it easier to rerun the workflow with different parameters or datas
 
 The files generated are 
 
-```{r}
-list.files(path = "Results/", recursive = T)
+```{r dirResults, echo=FALSE}
+library(fs)
+fs::dir_tree("Results", recursive = T, regexp = "\\.tif$")
 ```
 
 

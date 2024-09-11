@@ -29,4 +29,5 @@ export_richness <- function(Results, path) {
   names(Richness) <- paste("Richness", unique(Results$Landuse), sep = "_")
   output_path <- paste0("Results/Richness/", "/Richness_", unique(Results$Landuse), ".tif")
   write_cog(Richness, output_path)
+  paste0(output_path)
 }
