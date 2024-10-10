@@ -24,8 +24,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# SpeciesPoolR
-
+# SpeciesPoolR<a href="https://derek-corcoran-barrios.github.io/SpeciesPoolR/"><img src="man/figures/logo.png" align="right" height="120" alt="SpeciesPoolR website" /></a>
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/derek-corcoran-barrios/SpeciesPoolR/actions/workflows/R-CMD-check.yaml)
@@ -490,7 +489,7 @@ The files generated are
 
 ```{r dirResults, echo=FALSE}
 library(fs)
-fs::dir_tree("Results", recursive = T, regexp = "\\.tif$")
+fs::dir_tree("Results", recursive = T)
 ```
 
 

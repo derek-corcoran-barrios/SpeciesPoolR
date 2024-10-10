@@ -33,25 +33,43 @@ calc_rarity_weight <- function(df) {
 #' @importFrom Rarity Irr
 #'
 #' @export
+
 calc_rarity <- function(Fin, RW) {
   Pres <- species <- cell <- NULL
   Fin <- as.data.table(Fin)
-  Landuse <- unique(Fin$Landuse)
+  unique_landuse <- unique(Fin$Landuse)
 
-  Fin[, Pres := 1]
-  Fin[, species := stringr::str_replace_all(species, " ", "_")]
-  Fin <- Fin[cell > 0 & !is.na(cell)]
+  result_list <- list()  # To store the results for each land-use type
 
-  Fin2 <- dcast(Fin, cell ~ species, value.var = "Pres", fill = 0)
-  Fin2 <- tibble::column_to_rownames(as.data.frame(Fin2), "cell")
-  colnames(Fin2) <- stringr::str_replace_all(colnames(Fin2), "[^\\p{L}\\p{N}\\s]", " ")
-  Fin2 <- t(Fin2)
-  rownames(RW) <- stringr::str_replace_all(rownames(RW), "[^\\p{L}\\p{N}\\s]", " ")
+  for (landuse in unique_landuse) {
+    # Subset data for the current land-use type
+    Fin_subset <- Fin[Landuse == landuse]
 
-  Rarity <- Rarity::Irr(assemblages = Fin2, W = RW)
-  Rarity <- as.data.frame(Rarity)
-  Rarity$Landuse <- Landuse
-  Rarity <- tibble::rownames_to_column(Rarity, var = "cell")
+    # Continue with the original calculations
+    Fin_subset[, Pres := 1]
+    Fin_subset[, species := stringr::str_replace_all(species, " ", "_")]
+    Fin_subset <- Fin_subset[cell > 0 & !is.na(cell)]
 
-  return(Rarity)
+    Fin2 <- dcast(Fin_subset, cell ~ species, value.var = "Pres", fill = 0)
+    Fin2 <- tibble::column_to_rownames(as.data.frame(Fin2), "cell")
+    colnames(Fin2) <- stringr::str_replace_all(colnames(Fin2), "[^\\p{L}\\p{N}\\s]", " ")
+    Fin2 <- t(Fin2)
+    rownames(RW) <- stringr::str_replace_all(rownames(RW), "[^\\p{L}\\p{N}\\s]", " ")
+
+    # Calculate rarity using the Rarity package's Irr function
+    Rarity <- Rarity::Irr(assemblages = Fin2, W = RW)
+    Rarity <- as.data.frame(Rarity)
+    Rarity$Landuse <- landuse  # Assign the land-use type
+
+    # Add cell column back
+    Rarity <- tibble::rownames_to_column(Rarity, var = "cell")
+
+    # Store the result for this land-use type
+    result_list[[landuse]] <- Rarity
+  }
+
+  # Combine all the results into one data frame
+  final_result <- do.call(rbind, result_list)
+
+  return(final_result)
 }
