@@ -13,6 +13,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Creates Species Pools For Potential Habitats">
 <meta name="description" content="What the package does (one paragraph).">
 <meta property="og:description" content="What the package does (one paragraph).">
+<meta property="og:image" content="https://derek-corcoran-barrios.github.io/SpeciesPoolR/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +53,9 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><ul>
-<li><a href="#id_1-speciespoolr">1 SpeciesPoolR</a></li>
+<li>
+<a href="#id_1-speciespoolr">1 SpeciesPoolR</a><a href="https://derek-corcoran-barrios.github.io/SpeciesPoolR/"><img src="reference/figures/logo.png" align="right" height="120" alt="SpeciesPoolR website"></a>
+</li>
 <li>
 <a href="#id_2-motivation-for-the-pacakge">2 Motivation for the pacakge</a>
 <ul>
@@ -86,8 +89,11 @@
 <li><a href="#id_6-references">6 References</a></li>
 </ul>
 <!-- README.md is generated from README.Rmd. Please edit that file --><div class="section level1">
-<div class="page-header"><h1 id="id_1-speciespoolr">1 SpeciesPoolR<a class="anchor" aria-label="anchor" href="#id_1-speciespoolr"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="id_1-speciespoolr">1 SpeciesPoolR
+<a class="anchor" aria-label="anchor" href="#id_1-speciespoolr"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <!-- badges: end -->
@@ -513,7 +519,7 @@
 <td align="left">Fabaceae</td>
 <td align="left">Vicia</td>
 <td align="left">Vicia sepium</td>
-<td align="right">2897</td>
+<td align="right">2901</td>
 </tr>
 <tr class="even">
 <td align="left">Fabaceae</td>
@@ -531,25 +537,25 @@
 <td align="left">Fabaceae</td>
 <td align="left">Vicia</td>
 <td align="left">Vicia sativa</td>
-<td align="right">17379</td>
+<td align="right">17380</td>
 </tr>
 <tr class="odd">
 <td align="left">Fabaceae</td>
 <td align="left">Lathyrus</td>
 <td align="left">Lathyrus latifolius</td>
-<td align="right">684</td>
+<td align="right">685</td>
 </tr>
 <tr class="even">
 <td align="left">Fabaceae</td>
 <td align="left">Anthyllis</td>
 <td align="left">Anthyllis vulneraria</td>
-<td align="right">8876</td>
+<td align="right">8880</td>
 </tr>
 <tr class="odd">
 <td align="left">Fabaceae</td>
 <td align="left">Lathyrus</td>
 <td align="left">Lathyrus japonicus</td>
-<td align="right">3904</td>
+<td align="right">3905</td>
 </tr>
 <tr class="even">
 <td align="left">Fabaceae</td>
@@ -633,7 +639,7 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Presences</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_presences.html">get_presences</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">Count_Aarhus</span><span class="op">$</span><span class="va">species</span>, shapefile <span class="op">=</span> <span class="va">shp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Geometry created: POLYGON ((10.401438 56.302419, 10.048024 56.355225, 9.886316 56.019928, 10.239729 55.966657, 10.401438 56.302419))"</span></span></code></pre></div>
-<p>there we end up with 1075 presences for our 7 species.</p>
+<p>there we end up with 1077 presences for our 7 species.</p>
 </div>
 </div>
 <div class="section level2">
@@ -798,33 +804,33 @@
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
-<td align="left">OpenWetRich</td>
-<td align="right">0.6863723</td>
+<td align="left">ForestWetRich</td>
+<td align="right">0.6749865</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
-<td align="left">ForestWetRich</td>
-<td align="right">0.6863723</td>
+<td align="left">OpenWetRich</td>
+<td align="right">0.6749865</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
 <td align="left">OpenWetPoor</td>
-<td align="right">0.6863723</td>
+<td align="right">0.6749865</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
 <td align="left">Exclude</td>
-<td align="right">0.5143679</td>
+<td align="right">0.5127553</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
 <td align="left">ForestDryRich</td>
-<td align="right">0.2998771</td>
+<td align="right">0.2987050</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="even">
 <td align="left">ForestDryPoor</td>
-<td align="right">0.2260377</td>
+<td align="right">0.2528306</td>
 <td align="left">Anthyllis vulneraria</td>
 </tr>
 <tr class="odd">
@@ -861,9 +867,9 @@
 <tbody>
 <tr class="odd">
 <td align="left">Anthyllis vulneraria</td>
-<td align="right">0.514</td>
-<td align="right">0.514</td>
-<td align="right">0.514</td>
+<td align="right">0.513</td>
+<td align="right">0.513</td>
+<td align="right">0.513</td>
 </tr>
 <tr class="even">
 <td align="left">Genista tinctoria</td>
@@ -885,21 +891,21 @@
 </tr>
 <tr class="odd">
 <td align="left">Vicia sativa</td>
-<td align="right">0.404</td>
-<td align="right">0.404</td>
-<td align="right">0.404</td>
+<td align="right">0.400</td>
+<td align="right">0.400</td>
+<td align="right">0.400</td>
 </tr>
 <tr class="even">
 <td align="left">Vicia sepium</td>
-<td align="right">0.286</td>
-<td align="right">0.286</td>
-<td align="right">0.286</td>
+<td align="right">0.299</td>
+<td align="right">0.299</td>
+<td align="right">0.299</td>
 </tr>
 <tr class="odd">
 <td align="left">Vicia villosa</td>
-<td align="right">0.633</td>
-<td align="right">0.633</td>
-<td align="right">0.633</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
+<td align="right">0.634</td>
 </tr>
 </tbody>
 </table>
@@ -928,12 +934,12 @@
 </tr>
 <tr class="odd">
 <td align="left">Anthyllis vulneraria</td>
-<td align="left">OpenWetRich</td>
+<td align="left">ForestWetRich</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">Anthyllis vulneraria</td>
-<td align="left">ForestWetRich</td>
+<td align="left">OpenWetRich</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -963,14 +969,14 @@
 </tr>
 <tr class="even">
 <td align="left">Vicia sativa</td>
-<td align="left">ForestWetRich</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">Vicia sativa</td>
 <td align="left">OpenWetRich</td>
 <td align="right">1</td>
 </tr>
+<tr class="odd">
+<td align="left">Vicia sativa</td>
+<td align="left">ForestWetRich</td>
+<td align="right">1</td>
+</tr>
 <tr class="even">
 <td align="left">Vicia sativa</td>
 <td align="left">ForestDryRich</td>
@@ -978,12 +984,12 @@
 </tr>
 <tr class="odd">
 <td align="left">Vicia sepium</td>
-<td align="left">ForestWetRich</td>
+<td align="left">ForestDryRich</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">Vicia sepium</td>
-<td align="left">ForestDryRich</td>
+<td align="left">ForestWetRich</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -993,12 +999,12 @@
 </tr>
 <tr class="even">
 <td align="left">Vicia sepium</td>
-<td align="left">OpenWetRich</td>
+<td align="left">OpenWetPoor</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">Vicia sepium</td>
-<td align="left">OpenWetPoor</td>
+<td align="left">OpenWetRich</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
@@ -1243,184 +1249,184 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; ▶ dispatched target shp</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Raster</span></span>
-<span><span class="co">#&gt; ● completed target shp [6.837 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target shp [12.735 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Landuses</span></span>
-<span><span class="co">#&gt; ● completed target Raster [0.001 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Landuses [0.001 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target file</span></span>
-<span><span class="co">#&gt; ● completed target Landuses [0 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched target Landusesuitability</span></span>
 <span><span class="co">#&gt; ● completed target file [0 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target data</span></span>
-<span><span class="co">#&gt; ● completed target Landusesuitability [0 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched target Long_LU_table</span></span>
-<span><span class="co">#&gt; ● completed target data [0.625 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target data [1.432 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Clean</span></span>
-<span><span class="co">#&gt; ● completed target Long_LU_table [0.159 seconds]</span></span>
-<span><span class="co">#&gt; ● completed target Clean [1.501 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Clean [3.207 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_33538e94b3809372</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.493 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched target Landusesuitability</span></span>
+<span><span class="co">#&gt; ● completed target Landusesuitability [0.001 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched target Long_LU_table</span></span>
+<span><span class="co">#&gt; ● completed target Long_LU_table [0.141 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_52d72a5ad405e933</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_33538e94b3809372 [0.196 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.213 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_e70f77d9439a4770</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_52d72a5ad405e933 [0.134 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.073 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_dea4ef8633a449a1</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_e70f77d9439a4770 [0.065 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.16 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_69210fc440d13855</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_dea4ef8633a449a1 [0.074 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.142 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_a61be030e01ebaf5</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_69210fc440d13855 [0.068 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.099 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_974105e269324d3e</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_a61be030e01ebaf5 [0.139 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [0.068 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Count_Presences_37d1f8d5f74d852c</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.047 seconds]</span></span>
-<span><span class="co">#&gt; ● completed branch Count_Presences_974105e269324d3e [7.46 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Count_Presences_37d1f8d5f74d852c [0.066 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Count_Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched target More_than_zero</span></span>
-<span><span class="co">#&gt; ● completed target More_than_zero [0.005 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target More_than_zero [0.004 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_c112b37cd15959d6</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [0.853 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [1.321 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_c112b37cd15959d6 [2.178 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_626a53b08dfe709d</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [1.627 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Raster [17.345 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.282 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch Presences_af64bac105a08467</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_af64bac105a08467 [1.281 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.378 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_daf8d6353bc80f0c</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.292 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [17.553 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_daf8d6353bc80f0c [1.204 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.131 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_310adeccf6b44725</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [0.803 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_b226446ac3154351</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [5.909 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_310adeccf6b44725 [0.574 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.057 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_e65f4227e8299cc4</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.909 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [24.846 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_e65f4227e8299cc4 [0.732 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.068 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_d4b9dc68293bd5b2</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.726 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [0.887 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_d4b9dc68293bd5b2 [0.564 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.058 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Presences_88937156c1302a12</span></span>
-<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.483 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Presences_88937156c1302a12 [0.432 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Presences</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [0.324 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span>
+<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.046 seconds]</span></span>
+<span><span class="co">#&gt; ● completed pattern buffer</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Phylo_Tree</span></span>
-<span><span class="co">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [9.785 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_626a53b08dfe709d [26.624 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched target rarity_weight</span></span>
+<span><span class="co">#&gt; ● completed target rarity_weight [0.004 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0e19b8cb545404d2</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_0e19b8cb545404d2 [2.057 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_edb09c8ec5c9a988</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_edb09c8ec5c9a988 [29.17 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_b226446ac3154351</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_b226446ac3154351 [6.782 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_0a8436ee3d4f2644</span></span>
+<span><span class="co">#&gt; ● completed target Phylo_Tree [55.56 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_cae8301e59fc4e01</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_cae8301e59fc4e01 [1.408 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch ModelAndPredict_a0190cbfdf5f6f1f</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_a0190cbfdf5f6f1f [1.167 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch ModelAndPredict_0a8436ee3d4f2644 [11.749 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern ModelAndPredict</span></span>
 <span><span class="co">#&gt; ▶ dispatched target Thresholds</span></span>
-<span><span class="co">#&gt; ● completed target Thresholds [0.748 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target Thresholds [0.648 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target LookUpTable</span></span>
-<span><span class="co">#&gt; ● completed target LookUpTable [0.012 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched target rarity_weight</span></span>
-<span><span class="co">#&gt; ● completed target rarity_weight [0.003 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_0e19b8cb545404d2</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0e19b8cb545404d2 [0.061 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch Final_Presences_344cc771c9264c2e</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_344cc771c9264c2e [0.013 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_626a53b08dfe709d</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_626a53b08dfe709d [0.294 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target LookUpTable [0.01 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_ebf0f62f14548a82</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_ebf0f62f14548a82 [0.014 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_edb09c8ec5c9a988</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_edb09c8ec5c9a988 [0.073 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch Final_Presences_344cc771c9264c2e</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_344cc771c9264c2e [0.024 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_6f1885e07badc469</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_6f1885e07badc469 [0.049 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_b226446ac3154351</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_b226446ac3154351 [0.056 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_ebf0f62f14548a82 [0.086 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_35ecd9eff835718c</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_35ecd9eff835718c [0.016 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_0a8436ee3d4f2644</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_0a8436ee3d4f2644 [0.051 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_6f1885e07badc469 [0.055 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_af0c167a6a4b9998</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_af0c167a6a4b9998 [0.02 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_cae8301e59fc4e01</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_cae8301e59fc4e01 [0.043 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_35ecd9eff835718c [0.098 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_5224d468624d4ebb</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_5224d468624d4ebb [0.01 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch buffer_a0190cbfdf5f6f1f</span></span>
-<span><span class="co">#&gt; ● completed branch buffer_a0190cbfdf5f6f1f [0.035 seconds]</span></span>
-<span><span class="co">#&gt; ● completed pattern buffer</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_af0c167a6a4b9998 [0.081 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch Final_Presences_d203d619aa280fd1</span></span>
-<span><span class="co">#&gt; ● completed branch Final_Presences_d203d619aa280fd1 [0.011 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_5224d468624d4ebb [0.016 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch Final_Presences_d203d619aa280fd1 [0.021 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern Final_Presences</span></span>
 <span><span class="co">#&gt; ▶ dispatched target unique_habitats</span></span>
-<span><span class="co">#&gt; ● completed target unique_habitats [0 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch rarity_405e1cf7d36edc08</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_405e1cf7d36edc08 [0.075 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_2cf706eb0499c812</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_2cf706eb0499c812 [0.067 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched target unique_species</span></span>
-<span><span class="co">#&gt; ● completed target unique_species [0 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch export_presences_b7bf78e1c1a430c9</span></span>
-<span><span class="co">#&gt; ● completed branch export_presences_b7bf78e1c1a430c9 [0.748 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target unique_habitats [0 seconds]</span></span>
+<span><span class="co">#&gt; ● completed target unique_species [0.006 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch rarity_405e1cf7d36edc08</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch rarity_77d9a26761e4a007</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_77d9a26761e4a007 [0.065 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_405e1cf7d36edc08 [0.32 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_2cf706eb0499c812</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_77d9a26761e4a007 [0.318 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_Rarity_261466b6f238f521</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_261466b6f238f521 [0.342 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_2cf706eb0499c812 [0.227 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch rarity_47ea97700de70215</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_47ea97700de70215 [0.026 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_c2db253b33fcf9d9</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_c2db253b33fcf9d9 [0.074 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_261466b6f238f521 [0.176 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch rarity_f4a6e9a8f4837219</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_f4a6e9a8f4837219 [0.145 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_47ea97700de70215 [0.13 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_c2db253b33fcf9d9</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_f4a6e9a8f4837219 [0.231 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_Rarity_c1388be691e0be60</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_c1388be691e0be60 [0.089 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_c2db253b33fcf9d9 [0.5 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch rarity_bee04486eb86e311</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_bee04486eb86e311 [0.11 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_7d8e043127d47e71</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_7d8e043127d47e71 [0.077 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_c1388be691e0be60 [0.417 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch rarity_fcb1676d3b2f6824</span></span>
-<span><span class="co">#&gt; ● completed branch rarity_fcb1676d3b2f6824 [0.102 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_bee04486eb86e311 [0.099 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Rarity_7d8e043127d47e71</span></span>
+<span><span class="co">#&gt; ● completed branch rarity_fcb1676d3b2f6824 [0.162 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern rarity</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_7d8e043127d47e71 [0.096 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_Rarity_c8f99e24ce7afc52</span></span>
-<span><span class="co">#&gt; ● completed branch output_Rarity_c8f99e24ce7afc52 [0.07 seconds]</span></span>
-<span><span class="co">#&gt; ● completed pattern output_Rarity</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch export_presences_9cb7df6f909cc656</span></span>
-<span><span class="co">#&gt; ● completed branch export_presences_9cb7df6f909cc656 [0.554 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch export_presences_e0501a6e2e4e8857</span></span>
-<span><span class="co">#&gt; ● completed branch export_presences_e0501a6e2e4e8857 [0.321 seconds]</span></span>
-<span><span class="co">#&gt; ● completed pattern export_presences</span></span>
-<span><span class="co">#&gt; ● completed target Phylo_Tree [37.081 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_405e1cf7d36edc08</span></span>
+<span><span class="co">#&gt; ● completed branch output_Rarity_c8f99e24ce7afc52 [0.125 seconds]</span></span>
+<span><span class="co">#&gt; ● completed pattern output_Rarity</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_77d9a26761e4a007</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.271 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_405e1cf7d36edc08 [0.657 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_PD_0fed6773594c8b8e</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_0fed6773594c8b8e [0.065 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_0fed6773594c8b8e [0.182 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_47ea97700de70215</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_77d9a26761e4a007 [0.427 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_PD_9080f2064a157266</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_47ea97700de70215 [0.088 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_PD_5144605bf3a4ac38</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_9080f2064a157266 [0.088 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_77d9a26761e4a007 [0.766 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_f4a6e9a8f4837219</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_5144605bf3a4ac38 [0.065 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_47ea97700de70215 [0.195 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_PD_5144605bf3a4ac38</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_5144605bf3a4ac38 [0.099 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_bee04486eb86e311</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_bee04486eb86e311 [0.081 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_bee04486eb86e311 [0.205 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_PD_c0ee68bb087b85bd</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.298 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_f4a6e9a8f4837219 [0.538 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_PD_d34599733447ab6e</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_d34599733447ab6e [0.063 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_c0ee68bb087b85bd [0.095 seconds]</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch PhyloDiversity_fcb1676d3b2f6824</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_c0ee68bb087b85bd [0.294 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_0fed6773594c8b8e</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_0fed6773594c8b8e [0.053 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_9080f2064a157266</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_9080f2064a157266 [0.065 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_5144605bf3a4ac38</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_5144605bf3a4ac38 [0.062 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_c0ee68bb087b85bd</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_c0ee68bb087b85bd [0.068 seconds]</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_d34599733447ab6e</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_d34599733447ab6e [0.089 seconds]</span></span>
-<span><span class="co">#&gt; ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.482 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_d34599733447ab6e [0.082 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch export_presences_b7bf78e1c1a430c9</span></span>
+<span><span class="co">#&gt; ● completed branch PhyloDiversity_fcb1676d3b2f6824 [0.679 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern PhyloDiversity</span></span>
 <span><span class="co">#&gt; ▶ dispatched branch output_PD_32f01d33f95b1de0</span></span>
-<span><span class="co">#&gt; ▶ dispatched branch output_Richness_32f01d33f95b1de0</span></span>
-<span><span class="co">#&gt; ● completed branch output_PD_32f01d33f95b1de0 [0.06 seconds]</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_32f01d33f95b1de0 [0.129 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch export_presences_9cb7df6f909cc656</span></span>
+<span><span class="co">#&gt; ● completed branch export_presences_b7bf78e1c1a430c9 [0.902 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch export_presences_e0501a6e2e4e8857</span></span>
+<span><span class="co">#&gt; ● completed branch export_presences_e0501a6e2e4e8857 [0.4 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_0fed6773594c8b8e</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_0fed6773594c8b8e [0.102 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_PD_9080f2064a157266</span></span>
+<span><span class="co">#&gt; ● completed branch output_PD_9080f2064a157266 [0.17 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern output_PD</span></span>
-<span><span class="co">#&gt; ● completed branch output_Richness_32f01d33f95b1de0 [0.073 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_9080f2064a157266</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_9080f2064a157266 [0.201 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_5144605bf3a4ac38</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_5144605bf3a4ac38 [0.122 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_c0ee68bb087b85bd</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_c0ee68bb087b85bd [0.132 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_d34599733447ab6e</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_d34599733447ab6e [0.126 seconds]</span></span>
+<span><span class="co">#&gt; ▶ dispatched branch output_Richness_32f01d33f95b1de0</span></span>
+<span><span class="co">#&gt; ● completed branch output_Richness_32f01d33f95b1de0 [0.1 seconds]</span></span>
 <span><span class="co">#&gt; ● completed pattern output_Richness</span></span>
-<span><span class="co">#&gt; ▶ ended pipeline [1.514 minutes]</span></span>
+<span><span class="co">#&gt; ● completed branch export_presences_9cb7df6f909cc656 [2.214 seconds]</span></span>
+<span><span class="co">#&gt; ● completed pattern export_presences</span></span>
+<span><span class="co">#&gt; ▶ ended pipeline [1.849 minutes]</span></span>
 <span><span class="co">#&gt; Warning message:</span></span>
 <span><span class="co">#&gt; 10 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.</span></span></code></pre></div>
 <p><img src="reference/figures/README-run_workflow-1.png" width="100%"></p>
@@ -1450,7 +1456,46 @@
 <p>You can monitor the progress of the workflow and visualize the dependencies between steps using targets::tar_visnetwork(). The result will be similar to running the steps manually but with the added benefits of parallel execution and reproducibility.</p>
 <p>This automated approach allows you to streamline your analysis and ensures that all steps are consistently applied to your data. It also makes it easier to rerun the workflow with different parameters or datasets.</p>
 <p>The files generated are</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co">#&gt; Results</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co">#&gt; Results</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt; ├── PD</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_ForestDryRich.tfw</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_ForestDryRich.tif</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_ForestWetRich.tfw</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_ForestWetRich.tif</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenDryPoor.tfw</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenDryPoor.tif</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenDryRich.tfw</span></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenDryRich.tif</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenWetPoor.tfw</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenWetPoor.tif</span></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a><span class="co">#&gt; │   ├── PD_OpenWetRich.tfw</span></span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a><span class="co">#&gt; │   └── PD_OpenWetRich.tif</span></span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a><span class="co">#&gt; ├── Rarity</span></span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_ForestDryRich.tfw</span></span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_ForestDryRich.tif</span></span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_ForestWetRich.tfw</span></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_ForestWetRich.tif</span></span>
+<span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenDryPoor.tfw</span></span>
+<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenDryPoor.tif</span></span>
+<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenDryRich.tfw</span></span>
+<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenDryRich.tif</span></span>
+<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenWetPoor.tfw</span></span>
+<span id="cb23-25"><a href="#cb23-25" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenWetPoor.tif</span></span>
+<span id="cb23-26"><a href="#cb23-26" tabindex="-1"></a><span class="co">#&gt; │   ├── Rarity_OpenWetRich.tfw</span></span>
+<span id="cb23-27"><a href="#cb23-27" tabindex="-1"></a><span class="co">#&gt; │   └── Rarity_OpenWetRich.tif</span></span>
+<span id="cb23-28"><a href="#cb23-28" tabindex="-1"></a><span class="co">#&gt; └── Richness</span></span>
+<span id="cb23-29"><a href="#cb23-29" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_ForestDryRich.tfw</span></span>
+<span id="cb23-30"><a href="#cb23-30" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_ForestDryRich.tif</span></span>
+<span id="cb23-31"><a href="#cb23-31" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_ForestWetRich.tfw</span></span>
+<span id="cb23-32"><a href="#cb23-32" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_ForestWetRich.tif</span></span>
+<span id="cb23-33"><a href="#cb23-33" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenDryPoor.tfw</span></span>
+<span id="cb23-34"><a href="#cb23-34" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenDryPoor.tif</span></span>
+<span id="cb23-35"><a href="#cb23-35" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenDryRich.tfw</span></span>
+<span id="cb23-36"><a href="#cb23-36" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenDryRich.tif</span></span>
+<span id="cb23-37"><a href="#cb23-37" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenWetPoor.tfw</span></span>
+<span id="cb23-38"><a href="#cb23-38" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenWetPoor.tif</span></span>
+<span id="cb23-39"><a href="#cb23-39" tabindex="-1"></a><span class="co">#&gt;     ├── Richness_OpenWetRich.tfw</span></span>
+<span id="cb23-40"><a href="#cb23-40" tabindex="-1"></a><span class="co">#&gt;     └── Richness_OpenWetRich.tif</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -1552,7 +1597,7 @@ Zanne, Amy E., David C. Tank, William K. Cornwell, Jonathan M. Eastman, Stephen 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
