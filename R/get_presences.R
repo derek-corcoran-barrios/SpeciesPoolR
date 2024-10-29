@@ -128,7 +128,7 @@ GetOccs <- function(Species, WriteFile = FALSE, continent = NULL, country = NULL
 #'   The function will create a minimum bounding rectangle around the shapefile to query the
 #'   species occurrences. Default is `NULL`.
 #' @param country A two-letter country code (e.g., "DK" for Denmark) to define the area of interest.
-#'
+#' @param limit maximum number of occurrences downloaded
 #' @return A data.frame containing the occurrence data for the specified species, including the columns: `scientificName`, `decimalLatitude`, `decimalLongitude`, `family`, `genus`, and `species`.
 #'
 #' @importFrom dplyr select
@@ -141,7 +141,7 @@ GetOccs <- function(Species, WriteFile = FALSE, continent = NULL, country = NULL
 #' }
 #' @export
 
-get_presences <- function(species, country = NULL, shapefile = NULL){
+get_presences <- function(species, country = NULL, shapefile = NULL, limit = 100000){
   scientificName <- decimalLatitude <- decimalLongitude <- family <- genus <- NULL
   geometry <- NULL
 
@@ -171,7 +171,7 @@ get_presences <- function(species, country = NULL, shapefile = NULL){
                 WriteFile = FALSE,
                 Log = FALSE,
                 country = country,
-                limit = 100000,
+                limit = limit,
                 year='1999,2024',
                 geometry = geometry)
 

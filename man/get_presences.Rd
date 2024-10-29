@@ -4,7 +4,7 @@
 \alias{get_presences}
 \title{Get Occurrence Data for a Given Species List}
 \usage{
-get_presences(species, country = NULL, shapefile = NULL)
+get_presences(species, country = NULL, shapefile = NULL, limit = 1e+05)
 }
 \arguments{
 \item{species}{A vector of species to use.}
@@ -14,6 +14,8 @@ get_presences(species, country = NULL, shapefile = NULL)
 \item{shapefile}{A shapefile (with lat/long coordinates) defining the area of interest.
 The function will create a minimum bounding rectangle around the shapefile to query the
 species occurrences. Default is \code{NULL}.}
+
+\item{limit}{maximum number of occurrences downloaded}
 }
 \value{
 A data.frame containing the occurrence data for the specified species, including the columns: \code{scientificName}, \code{decimalLatitude}, \code{decimalLongitude}, \code{family}, \code{genus}, and \code{species}.
