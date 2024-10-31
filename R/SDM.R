@@ -64,30 +64,33 @@ Convex_20 <- function(DF, lon = "decimalLongitude", lat = "decimalLatitude", pro
 #'
 #' @return A data frame with the sampled land-use data. The data frame contains columns for `species`, `Landuse`, and `Pres`, where `Pres` indicates whether the row corresponds to a presence (1) or background (0) point.
 #'
-#' @importFrom terra rast project extract crop spatSample
+#' @importFrom terra rast project extract crop spatSample names
 #' @importFrom dplyr select mutate filter
 #' @importFrom stringr str_detect
 #' @importFrom data.table as.data.table
 #'
 #' @export
 SampleLanduse <- function(DF, file, type = "pres") {
-  species <- decimalLongitude <- decimalLatitude <- Landuse <- SN_ModelClass <- NULL
+  species <- decimalLongitude <- decimalLatitude <- Landuse <- NULL
 
-  Denmark_LU <- terra::rast(file)
+  # Load raster and detect layer name
+  LU <- terra::rast(file)
+  layer_name <- names(LU)[1]  # Get the first layer name (adjust index if needed)
+
   Temp <- DF |>
     dplyr::select(species, decimalLongitude, decimalLatitude) |>
     terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "epsg:4326") |>
-    terra::project(terra::crs(Denmark_LU))
+    terra::project(terra::crs(LU))
 
   if (type == "pres") {
-    Data <- terra::extract(Denmark_LU, Temp) |>
-      dplyr::mutate(Landuse = as.character(SN_ModelClass), Pres = 1) |>
+    Data <- terra::extract(LU, Temp) |>
+      dplyr::mutate(Landuse = as.character(.data[[layer_name]]), Pres = 1) |>
       dplyr::filter(!is.na(Landuse))
   } else if (type == "bg") {
-    Data <- Denmark_LU |>
-      terra::crop(Convex_20(as.data.frame(Temp, geom = "xy"), lon = "x", lat = "y", proj = terra::crs(Denmark_LU))) |>
+    Data <- LU |>
+      terra::crop(Convex_20(as.data.frame(Temp, geom = "xy"), lon = "x", lat = "y", proj = terra::crs(LU))) |>
       terra::spatSample(10000, na.rm = TRUE) |>
-      dplyr::mutate(Landuse = as.character(SN_ModelClass), Pres = 0) |>
+      dplyr::mutate(Landuse = as.character(.data[[layer_name]]), Pres = 0) |>
       dplyr::filter(!is.na(Landuse))
   }
 
@@ -116,14 +119,6 @@ ModelSpecies <- function(DF) {
   Landuse <- Pred <-NULL
   All <- DF |>
     dplyr::mutate(Landuse = as.factor(Landuse))
-
-  is_both <- stringr::str_detect(All$Landuse, "Both")
-  duplicated_rows1 <- All[is_both, ]
-  duplicated_rows2 <- All[is_both, ]
-  duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
-  duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
-  All <- All[!is_both, ] |>
-    dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
 
   if (length(unique(All$Landuse)) > 1) {
     Landuse_matrix <- model.matrix(~ Landuse - 1, data = All)
@@ -174,7 +169,7 @@ ModelSpecies <- function(DF) {
 #'
 #' @return A data frame with predicted habitat suitability scores for each land-use type for each species.
 #'
-#' @importFrom terra rast vect project crop extract spatSample
+#' @importFrom terra rast vect project crop extract spatSample levels
 #' @importFrom dplyr select mutate filter bind_rows left_join distinct arrange group_split
 #' @importFrom stringr str_detect str_replace_all str_remove_all
 #' @importFrom maxnet maxnet
@@ -185,6 +180,11 @@ ModelSpecies <- function(DF) {
 #' @export
 ModelAndPredictFunc <- function(DF, file) {
   species <- NULL
+
+  # Load the raster and extract land-use levels
+  LU <- terra::rast(file)
+  landuse_levels <- levels(LU)[[1]][,2]  # Get the land-use level names (adjust as needed)
+
   # Split the data by species
   split_species <- dplyr::group_split(DF, species)
 
@@ -192,8 +192,7 @@ ModelAndPredictFunc <- function(DF, file) {
   model_single_species <- function(species_data) {
     Predicted <- data.frame(
       Pred = 0,
-      Landuse = c("ForestDryRich", "ForestDryPoor", "ForestWetRich", "OpenDryPoor",
-                  "ForestWetPoor", "OpenDryRich", "OpenWetPoor", "Exclude", "OpenWetRich"),
+      Landuse = landuse_levels,  # Use the dynamic land-use categories here
       species = unique(species_data$species)
     )
 

@@ -390,7 +390,7 @@ final_presences <- make_final_presences(Long_LU_table = long_LU_table,
                                         LookUpTable = LookupTable)
 ```
 
-The resulting `final_presences` table provides detailed information on the potential distribution of each species. It specifies which cells and habitats are suitable for each species, ensuring that only the most plausible locations are considered. In table @\ref(tab:finalpresences), you can see the first 15 observations from this final dataset, which represent the potential habitats where each species could thrive, whereas in table @\ref(tab:summaryfinalpresences), you can see a summary of the number of cells that each species could thrive on each habitat type.
+The resulting `final_presences` table provides detailed information on the potential distribution of each species. It specifies which cells and habitats are suitable for each species, ensuring that only the most plausible locations are considered. In table \@ref(tab:finalpresences), you can see the first 15 observations from this final dataset, which represent the potential habitats where each species could thrive, whereas in table \@ref(tab:summaryfinalpresences), you can see a summary of the number of cells that each species could thrive on each habitat type.
   
 ```{r finalpresences, echo=FALSE}
 knitr::kable(head(final_presences, 15), caption = "First 15 rows of the final presences dataset, showing the cells and land-use types where each species can potentially occur")
