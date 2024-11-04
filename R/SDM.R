@@ -71,7 +71,7 @@ Convex_20 <- function(DF, lon = "decimalLongitude", lat = "decimalLatitude", pro
 #'
 #' @export
 SampleLanduse <- function(DF, file, type = "pres") {
-  species <- decimalLongitude <- decimalLatitude <- Landuse <- NULL
+  species <- decimalLongitude <- decimalLatitude <- Landuse <- .data <- NULL
 
   # Load raster and detect layer name
   LU <- terra::rast(file)

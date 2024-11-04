@@ -35,7 +35,7 @@ calc_rarity_weight <- function(df) {
 #' @export
 
 calc_rarity <- function(Fin, RW) {
-  Pres <- species <- cell <- NULL
+  Pres <- species <- cell <- Landuse <- NULL
   Fin <- as.data.table(Fin)
   unique_landuse <- unique(Fin$Landuse)
 

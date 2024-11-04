@@ -9,6 +9,7 @@
 #' @param file_path Path to the Excel or csv file containing the data.
 #' @param filter An optional expression used to filter the resulting `data.frame`. This should be an expression
 #' written as if you were using `dplyr::filter()`. The default is NULL, meaning no filtering is applied.
+#' @param limit maximum number of occurrences downloaded
 #' @param country A two-letter country code to define the area of interest for counting species presences. Default is NULL.
 #' @param shapefile Path to a shapefile defining the area of interest for counting species presences. Default is NULL.
 #' @param rastertemp A file path to the raster file that will be used as a template for rasterizing the buffers.
@@ -29,12 +30,13 @@ run_workflow <- function(workers = 2,
                          rasterLU,
                          LanduseSuitability,
                          dist = 500,
+                         limit = 1000,
                          filter = NULL,
                          country = NULL,
                          shapefile = NULL,
                          plot = TRUE) {
 
-  Clean <- Count_Presences <- Final_Presences <- Landuse <- Landuses <- Landusesuitability <- Long_LU_table <- LookUpTable <- ModelAndPredict <- More_than_zero <- N <- PhyloDiversity <- Phylo_Tree <- Presences <- Raster <- Thresholds <- buffer <- data <- export_presences <- output_Rarity <- output_Richness <- rarity <- rarity_weight <- shp <- species <- unique_habitats <- unique_species <- NULL
+  Clean <- Count_Presences <- Final_Presences <- Landuse <- Landuses <- Landusesuitability <- Long_LU_table <- LookUpTable <- ModelAndPredict <- More_than_zero <- N <- PhyloDiversity <- Phylo_Tree <- Presences <- Raster <- Thresholds <- buffer <- data <- export_presences <- output_Rarity <- output_Richness <- rarity <- rarity_weight <- shp <- species <- unique_habitats <- unique_species <- output_PD <- NULL
 
   # Write the script using tar_helper()
   targets::tar_helper(
@@ -63,7 +65,7 @@ run_workflow <- function(workers = 2,
                                                             sum(N)]),
         targets::tar_target(Presences,
                             get_presences(More_than_zero$species, country = !!country,
-                                          shapefile = shp),
+                                          shapefile = shp, limit = !!limit),
                             pattern = map(More_than_zero)),
         targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
                    pattern = map(Presences)),

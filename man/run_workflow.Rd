@@ -12,6 +12,7 @@ run_workflow(
   rasterLU,
   LanduseSuitability,
   dist = 500,
+  limit = 1000,
   filter = NULL,
   country = NULL,
   shapefile = NULL,
@@ -32,6 +33,8 @@ run_workflow(
 \item{LanduseSuitability}{A string representing the file path to the raster file containing land-use binary suitability data.}
 
 \item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
+
+\item{limit}{maximum number of occurrences downloaded}
 
 \item{filter}{An optional expression used to filter the resulting \code{data.frame}. This should be an expression
 written as if you were using \code{dplyr::filter()}. The default is NULL, meaning no filtering is applied.}
