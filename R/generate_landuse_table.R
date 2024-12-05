@@ -110,7 +110,7 @@ make_final_presences <- function(Long_LU_table, Long_Buffer_gbif, LookUpTable)
     Feasible_Landuses <- Feasible_Landuses[Landuse != "Exclude"]
 
     # Get only the cells that can become the feasible Landuses
-    Available_Cells <- Long_LU_table[Habitat %chin% unique(Feasible_Landuses$Habitat)]
+    Available_Cells <- Long_LU_table[Habitat %chin% unique(as.character(Feasible_Landuses$Habitat))]
 
     # Check which of the available cells for the species can be in a habitat suitable for the species
     FeasibleCells <- Long_Buffer_gbif[cell %chin% unique(Available_Cells$cell)]

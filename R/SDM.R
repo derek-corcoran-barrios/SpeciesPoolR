@@ -279,27 +279,19 @@ create_thresholds <- function(Model, reference, file) {
 
         Pres <- SampleLanduse(DF = reference_species, file = file)
 
-        is_both <- stringr::str_detect(Pres$Landuse, "Both")
-        duplicated_rows1 <- Pres[is_both, ]
-        duplicated_rows2 <- Pres[is_both, ]
-        duplicated_rows1$Landuse <- stringr::str_replace_all(duplicated_rows1$Landuse, "Both", "Poor")
-        duplicated_rows2$Landuse <- stringr::str_replace_all(duplicated_rows2$Landuse, "Both", "Rich")
-        FixedDataset <- Pres[!is_both, ] |>
-          dplyr::bind_rows(duplicated_rows1, duplicated_rows2)
-
-        Thres$Thres_99 <- FixedDataset |>
+        Thres$Thres_99 <- Pres |>
           dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
           dplyr::slice_max(order_by = Pred, prop = 0.99, with_ties = FALSE) |>
           dplyr::pull(Pred) |>
           min()
 
-        Thres$Thres_95 <- FixedDataset |>
+        Thres$Thres_95 <- Pres |>
           dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
           dplyr::slice_max(order_by = Pred, prop = 0.95, with_ties = FALSE) |>
           dplyr::pull(Pred) |>
           min()
 
-        Thres$Thres_90 <- FixedDataset |>
+        Thres$Thres_90 <- Pres |>
           dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
           dplyr::slice_max(order_by = Pred, prop = 0.90, with_ties = FALSE) |>
           dplyr::pull(Pred) |>
