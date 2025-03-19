@@ -13,6 +13,7 @@ Imports:
     crew,
     data.table,
     dplyr,
+    geotargets (>= 0.2.0.9000),
     janitor,
     maxnet,
     picante,
@@ -33,8 +34,9 @@ Imports:
 Depends: 
     R (>= 2.10)
 LazyData: true
-Remotes: 
-    jinyizju/V.PhyloMaker
+Remotes:  
+    jinyizju/V.PhyloMaker,
+    njtierney/geotargets
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
 BugReports: https://github.com/derek-corcoran-barrios/SpeciesPoolR/issues
 Suggests: 
