@@ -71,6 +71,8 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = F){
     dplyr::filter(TaxaID == min(TaxaID)) |>
     ungroup()
 
+  message(paste(nrow(NewTaxa), "of", length(Taxons), "resolved", nrow(Cleaned_Taxize), "are not synonims"))
+
   return(Cleaned_Taxize)
 }
 
@@ -85,7 +87,7 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = F){
 #' @export
 #'
 #' @examples
-#' Cleaned_Taxize <- Clean_Taxa_Taxize(Taxons = c("Canis lupus", "C. lupus"))
+#' Cleaned_Taxize <- Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
 #' Clean_Taxa_rgbif(Cleaned_Taxize)
 #' @importFrom dplyr rename relocate select everything left_join
 #' @importFrom readr write_csv

@@ -22,7 +22,7 @@ A csv file containing the cleaned taxonomic list
 Clean the taxonomic list using GBIF
 }
 \examples{
-Cleaned_Taxize <- Clean_Taxa_Taxize(Taxons = c("Canis lupus", "C. lupus"))
+Cleaned_Taxize <- Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
 Clean_Taxa_rgbif(Cleaned_Taxize)
 }
 \references{
