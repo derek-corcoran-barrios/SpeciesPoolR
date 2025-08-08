@@ -8,7 +8,7 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     crew,
     data.table,
@@ -34,7 +34,7 @@ Imports:
 Depends: 
     R (>= 2.10)
 LazyData: true
-Remotes:  
+Remotes: 
     jinyizju/V.PhyloMaker,
     njtierney/geotargets
 URL: https://github.com/derek-corcoran-barrios/SpeciesPoolR, https://derek-corcoran-barrios.github.io/SpeciesPoolR/
