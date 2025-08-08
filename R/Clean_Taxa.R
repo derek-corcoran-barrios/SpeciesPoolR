@@ -15,7 +15,7 @@
 #' @examples
 #' Clean_Taxa_Taxize(Taxons = c("Canis lupus", "C. lupus"))
 #'
-#' @importFrom taxize gnr_resolve
+#' @importFrom taxize gna_verifier
 #' @importFrom dplyr select filter group_by ungroup rename
 #' @importFrom readr write_csv
 #' @importFrom tibble rowid_to_column
@@ -35,16 +35,17 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = F){
 
 
   # try vectorized form first
-  Temp <- tryCatch(taxize::gnr_resolve(NewTaxa$Taxa, data_source_ids = "11", canonical = TRUE, best_match_only = T),
+  Temp <- tryCatch(taxize::gna_verifier(NewTaxa$Taxa, data_sources = 11, capitalize = TRUE, fuzzy_uninomial = TRUE),
                    error = function(e) return(NULL))
 
   # if vectorized form fails, use loop
   if(is.null(Temp)){
     message("Vectorized form did not work")
     for(i in 1:nrow(NewTaxa)){
-      try({Temp <- taxize::gnr_resolve(NewTaxa$Taxa[i],
-                                  data_source_ids = "11", canonical = TRUE, best_match_only = T) |>
-        dplyr::select(score, matched_name2)
+      try({Temp <- taxize::gna_verifier(NewTaxa$Taxa[i],
+                                        , data_sources = 11, capitalize = TRUE, fuzzy_uninomial = TRUE) |>
+        dplyr::select(fuzzyLessScore, currentCanonicalFull) |>
+        dplyr::rename(score = fuzzyLessScore)
       NewTaxa[i,3:4] <- Temp})
       if((i %% 50) == 0){
         message(paste(i, "of", nrow(NewTaxa), "Ready!", Sys.time()))
@@ -53,9 +54,10 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = F){
     }
   } else {
       NewTaxa <- Temp |>
-      dplyr::rename(Taxa = user_supplied_name) |>
-      dplyr::select(Taxa, score, matched_name2) |>
-      dplyr::left_join(dplyr::select(NewTaxa, TaxaID, Taxa))
+      dplyr::rename(Taxa = submittedName) |>
+      dplyr::select(Taxa, fuzzyLessScore, currentCanonicalFull) |>
+      dplyr::left_join(dplyr::select(NewTaxa, TaxaID, Taxa)) |>
+      dplyr::rename(score = fuzzyLessScore)
   }
 
   if(WriteFile){

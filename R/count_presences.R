@@ -16,7 +16,7 @@
 #' @return A data.frame with columns `family`, `genus`, `species`, and `N` where `N`
 #'   represents the number of occurrences of each species within the defined area.
 #'
-#' @importFrom terra vect minRect geom
+#' @importFrom terra vect hull geom
 #' @importFrom data.table data.table rbindlist
 #' @importFrom rgbif occ_count
 #'
@@ -42,7 +42,7 @@ count_presences <- function(species, shapefile = NULL, country = NULL){
   # Calculate geometry if a shapefile is provided
   geometry <- if (!is.null(shapefile) & is.null(country)) {
     terra::vect(shapefile) |>
-      terra::minRect() |>
+      terra::hull(type = "rectangle") |>
       terra::geom(wkt = TRUE)
   } else {
     NULL
