@@ -20,7 +20,7 @@ A data frame with the cleaned taxa and their scores.
 This function cleans a vector of taxa using Taxize.
 }
 \examples{
-Clean_Taxa_Taxize(Taxons = c("Canis lupus", "C. lupus"))
+Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
 
 }
 \references{

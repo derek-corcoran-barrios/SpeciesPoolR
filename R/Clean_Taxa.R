@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' Clean_Taxa_Taxize(Taxons = c("Canis lupus", "C. lupus"))
+#' Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
 #'
 #' @importFrom taxize gna_verifier
 #' @importFrom dplyr select filter group_by ungroup rename
@@ -66,8 +66,8 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = F){
 
 
   Cleaned_Taxize <- NewTaxa |>
-    dplyr::filter(!is.na(matched_name2)) |>
-    dplyr::group_by(matched_name2) |>
+    dplyr::filter(!is.na(currentCanonicalFull)) |>
+    dplyr::group_by(currentCanonicalFull) |>
     dplyr::filter(TaxaID == min(TaxaID)) |>
     ungroup()
 
@@ -102,12 +102,12 @@ Clean_Taxa_rgbif <- function(Cleaned_Taxize, WriteFile = F, Species_Only = T){
   if(WriteFile){
     dir.create("Results")
   }
-  rgbif_find <- rgbif::name_backbone_checklist(Cleaned_Taxize$matched_name2) |>
+  rgbif_find <- rgbif::name_backbone_checklist(Cleaned_Taxize$currentCanonicalFull) |>
     # Change name to match the cleaned_taxize dataset
-    dplyr::rename(matched_name2 = verbatim_name) |>
-    dplyr::relocate(matched_name2, .before = everything()) |>
+    dplyr::rename(currentCanonicalFull = verbatim_name) |>
+    dplyr::relocate(currentCanonicalFull, .before = everything()) |>
     dplyr::left_join(Cleaned_Taxize) |>
-    dplyr::select(Taxa, matched_name2, confidence, canonicalName, kingdom, phylum, class, order, family, genus, species, rank)
+    dplyr::select(Taxa, currentCanonicalFull, confidence, canonicalName, kingdom, phylum, class, order, family, genus, species, rank)
   if(WriteFile){
     readr::write_csv(rgbif_find, "Results/Cleaned_Taxa_rgbif.csv")
   }
