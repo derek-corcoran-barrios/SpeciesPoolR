@@ -4,35 +4,23 @@
 \alias{Clean_Taxa}
 \title{Clean taxa using Taxize and rgbif}
 \usage{
-Clean_Taxa(Taxons, WriteFile = F, Species_Only = T)
+Clean_Taxa(Taxons, WriteFile = FALSE, Species_Only = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{Taxons}{Vector of taxa to be cleaned.}
 
-\item{WriteFile}{logical if False (default) only returns a
-data frame, if TRUE will generate a folder (Results in the
-Working directory with a csv of the results)}
+\item{WriteFile}{logical; if FALSE (default) only returns a data frame, if TRUE will generate a folder (Results) with CSVs.}
 
-\item{Species_Only}{logical, if TRUE (default) only species will be
-returned, if FALSE, it will return the highest possible taxonomic
-resolution}
+\item{Species_Only}{logical; if TRUE (default) only species will be returned, if FALSE returns highest possible taxonomic resolution.}
+
+\item{verbose}{logical; if TRUE, prints progress and summary messages (default: TRUE).}
 }
 \value{
 A data frame with the cleaned taxa and their scores.
 }
 \description{
-This function cleans a vector of taxa using Taxize and rgbif
+This function cleans a vector of taxa using Taxize and rgbif sequentially.
 }
 \examples{
-
-Cleaned <- Clean_Taxa(Taxons = c("Canis lupus", "C. lupus"))
-
-}
-\references{
-Chamberlain, Scott T., et al. "Taxize: an R package for taxonomic
-lookup and manipulation." Methods in Ecology and Evolution 6.12
-(2015): 1451-1456.
-Chamberlain S, Barve V, Mcglinn D, Oldoni D, Desmet P, Geffert L, Ram K
-(2023). rgbif: Interface to the Global Biodiversity Information
-Facility API_ R package version 3.7.4
+Cleaned <- Clean_Taxa(c("Canis lupus", "C. lupus"), verbose = TRUE)
 }

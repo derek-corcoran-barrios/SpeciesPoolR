@@ -7,40 +7,36 @@
 count_presences(species, shapefile = NULL, country = NULL)
 }
 \arguments{
-\item{species}{A data.frame containing the columns \code{family}, \code{genus}, and \code{species}.
-These should be the taxonomic details of the species for which you want to count occurrences.}
+\item{species}{A data.frame/tibble with columns \code{family}, \code{genus}, \code{species}.}
 
-\item{shapefile}{A shapefile (with lat/long coordinates) defining the area of interest.
-The function will create a minimum bounding rectangle around the shapefile to query the
-species occurrences. Default is \code{NULL}.}
+\item{shapefile}{Path to a shapefile (lon/lat coordinates preferred). If provided (and
+\code{country} is NULL), a minimum bounding rectangle is used as the query geometry.}
 
-\item{country}{A two-letter country code (e.g., "DK" for Denmark) to define the area of interest.
-Default is \code{NULL}.}
+\item{country}{Two-letter country code (e.g., "DK"). Ignored if \code{shapefile} is provided.}
 }
 \value{
-A data.frame with columns \code{family}, \code{genus}, \code{species}, and \code{N} where \code{N}
-represents the number of occurrences of each species within the defined area.
+A \code{data.table} with columns \code{family}, \code{genus}, \code{species}, \code{N}.
 }
 \description{
-This function counts the number of occurrences of specified species within a defined area.
-The area can be specified using a shapefile or a two-letter country code. The function
-uses the \code{rgbif} package to query species occurrences and returns a data.frame with the
-results.
+Counts the number of GBIF occurrences (1999–2023) for each species in \code{species}
+within a country or within the minimum bounding rectangle of a shapefile.
+}
+\details{
+If both \code{shapefile} and \code{country} are provided, an error is thrown. If neither is provided,
+GBIF query is global.
 }
 \examples{
 # Example species data.frame
-species <- structure(list(family = "Polytrichaceae", genus = "Atrichum",
-                          species = "Atrichum undulatum"), row.names = c(NA, -1L),
-                     class = c("tbl_df", "tbl", "data.frame"))
+species <- structure(
+  list(family = "Polytrichaceae", genus = "Atrichum", species = "Atrichum undulatum"),
+  row.names = c(NA, -1L), class = c("tbl_df","tbl","data.frame")
+)
 
-# Example 1: Using a country code
-df_country <- count_presences(species, country = "DK")
-print(df_country)
+# Using a country code
+# df_country <- count_presences(species, country = "DK")
 
-# Example 2: Using a shapefile
-# Assuming "Aarhus.shp" is in the working directory
-f <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
-df_shapefile <- count_presences(species, shapefile = f)
-print(df_shapefile)
+# Using a shapefile (example from the package)
+# f <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
+# df_shapefile <- count_presences(species, shapefile = f)
 
 }

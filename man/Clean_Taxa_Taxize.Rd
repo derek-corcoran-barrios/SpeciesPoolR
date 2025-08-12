@@ -4,27 +4,29 @@
 \alias{Clean_Taxa_Taxize}
 \title{Clean taxa using Taxize}
 \usage{
-Clean_Taxa_Taxize(Taxons, WriteFile = F)
+Clean_Taxa_Taxize(Taxons, WriteFile = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{Taxons}{Vector of taxa to be cleaned.}
 
-\item{WriteFile}{logical if False (default) only returns a
-data frame, if TRUE will generate a folder (Results in the
-Working directory with a csv of the results)}
+\item{WriteFile}{logical; if FALSE (default) only returns a
+data frame, if TRUE will generate a folder (Results) in the
+working directory with a CSV of the results.}
+
+\item{verbose}{logical; if TRUE, prints progress and summary
+messages (default: TRUE).}
 }
 \value{
 A data frame with the cleaned taxa and their scores.
 }
 \description{
-This function cleans a vector of taxa using Taxize.
+This function cleans a vector of taxa using the Global Names Architecture
+via the \pkg{taxize} package.
 }
 \examples{
-Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
+Clean_Taxa_Taxize(
+  Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"),
+  verbose = TRUE
+)
 
-}
-\references{
-Chamberlain, Scott T., et al. "Taxize: an R package for taxonomic
-lookup and manipulation." Methods in Ecology and Evolution 6.12
-(2015): 1451-1456.
 }

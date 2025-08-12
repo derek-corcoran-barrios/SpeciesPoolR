@@ -4,29 +4,31 @@
 \alias{Clean_Taxa_rgbif}
 \title{Clean Taxa from GBIF}
 \usage{
-Clean_Taxa_rgbif(Cleaned_Taxize, WriteFile = F, Species_Only = T)
+Clean_Taxa_rgbif(
+  Cleaned_Taxize,
+  WriteFile = FALSE,
+  Species_Only = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{Cleaned_Taxize}{a data frame containing the cleaned taxonomic list from function Clean_Taxa_Taxize}
+\item{Cleaned_Taxize}{a data frame containing the cleaned taxonomic list from \code{Clean_Taxa_Taxize}.}
 
-\item{WriteFile}{logical if False (default) only returns a
-data frame, if TRUE will generate a folder (Results in the
-Working directory with a csv of the results)}
+\item{WriteFile}{logical; if FALSE (default) only returns a data frame, if TRUE will generate a folder (Results) with a CSV.}
 
-\item{Species_Only}{logical, if TRUE (default) only species will be returned, if FALSE, it will return the highest possible taxonomic resolution}
+\item{Species_Only}{logical; if TRUE (default) only species will be returned, if FALSE returns highest possible taxonomic resolution.}
+
+\item{verbose}{logical; if TRUE, prints progress and summary messages (default: FALSE).}
 }
 \value{
-A csv file containing the cleaned taxonomic list
+A data frame containing the GBIF-cleaned taxonomic list.
 }
 \description{
-Clean the taxonomic list using GBIF
+Clean the taxonomic list using GBIF.
 }
 \examples{
-Cleaned_Taxize <- Clean_Taxa_Taxize(Taxons =  c("Abies concolor", "Abies lowiana", "Canis lupus", "Cannis lupus"))
-Clean_Taxa_rgbif(Cleaned_Taxize)
+\dontrun{
+Cleaned_Taxize <- Clean_Taxa_Taxize(c("Abies concolor", "Canis lupus"), verbose = TRUE)
+Clean_Taxa_rgbif(Cleaned_Taxize, verbose = TRUE)
 }
-\references{
-Chamberlain S, Barve V, Mcglinn D, Oldoni D, Desmet P, Geffert L, Ram K
-(2023). rgbif: Interface to the Global Biodiversity Information
-Facility API_ R package version 3.7.4,
 }
