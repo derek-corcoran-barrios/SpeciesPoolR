@@ -26,7 +26,7 @@
 #' @importFrom readr write_csv
 #' @importFrom tibble rowid_to_column
 Clean_Taxa_Taxize <- function(Taxons, WriteFile = FALSE, verbose = TRUE) {
-  score <- matched_name2 <- TaxaID <- user_supplied_name <- Taxa <- NULL
+  score <- matched_name2 <- TaxaID <- user_supplied_name <- Taxa <- fuzzyLessScore <- currentCanonicalFull <- submittedName <- NULL
 
   NewTaxa <- data.frame(Taxa = Taxons, score = NA, matched_name2 = NA) |>
     tibble::rowid_to_column(var = "TaxaID")
@@ -106,6 +106,8 @@ Clean_Taxa_Taxize <- function(Taxons, WriteFile = FALSE, verbose = TRUE) {
 #' Clean_Taxa_rgbif(Cleaned_Taxize, verbose = TRUE)
 #' }
 Clean_Taxa_rgbif <- function(Cleaned_Taxize, WriteFile = FALSE, Species_Only = TRUE, verbose = FALSE) {
+  verbatim_name <- currentCanonicalFull <- Taxa <- confidence <- kingdom <- phylum <- family <- genus <- species <- canonicalName <- NULL
+
   if (WriteFile) dir.create("Results", showWarnings = FALSE)
 
   rgbif_find <- rgbif::name_backbone_checklist(Cleaned_Taxize$currentCanonicalFull) |>

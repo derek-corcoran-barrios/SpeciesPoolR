@@ -8,11 +8,11 @@
 #'
 #' @return A data.table in long format with two columns: `cell`, indicating the raster cell number, and `species`, indicating the species name corresponding to the cell.
 #'
-#' @importFrom terra rast vect project buffer rasterize crs as.data.frame
+#' @importFrom terra rast vect project buffer crs
 #' @importFrom dplyr select mutate group_split
 #' @importFrom purrr map
 #' @importFrom stringr str_replace_all
-#' @importFrom data.table as.data.table rbindlist
+#' @importFrom data.table as.data.table
 #'
 #' @examples
 #' \dontrun{
@@ -38,19 +38,7 @@ make_buffer_rasterized <- function(DT, file, dist = 500) {
       purrr::map(~terra::vect(.x, geom = c("decimalLongitude", "decimalLatitude"), crs = "+proj=longlat +datum=WGS84")) |>
       purrr::map(~terra::project(.x, terra::crs(Rast))) |>
       purrr::map(~terra::buffer(.x, dist)) |>
-      purrr::map(~terra::rasterize(.x, Rast, field = "presence")) |>
-      purrr::map(~terra::as.data.frame(.x, cells = TRUE))
-
-    species <- stringr::str_replace_all(unique(Result$species), " ", "_")
-
-    for(i in 1:length(Temp)){
-      colnames(Temp[[i]]) <- c("cell", species[i])
-      Temp[[i]] <- as.data.table(Temp[[i]])
-      Species <- stringr::str_replace_all(colnames(Temp[[i]])[2], "_", " ")
-      Temp[[i]] <- Temp[[i]][, .(cell, species = Species)]
-    }
-
-    Temp <- data.table::rbindlist(Temp)
+      purrr::reduce(rbind)
   }
   return(Temp)
 }

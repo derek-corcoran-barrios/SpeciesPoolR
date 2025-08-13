@@ -1,6 +1,6 @@
 Package: SpeciesPoolR
 Title: Creates Species Pools For Potential Habitats
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(person("Derek", "Corcoran", email = "derek.corcoran.barrios@gmail.com",
   role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0248-6230")))
 Maintainer: Derek Corcoran <derek.corcoran.barrios@gmail.com>
@@ -32,7 +32,7 @@ Imports:
     utils,
     V.PhyloMaker
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 LazyData: true
 Remotes: 
     jinyizju/V.PhyloMaker,

@@ -147,10 +147,8 @@ get_presences <- function(species, country = NULL, shapefile = NULL, limit = 100
 
   if(!is.null(shapefile) & is.null(country)){
     try({
-      geometry <- terra::vect(shapefile) |>
-        terra::hull(type = "rectangle") |>
-        terra::geom(wkt = TRUE)
-      print(paste("Geometry created:", geometry))
+      geometry <- wkt_rect_ccw(shapefile)
+      message("Geometry created: ", geometry)
     }, silent = TRUE)
 
     if (is.null(geometry)) {

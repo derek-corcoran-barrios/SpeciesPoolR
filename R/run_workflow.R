@@ -21,6 +21,7 @@
 #' @importFrom crew crew_controller_local
 #' @importFrom rlang enquo
 #' @importFrom targets tar_option_set tar_target tar_helper tar_make tar_visnetwork
+#' @importFrom geotargets tar_terra_rast
 #' @export
 
 run_workflow <- function(workers = 2,
@@ -67,7 +68,7 @@ run_workflow <- function(workers = 2,
                             get_presences(More_than_zero$species, country = !!country,
                                           shapefile = shp, limit = !!limit),
                             pattern = map(More_than_zero)),
-        targets::tar_target(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
+        geotargets::tar_terra_rast(buffer, make_buffer_rasterized(DT = Presences, file = Raster, dist = !!dist),
                    pattern = map(Presences)),
         targets::tar_target(ModelAndPredict, ModelAndPredictFunc(Presences, file = Landuses), pattern = map(Presences)),
         targets::tar_target(Thresholds, create_thresholds(Model = ModelAndPredict, reference = Presences, file = Landuses)),
