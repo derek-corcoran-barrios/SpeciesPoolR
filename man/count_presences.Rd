@@ -2,41 +2,74 @@
 % Please edit documentation in R/count_presences.R
 \name{count_presences}
 \alias{count_presences}
-\title{Count Presences of Species within a Specified Area}
+\title{Unified interface for GBIF presence counts}
 \usage{
-count_presences(species, shapefile = NULL, country = NULL)
+count_presences(
+  species,
+  shapefile = NULL,
+  country = NULL,
+  method = c("simple", "auth"),
+  year = c(1999L, as.integer(format(Sys.Date(), "\%Y"))),
+  ...
+)
 }
 \arguments{
-\item{species}{A data.frame/tibble with columns \code{family}, \code{genus}, \code{species}.}
+\item{species}{A data frame/data.table/tibble with columns \code{family}, \code{genus}, \code{species}.}
 
-\item{shapefile}{Path to a shapefile (lon/lat coordinates preferred). If provided (and
-\code{country} is NULL), a minimum bounding rectangle is used as the query geometry.}
+\item{shapefile}{Path to a vector file readable by \code{terra::vect()}.
+If provided (and \code{country} is \code{NULL}), its MBR is used as the GBIF
+\code{geometry} filter via \code{\link{wkt_rect_ccw}}. Mutually exclusive with \code{country}.}
 
-\item{country}{Two-letter country code (e.g., "DK"). Ignored if \code{shapefile} is provided.}
+\item{country}{Two-letter ISO country code (e.g., \code{"DK"}). Ignored if \code{shapefile} is provided.
+Mutually exclusive with \code{shapefile}.}
+
+\item{method}{Character; one of \code{"simple"} (default) or \code{"auth"}.
+Matching is case-insensitive.}
+
+\item{year}{Integer vector \code{c(start, end)} with the year range (inclusive). Default is
+\code{c(1999, current_year)}.}
+
+\item{...}{Additional arguments passed to the selected backend:
+\itemize{
+\item For \code{method = "simple"}: \code{facet_limit}, \code{verbose}.
+\item For \code{method = "auth"}: \code{restrict_to_species}, \code{verbose}.
+}}
 }
 \value{
 A \code{data.table} with columns \code{family}, \code{genus}, \code{species}, \code{N}.
 }
 \description{
-Counts the number of GBIF occurrences (1999–2023) for each species in \code{species}
-within a country or within the minimum bounding rectangle of a shapefile.
+Convenience wrapper that dispatches to \code{\link{count_presences_simple}} (fast,
+no authentication) or \code{\link{count_presences_auth}} (robust, authenticated GBIF
+download). Returns a tidy table of counts per species within either a country or
+the MBR of a shapefile.
 }
 \details{
-If both \code{shapefile} and \code{country} are provided, an error is thrown. If neither is provided,
-GBIF query is global.
+Count presences via GBIF (choose fast \strong{simple} or robust \strong{auth} method)
+
+Use \code{method = "simple"} for quick exploratory work; switch to \code{"auth"} for
+larger lists or when you need a citable, reproducible download record.
 }
 \examples{
-# Example species data.frame
-species <- structure(
-  list(family = "Polytrichaceae", genus = "Atrichum", species = "Atrichum undulatum"),
-  row.names = c(NA, -1L), class = c("tbl_df","tbl","data.frame")
-)
+\dontrun{
+f_species <- system.file("ex/Species_List.csv", package = "SpeciesPoolR")
+shp       <- system.file("ex/Aarhus.shp",      package = "SpeciesPoolR")
+sp        <- SpeciesPoolR::get_data(f_species)
+clean     <- SpeciesPoolR::Clean_Taxa(sp$Species)
 
-# Using a country code
-# df_country <- count_presences(species, country = "DK")
+# Fast
+out1 <- count_presences(clean, shapefile = shp, method = "simple")
 
-# Using a shapefile (example from the package)
-# f <- system.file("ex/Aarhus.shp", package="SpeciesPoolR")
-# df_shapefile <- count_presences(species, shapefile = f)
+# Robust (requires GBIF_USER/GBIF_PWD/GBIF_EMAIL)
+out2 <- count_presences(clean, shapefile = shp, method = "auth", restrict_to_species = TRUE)
+}
 
 }
+\seealso{
+\code{\link{count_presences_simple}}, \code{\link{count_presences_auth}}, \code{\link{wkt_rect_ccw}}
+
+Other GBIF helpers: 
+\code{\link{count_presences_auth}()},
+\code{\link{count_presences_simple}()}
+}
+\concept{GBIF helpers}
