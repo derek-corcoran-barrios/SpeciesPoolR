@@ -110,12 +110,7 @@ count_presences_simple <- function(
     facetLimit         = facet_limit
   )
 
-  if (length(r$facets) == 0L) {
-    dt <- data.table::data.table(species = character(), N = integer())
-  } else {
-    dt <- data.table::as.data.table(r$facets[[1]]$counts)[
-      , .(species = name, N = as.integer(count))]
-  }
+  dt <- extract_gbif_facet_counts(r$facets)
 
   want <- data.table::as.data.table(unique(species[, c("family","genus","species")]))
   out  <- dt[want, on = "species"]
@@ -127,6 +122,35 @@ count_presences_simple <- function(
             "facet results can be truncated. Consider count_presences_auth().")
   }
   out[]
+}
+
+
+extract_gbif_facet_counts <- function(facets) {
+  name <- count <- NULL
+  empty <- data.table::data.table(species = character(), N = integer())
+
+  if (length(facets) == 0L) {
+    return(empty)
+  }
+
+  facet <- facets[[1L]]
+
+  if (is.null(facet)) {
+    return(empty)
+  }
+
+  if (is.list(facet) && !is.data.frame(facet) && !is.null(facet$counts)) {
+    facet <- facet$counts
+  }
+
+  dt <- data.table::as.data.table(facet)
+
+  if (!all(c("name", "count") %in% names(dt))) {
+    return(empty)
+  }
+
+  dt <- dt[!is.na(name), .(species = as.character(name), N = as.integer(count))]
+  dt[]
 }
 
 
