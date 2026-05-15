@@ -39,7 +39,7 @@ wkt_rect_ccw <- function(shapefile) {
 #' @title Fast presence counts via GBIF facets (unauthenticated)
 #'
 #' @description
-#' Performs a single GBIF search using a facet on \code{scientificName} and returns
+#' Performs a single GBIF search using a facet on \code{species} and returns
 #' occurrence counts for the supplied species list within either a country or the
 #' minimum bounding rectangle (MBR) of a shapefile (converted to CCW WKT with
 #' \code{\link{wkt_rect_ccw}}). This method is **fast and polite** (one request),
@@ -60,8 +60,8 @@ wkt_rect_ccw <- function(shapefile) {
 #' @return A \code{data.table} with columns \code{family}, \code{genus}, \code{species}, \code{N}.
 #'
 #' @details
-#' This function makes **one** call to \code{rgbif::occ_search()} with \code{facet = "scientificName"}
-#' and joins the returned counts to your requested species. Species not present in the facet response
+#' This function makes **one** call to \code{rgbif::occ_search()} with \code{facet = "species"}
+#' and joins the returned canonical species counts to your requested species. Species not present in the facet response
 #' receive \code{N = 0}. If your list is longer than \code{facet_limit}, GBIF may truncate the facet;
 #' consider \code{\link{count_presences_auth}} for complete, reproducible results.
 #'
@@ -106,11 +106,12 @@ count_presences_simple <- function(
     year               = paste(year, collapse = ","),
     country            = country,
     geometry           = geometry,
-    facet              = "scientificName",
-    facetLimit         = facet_limit
+    facet              = "species",
+    limit              = 0L,
+    species.facetLimit = facet_limit
   )
 
-  dt <- extract_gbif_facet_counts(r$facets)
+  dt <- extract_gbif_facet_counts(r$facets, facet = "species")
 
   want <- data.table::as.data.table(unique(species[, c("family","genus","species")]))
   out  <- dt[want, on = "species"]
@@ -125,31 +126,54 @@ count_presences_simple <- function(
 }
 
 
-extract_gbif_facet_counts <- function(facets) {
-  name <- count <- NULL
+extract_gbif_facet_counts <- function(facets, facet = NULL) {
   empty <- data.table::data.table(species = character(), N = integer())
 
   if (length(facets) == 0L) {
     return(empty)
   }
 
-  facet <- facets[[1L]]
+  facet_counts <- NULL
+  if (!is.null(facet) && !is.null(facets[[facet]])) {
+    facet_counts <- facets[[facet]]
+  } else {
+    facet_counts <- facets[[1L]]
+  }
 
-  if (is.null(facet)) {
+  if (is.null(facet_counts)) {
     return(empty)
   }
 
-  if (is.list(facet) && !is.data.frame(facet) && !is.null(facet$counts)) {
-    facet <- facet$counts
+  if (is.list(facet_counts) && !is.data.frame(facet_counts) && !is.null(facet_counts$counts)) {
+    facet_counts <- facet_counts$counts
   }
 
-  dt <- data.table::as.data.table(facet)
+  dt <- data.table::as.data.table(facet_counts)
 
-  if (!all(c("name", "count") %in% names(dt))) {
+  if (!("count" %in% names(dt))) {
     return(empty)
   }
 
-  dt <- dt[!is.na(name), .(species = as.character(name), N = as.integer(count))]
+  value_col <- NULL
+  if (!is.null(facet) && facet %in% names(dt)) {
+    value_col <- facet
+  } else if ("name" %in% names(dt)) {
+    value_col <- "name"
+  } else {
+    possible_value_cols <- setdiff(names(dt), "count")
+    if (length(possible_value_cols) > 0L) {
+      value_col <- possible_value_cols[[1L]]
+    }
+  }
+
+  if (is.null(value_col)) {
+    return(empty)
+  }
+
+  dt <- dt[!is.na(get(value_col)), .(
+    species = as.character(get(value_col)),
+    N = as.integer(count)
+  )]
   dt[]
 }
 
@@ -270,8 +294,9 @@ count_presences_auth <- function(
   zipfile <- rgbif::occ_download_get(key, overwrite = TRUE)
   occs    <- rgbif::occ_download_import(zipfile)
 
-  dt <- data.table::as.data.table(occs)[, .N, by = scientificName]
-  data.table::setnames(dt, c("species","N"))
+  occs_dt <- data.table::as.data.table(occs)
+  name_col <- if ("species" %in% names(occs_dt)) "species" else "scientificName"
+  dt <- occs_dt[!is.na(get(name_col)), .N, by = .(species = get(name_col))]
 
   out <- dt[want, on = "species"][, `:=`(family = i.family, genus = i.genus)][
     , c("i.family","i.genus") := NULL][]
