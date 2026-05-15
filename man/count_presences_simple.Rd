@@ -35,7 +35,7 @@ Mutually exclusive with \code{shapefile}.}
 A \code{data.table} with columns \code{family}, \code{genus}, \code{species}, \code{N}.
 }
 \description{
-Performs a single GBIF search using a facet on \code{scientificName} and returns
+Performs a single GBIF search using a facet on \code{species} and returns
 occurrence counts for the supplied species list within either a country or the
 minimum bounding rectangle (MBR) of a shapefile (converted to CCW WKT with
 \code{\link{wkt_rect_ccw}}). This method is \strong{fast and polite} (one request),
@@ -44,8 +44,8 @@ but facet results can be truncated if your species list exceeds \code{facet_limi
 \details{
 Count presences quickly (no auth) using GBIF facets
 
-This function makes \strong{one} call to \code{rgbif::occ_search()} with \code{facet = "scientificName"}
-and joins the returned counts to your requested species. Species not present in the facet response
+This function makes \strong{one} call to \code{rgbif::occ_search()} with \code{facet = "species"}
+and joins the returned canonical species counts to your requested species. Species not present in the facet response
 receive \code{N = 0}. If your list is longer than \code{facet_limit}, GBIF may truncate the facet;
 consider \code{\link{count_presences_auth}} for complete, reproducible results.
 }
