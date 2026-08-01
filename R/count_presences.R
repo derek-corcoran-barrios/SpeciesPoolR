@@ -92,89 +92,80 @@ count_presences_simple <- function(
     verbose   = TRUE
 ) {
   if (!xor(!is.null(shapefile), !is.null(country))) {
-    stop("Provide either 'shapefile' OR 'country' (exclusively).")
+    stop("Provide either 'shapefile' OR 'country' exclusively.")
   }
-  if (!all(c("family","genus","species") %in% colnames(species))) {
+
+  if (!all(c("family", "genus", "species") %in% colnames(species))) {
     stop("`species` must have columns: family, genus, species")
+  }
+
+  if (!"gbif_speciesKey" %in% names(species)) {
+    stop(
+      "`species` must contain `gbif_speciesKey`. ",
+      "Run the updated Clean_Taxa() first."
+    )
+  }
+
+  want <- data.table::as.data.table(
+    unique(species[, c("family", "genus", "species", "gbif_speciesKey")])
+  )
+
+  keys <- unique(stats::na.omit(want$gbif_speciesKey))
+
+  if (length(keys) == 0L) {
+    warning("No GBIF species keys available; returning zero counts.")
+    want[, N := 0L]
+    return(want[, .(family, genus, species, N)])
   }
 
   geometry <- if (!is.null(shapefile)) wkt_rect_ccw(shapefile) else NULL
 
-  r <- rgbif::occ_search(
-    hasCoordinate      = TRUE,
-    hasGeospatialIssue = FALSE,
-    year               = paste(year, collapse = ","),
-    country            = country,
-    geometry           = geometry,
-    facet              = "species",
-    limit              = 0L,
-    species.facetLimit = facet_limit
+  if (verbose) {
+    message("Querying GBIF occurrence counts using speciesKey...")
+    message("Number of GBIF species keys: ", length(keys))
+  }
+
+  key_string <- paste(keys, collapse = ";")
+
+  dt <- rgbif::occ_count(
+    hasCoordinate       = TRUE,
+    hasGeospatialIssue  = FALSE,
+    year                = paste(year, collapse = ","),
+    country             = country,
+    geometry            = geometry,
+    speciesKey          = key_string,
+    facet               = "speciesKey",
+    facetLimit          = max(facet_limit, length(keys) + 100L)
   )
 
-  dt <- extract_gbif_facet_counts(r$facets, facet = "species")
+  dt <- data.table::as.data.table(dt)
 
-  want <- data.table::as.data.table(unique(species[, c("family","genus","species")]))
-  out  <- dt[want, on = "species"]
-  out[is.na(N), N := 0L][]
-  data.table::setcolorder(out, c("family","genus","species","N"))
-
-  if (verbose && nrow(want) > facet_limit && any(out$N == 0L)) {
-    message("count_presences_simple(): species list may exceed facet_limit; ",
-            "facet results can be truncated. Consider count_presences_auth().")
-  }
-  out[]
-}
-
-
-extract_gbif_facet_counts <- function(facets, facet = NULL) {
-  empty <- data.table::data.table(species = character(), N = integer())
-
-  if (length(facets) == 0L) {
-    return(empty)
+  if (nrow(dt) == 0L) {
+    stop(
+      "GBIF returned no speciesKey facet counts. ",
+      "Try one species manually with rgbif::occ_count(speciesKey = one_key, country = 'DK')."
+    )
   }
 
-  facet_counts <- NULL
-  if (!is.null(facet) && !is.null(facets[[facet]])) {
-    facet_counts <- facets[[facet]]
-  } else {
-    facet_counts <- facets[[1L]]
+  if (!all(c("speciesKey", "count") %in% names(dt))) {
+    stop(
+      "Unexpected GBIF facet table structure. Columns were: ",
+      paste(names(dt), collapse = ", ")
+    )
   }
 
-  if (is.null(facet_counts)) {
-    return(empty)
-  }
-
-  if (is.list(facet_counts) && !is.data.frame(facet_counts) && !is.null(facet_counts$counts)) {
-    facet_counts <- facet_counts$counts
-  }
-
-  dt <- data.table::as.data.table(facet_counts)
-
-  if (!("count" %in% names(dt))) {
-    return(empty)
-  }
-
-  value_col <- NULL
-  if (!is.null(facet) && facet %in% names(dt)) {
-    value_col <- facet
-  } else if ("name" %in% names(dt)) {
-    value_col <- "name"
-  } else {
-    possible_value_cols <- setdiff(names(dt), "count")
-    if (length(possible_value_cols) > 0L) {
-      value_col <- possible_value_cols[[1L]]
-    }
-  }
-
-  if (is.null(value_col)) {
-    return(empty)
-  }
-
-  dt <- dt[!is.na(get(value_col)), .(
-    species = as.character(get(value_col)),
+  dt <- dt[, .(
+    gbif_speciesKey = as.integer(speciesKey),
     N = as.integer(count)
   )]
-  dt[]
+
+  out <- dt[want, on = "gbif_speciesKey"]
+
+  out[is.na(N), N := 0L]
+
+  data.table::setcolorder(out, c("family", "genus", "species", "N"))
+
+  out[, .(family, genus, species, N)]
 }
 
 
@@ -359,7 +350,7 @@ count_presences <- function(
     species,
     shapefile = NULL,
     country   = NULL,
-    method    = c("simple", "auth"),
+    method    = c("simple"),
     year      = c(1999L, as.integer(format(Sys.Date(), "%Y"))),
     ...
 ) {
@@ -371,13 +362,12 @@ count_presences <- function(
   }
 
   m <- tolower(method[1L])
-  if (!m %in% c("simple", "auth")) {
-    stop("`method` must be one of: 'simple', 'auth'.")
+  if (!m %in% c("simple")) {
+    stop("`method` must be one of: 'simple'")
   }
 
   fun <- switch(m,
-                simple = count_presences_simple,
-                auth   = count_presences_auth
+                simple = count_presences_simple
   )
 
   fun(
@@ -387,4 +377,68 @@ count_presences <- function(
     year      = year,
     ...
   )
+}
+
+extract_gbif_facet_counts <- function(facets, facet) {
+  empty <- data.table::data.table(value = character(), N = integer())
+
+  if (is.null(facets) || length(facets) == 0L) {
+    return(empty)
+  }
+
+  if (is.null(facets[[facet]])) {
+    return(empty)
+  }
+
+  facet_counts <- facets[[facet]]
+
+  # Some rgbif versions / structures may wrap counts inside $counts
+  if (
+    is.list(facet_counts) &&
+    !is.data.frame(facet_counts) &&
+    "counts" %in% names(facet_counts)
+  ) {
+    facet_counts <- facet_counts$counts
+  }
+
+  dt <- data.table::as.data.table(facet_counts)
+
+  if (nrow(dt) == 0L) {
+    return(empty)
+  }
+
+  if (!"count" %in% names(dt)) {
+    stop(
+      "GBIF facet table did not contain a `count` column. Columns were: ",
+      paste(names(dt), collapse = ", ")
+    )
+  }
+
+  value_col <- NULL
+
+  candidates <- c(facet, "name", "key", "value")
+  candidates <- candidates[candidates %in% names(dt)]
+
+  if (length(candidates) > 0L) {
+    value_col <- candidates[[1L]]
+  } else {
+    possible <- setdiff(names(dt), "count")
+    if (length(possible) > 0L) {
+      value_col <- possible[[1L]]
+    }
+  }
+
+  if (is.null(value_col)) {
+    stop(
+      "Could not identify the facet value column. Columns were: ",
+      paste(names(dt), collapse = ", ")
+    )
+  }
+
+  dt <- dt[!is.na(get(value_col)), .(
+    value = as.character(get(value_col)),
+    N = as.integer(count)
+  )]
+
+  dt[]
 }

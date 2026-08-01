@@ -114,7 +114,35 @@ Clean_Taxa_rgbif <- function(Cleaned_Taxize, WriteFile = FALSE, Species_Only = T
     dplyr::rename(currentCanonicalFull = verbatim_name) |>
     dplyr::relocate(currentCanonicalFull, .before = dplyr::everything()) |>
     dplyr::left_join(Cleaned_Taxize, by = "currentCanonicalFull") |>
-    dplyr::select(Taxa, currentCanonicalFull, confidence, canonicalName, kingdom, phylum, class, order, family, genus, species, rank)
+    dplyr::select(
+      Taxa,
+      currentCanonicalFull,
+      dplyr::any_of(c(
+        "usageKey",
+        "acceptedUsageKey",
+        "speciesKey",
+        "confidence",
+        "matchType",
+        "status",
+        "canonicalName",
+        "scientificName",
+        "kingdom",
+        "phylum",
+        "class",
+        "order",
+        "family",
+        "genus",
+        "species",
+        "rank"
+      ))
+    ) |>
+    dplyr::mutate(
+      gbif_speciesKey = dplyr::case_when(
+        !is.na(speciesKey) ~ as.integer(speciesKey),
+        rank == "SPECIES" & !is.na(usageKey) ~ as.integer(usageKey),
+        TRUE ~ NA_integer_
+      )
+    )
 
   if (WriteFile) {
     readr::write_csv(rgbif_find, "Results/Cleaned_Taxa_rgbif.csv")
@@ -124,12 +152,12 @@ Clean_Taxa_rgbif <- function(Cleaned_Taxize, WriteFile = FALSE, Species_Only = T
     FinalSpeciesList <- rgbif_find |>
       dplyr::filter(!is.na(species)) |>
       dplyr::group_by(species) |>
-      dplyr::filter(confidence == max(confidence)) |>
+      dplyr::slice_max(confidence, n = 1, with_ties = FALSE) |>
       dplyr::ungroup()
   } else {
     FinalSpeciesList <- rgbif_find |>
       dplyr::group_by(canonicalName) |>
-      dplyr::filter(confidence == max(confidence)) |>
+      dplyr::slice_max(confidence, n = 1, with_ties = FALSE) |>
       dplyr::ungroup()
   }
 
