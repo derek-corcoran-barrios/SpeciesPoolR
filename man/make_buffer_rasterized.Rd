@@ -2,27 +2,48 @@
 % Please edit documentation in R/buffer.R
 \name{make_buffer_rasterized}
 \alias{make_buffer_rasterized}
-\title{Generate a Rasterized Buffer Around Species Occurrences and Convert to Long Format}
+\title{Build buffered occurrence geometries around species records}
 \usage{
-make_buffer_rasterized(DT, file, dist = 500)
+make_buffer_rasterized(DT, dist = 500)
 }
 \arguments{
-\item{DT}{A data.table or data.frame containing species occurrence data. The data should include the columns: \code{decimalLatitude}, \code{decimalLongitude}, \code{family}, \code{genus}, and \code{species}.}
+\item{DT}{A data.frame/data.table with columns \code{decimalLongitude},
+\code{decimalLatitude}, \code{family}, \code{genus}, and \code{species} (as produced by
+\code{\link[=get_presences]{get_presences()}}).}
 
-\item{file}{A file path to the raster file that will be used as a template for rasterizing the buffers.}
-
-\item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
+\item{dist}{A numeric value specifying the buffer distance in meters.
+Default is 500 meters.}
 }
 \value{
-A data.table in long format with two columns: \code{cell}, indicating the raster cell number, and \code{species}, indicating the species name corresponding to the cell.
+A \code{SpatVector} (CRS EPSG:4326), one feature per spatially distinct
+(non-overlapping) buffer patch per species, with attributes \code{family},
+\code{genus}, \code{species}, and \code{n_records} (the number of occurrence records
+whose buffers were merged into that patch). If \code{DT} has zero rows, an
+empty \code{SpatVector} with the same CRS and \code{family}/\code{genus}/\code{species}
+fields is returned.
 }
 \description{
-This function takes species occurrence data, generates a buffer around each occurrence point, rasterizes the buffer onto a given raster template, and converts the resulting raster data into a long-format data.table. The buffer distance can be specified by the user.
+Takes species occurrence data and buffers each occurrence point by a fixed
+distance, then dissolves overlapping buffers within each species into
+spatially distinct patches. Returns a single \code{SpatVector} (one feature per
+disjoint patch per species), still in geographic (lon/lat) coordinates.
+}
+\details{
+Buffering is done directly on lon/lat data because \code{terra::buffer()}
+computes distances in meters correctly for a longitude/latitude CRS, and
+terra's own documentation notes that pre-projecting to a planar CRS makes
+the result \emph{less} precise, not more. GBIF occurrence data (\code{decimalLatitude}/
+\code{decimalLongitude}) is always WGS84, so no raster/CRS input is needed here.
+
+Rasterization is intentionally not done here either: keeping the result as
+vector geometry means you can reproject and rasterize it onto any raster
+template later (e.g. if the land-use raster resolution, extent, or CRS
+changes) without repeating the buffering step.
 }
 \examples{
 \dontrun{
-# Assuming DT contains species occurrence data and 'raster_file.tif' is the raster template
-buffer_df <- make_buffer_rasterized(DT, file = "raster_file.tif", dist = 500)
+# Assuming Presences contains species occurrence data
+buffer_vect <- make_buffer_rasterized(Presences, dist = 500)
 }
 
 }

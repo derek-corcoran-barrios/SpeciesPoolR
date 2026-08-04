@@ -76,8 +76,8 @@ head(out)
 \seealso{
 \code{\link{count_presences_simple}}, \code{\link{count_presences}}, \code{\link{wkt_rect_ccw}}
 
-Other GBIF helpers: 
-\code{\link{count_presences}()},
-\code{\link{count_presences_simple}()}
+Other GBIF helpers:
+\code{\link[=count_presences]{count_presences()}},
+\code{\link[=count_presences_simple]{count_presences_simple()}}
 }
 \concept{GBIF helpers}

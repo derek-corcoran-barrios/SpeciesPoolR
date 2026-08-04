@@ -1,44 +1,71 @@
-#' Generate a Rasterized Buffer Around Species Occurrences and Convert to Long Format
+#' Build buffered occurrence geometries around species records
 #'
-#' This function takes species occurrence data, generates a buffer around each occurrence point, rasterizes the buffer onto a given raster template, and converts the resulting raster data into a long-format data.table. The buffer distance can be specified by the user.
+#' Takes species occurrence data and buffers each occurrence point by a fixed
+#' distance, then dissolves overlapping buffers within each species into
+#' spatially distinct patches. Returns a single `SpatVector` (one feature per
+#' disjoint patch per species), still in geographic (lon/lat) coordinates.
 #'
-#' @param DT A data.table or data.frame containing species occurrence data. The data should include the columns: `decimalLatitude`, `decimalLongitude`, `family`, `genus`, and `species`.
-#' @param file A file path to the raster file that will be used as a template for rasterizing the buffers.
-#' @param dist A numeric value specifying the buffer distance in meters. Default is 500 meters.
+#' Buffering is done directly on lon/lat data because `terra::buffer()`
+#' computes distances in meters correctly for a longitude/latitude CRS, and
+#' terra's own documentation notes that pre-projecting to a planar CRS makes
+#' the result *less* precise, not more. GBIF occurrence data (`decimalLatitude`/
+#' `decimalLongitude`) is always WGS84, so no raster/CRS input is needed here.
 #'
-#' @return A data.table in long format with two columns: `cell`, indicating the raster cell number, and `species`, indicating the species name corresponding to the cell.
+#' Rasterization is intentionally not done here either: keeping the result as
+#' vector geometry means you can reproject and rasterize it onto any raster
+#' template later (e.g. if the land-use raster resolution, extent, or CRS
+#' changes) without repeating the buffering step.
 #'
-#' @importFrom terra rast vect project buffer crs
-#' @importFrom dplyr select mutate group_split
-#' @importFrom purrr map
-#' @importFrom stringr str_replace_all
-#' @importFrom data.table as.data.table
+#' @param DT A data.frame/data.table with columns `decimalLongitude`,
+#'   `decimalLatitude`, `family`, `genus`, and `species` (as produced by
+#'   [get_presences()]).
+#' @param dist A numeric value specifying the buffer distance in meters.
+#'   Default is 500 meters.
+#'
+#' @return A `SpatVector` (CRS EPSG:4326), one feature per spatially distinct
+#'   (non-overlapping) buffer patch per species, with attributes `family`,
+#'   `genus`, `species`, and `n_records` (the number of occurrence records
+#'   whose buffers were merged into that patch). If `DT` has zero rows, an
+#'   empty `SpatVector` with the same CRS and `family`/`genus`/`species`
+#'   fields is returned.
+#'
+#' @importFrom terra vect buffer aggregate disagg
+#' @importFrom dplyr select
 #'
 #' @examples
 #' \dontrun{
-#' # Assuming DT contains species occurrence data and 'raster_file.tif' is the raster template
-#' buffer_df <- make_buffer_rasterized(DT, file = "raster_file.tif", dist = 500)
+#' # Assuming Presences contains species occurrence data
+#' buffer_vect <- make_buffer_rasterized(Presences, dist = 500)
 #' }
 #'
 #' @export
-make_buffer_rasterized <- function(DT, file, dist = 500) {
-  cell <- . <- genus <- family <- decimalLongitude <- decimalLatitude <- NULL
-  if (nrow(DT) == 0) {
-    DT <- data.frame(matrix(ncol = 2, nrow = 0))
-    colnames(DT) <- c("cell", "species")
-    as.data.table(DT)
-  } else {
-    Rast <- terra::rast(file)
-    Result <- DT |>
-      dplyr::select(decimalLatitude, decimalLongitude, family, genus, species) |>
-      dplyr::mutate(presence = 1)
+make_buffer_rasterized <- function(DT, dist = 500) {
+  decimalLongitude <- decimalLatitude <- family <- genus <- species <- NULL
 
-    Temp <- Result |>
-      dplyr::group_split(species) |>
-      purrr::map(~terra::vect(.x, geom = c("decimalLongitude", "decimalLatitude"), crs = "+proj=longlat +datum=WGS84")) |>
-      purrr::map(~terra::project(.x, terra::crs(Rast))) |>
-      purrr::map(~terra::buffer(.x, dist)) |>
-      purrr::reduce(rbind)
+  if (nrow(DT) == 0) {
+    empty <- data.frame(
+      decimalLongitude = numeric(0),
+      decimalLatitude  = numeric(0),
+      family  = character(0),
+      genus   = character(0),
+      species = character(0)
+    )
+    return(terra::vect(empty,
+                       geom = c("decimalLongitude", "decimalLatitude"),
+                       crs  = "EPSG:4326"))
   }
-  return(Temp)
+
+  buffered <- DT |>
+    dplyr::select(decimalLongitude, decimalLatitude, family, genus, species) |>
+    terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "EPSG:4326") |>
+    terra::buffer(width = dist)
+
+  dissolved <- terra::aggregate(buffered,
+                                by = c("family", "genus", "species"),
+                                dissolve = TRUE,
+                                count = TRUE)
+  dissolved <- terra::disagg(dissolved)
+  names(dissolved)[names(dissolved) == "agg_n"] <- "n_records"
+
+  dissolved
 }

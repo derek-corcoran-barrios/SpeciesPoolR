@@ -8,7 +8,7 @@ count_presences(
   species,
   shapefile = NULL,
   country = NULL,
-  method = c("simple", "auth"),
+  method = c("simple"),
   year = c(1999L, as.integer(format(Sys.Date(), "\%Y"))),
   ...
 )
@@ -68,8 +68,8 @@ out2 <- count_presences(clean, shapefile = shp, method = "auth", restrict_to_spe
 \seealso{
 \code{\link{count_presences_simple}}, \code{\link{count_presences_auth}}, \code{\link{wkt_rect_ccw}}
 
-Other GBIF helpers: 
-\code{\link{count_presences_auth}()},
-\code{\link{count_presences_simple}()}
+Other GBIF helpers:
+\code{\link[=count_presences_auth]{count_presences_auth()}},
+\code{\link[=count_presences_simple]{count_presences_simple()}}
 }
 \concept{GBIF helpers}

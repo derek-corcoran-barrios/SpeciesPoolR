@@ -68,8 +68,8 @@ head(out)
 \seealso{
 \code{\link{count_presences_auth}}, \code{\link{count_presences}}, \code{\link{wkt_rect_ccw}}
 
-Other GBIF helpers: 
-\code{\link{count_presences}()},
-\code{\link{count_presences_auth}()}
+Other GBIF helpers:
+\code{\link[=count_presences]{count_presences()}},
+\code{\link[=count_presences_auth]{count_presences_auth()}}
 }
 \concept{GBIF helpers}
