@@ -8,7 +8,8 @@ Convex_20(
   DF,
   lon = "decimalLongitude",
   lat = "decimalLatitude",
-  proj = "+proj=longlat +datum=WGS84 +no_defs"
+  proj = "+proj=longlat +datum=WGS84 +no_defs",
+  expansion = 1.2
 )
 }
 \arguments{
@@ -19,12 +20,16 @@ Convex_20(
 \item{lat}{The name of the latitude column in the dataframe.}
 
 \item{proj}{The projection of the coordinates.}
+
+\item{expansion}{Numeric expansion factor applied to the convex hull
+around its centroid. Default 1.2 (a 20\% expansion).}
 }
 \value{
-A polygon representing the expanded convex hull by 20\%.
+A polygon representing the expanded convex hull.
 }
 \description{
-Creates a 20\% expanded convex hull from a set of coordinates.
+Creates an expanded convex hull from a set of coordinates, used to define
+a background-sampling area around a species' known occurrences.
 }
 \examples{
 

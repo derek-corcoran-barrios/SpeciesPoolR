@@ -4,25 +4,33 @@
 \alias{ModelAndPredictFunc}
 \title{Model and Predict Habitat Suitability}
 \usage{
-ModelAndPredictFunc(DF, file)
+ModelAndPredictFunc(DF, file, categorical = NULL)
 }
 \arguments{
-\item{DF}{A data frame containing species presence data with columns for species name, longitude (\code{decimalLongitude}), and latitude (\code{decimalLatitude}).}
+\item{DF}{A data frame with species presence data: \code{species},
+\code{decimalLongitude}, \code{decimalLatitude}.}
 
-\item{file}{A file path to the raster layer containing land-use data.}
+\item{file}{A path (or vector of paths) to the environmental raster
+layer(s). Passed to \code{terra::rast()}.}
+
+\item{categorical}{Optional character vector naming which layer(s) are
+categorical (e.g. land use). See \code{\link[=SampleEnv]{SampleEnv()}}.}
 }
 \value{
-A data frame with predicted habitat suitability scores for each land-use type for each species.
+A multi-layer \code{SpatRaster}, one layer per species (named by
+species), each cell holding predicted habitat suitability (0-1).
 }
 \description{
-This function performs the complete workflow for modeling habitat suitability for multiple species. It includes sampling land-use data for presence and background points separately, and then fitting a MaxEnt model to predict habitat suitability based on the available land-use types.
+Fits a species distribution model per species and predicts
+habitat suitability across every cell of the environmental raster
+stack, returning one continuous suitability layer per species (rather
+than a lookup table of predictions per category).
 }
 \details{
-The function encompasses several steps:
-\enumerate{
-\item Grouping the data by species using \code{dplyr::group_split}.
-\item Sampling land-use data for species presence points using the \code{SampleLanduse} function.
-\item Sampling land-use data for background points using the \code{SampleLanduse} function.
-\item Combining the presence and background data, and fitting a MaxEnt model to predict habitat suitability using the \code{ModelSpecies} function, which also handles the duplication of rows where necessary.
-}
+For each species: samples the environment at presence points and
+at background points (via \code{\link[=SampleEnv]{SampleEnv()}}), fits a model (via
+\code{\link[=ModelSpecies]{ModelSpecies()}}), and predicts a full suitability surface with
+\code{terra::predict(..., type = "cloglog")}. If fitting fails for a
+species, that species' layer is filled with 0 rather than dropped, so
+the output stack always has one layer per input species.
 }

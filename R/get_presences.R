@@ -170,7 +170,7 @@ get_presences <- function(species, country = NULL, shapefile = NULL, limit = 100
                 Log = FALSE,
                 country = country,
                 limit = limit,
-                year='1999,2024',
+                year=paste0("1999,", format(Sys.time(), "%Y")),
                 geometry = geometry)
 
   try({DF <- DF |>

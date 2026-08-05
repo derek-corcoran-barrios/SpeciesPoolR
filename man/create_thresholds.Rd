@@ -4,18 +4,25 @@
 \alias{create_thresholds}
 \title{Create Prediction Thresholds for Species Distribution Models}
 \usage{
-create_thresholds(Model, reference, file)
+create_thresholds(Model, reference)
 }
 \arguments{
-\item{Model}{A data frame containing model predictions, with columns for \code{species}, \code{Landuse}, and \code{Pred}.}
+\item{Model}{A multi-layer \code{SpatRaster} of predicted suitability, one
+layer per species (named by species), as produced by
+\code{\link[=ModelAndPredictFunc]{ModelAndPredictFunc()}}.}
 
-\item{reference}{A data frame containing reference species presence data for threshold calibration.}
-
-\item{file}{A string representing the path to a raster file that contains land-use data.}
+\item{reference}{A data frame of reference occurrence points for
+threshold calibration, with columns \code{species}, \code{decimalLongitude},
+\code{decimalLatitude}.}
 }
 \value{
-A data frame with the calculated thresholds. The data frame contains columns for \code{species}, \code{Thres_99}, \code{Thres_95}, and \code{Thres_90}.
+A data frame with columns \code{species}, \code{Thres_99}, \code{Thres_95}, and
+\code{Thres_90} -- the suitability value below which 1\%, 5\%, and 10\% of
+known occurrences fall, respectively.
 }
 \description{
-This function generates thresholds for species distribution predictions based on modeled land-use preferences. Thresholds are calculated for the 99th, 95th, and 90th percentiles of the predicted values.
+Generates presence-prediction thresholds directly from a species'
+predicted suitability raster, evaluated at its own known occurrence
+points -- no re-sampling of the environmental stack needed, since the
+suitability raster already encodes the model.
 }

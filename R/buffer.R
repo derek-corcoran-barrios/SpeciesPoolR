@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-make_buffer_rasterized <- function(DT, dist = 500) {
+make_buffer <- function(DT, dist = 500) {
   decimalLongitude <- decimalLatitude <- family <- genus <- species <- NULL
 
   if (nrow(DT) == 0) {

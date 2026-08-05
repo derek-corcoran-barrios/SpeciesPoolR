@@ -1,13 +1,16 @@
 #' Convex_20
 #'
-#' Creates a 20% expanded convex hull from a set of coordinates.
+#' Creates an expanded convex hull from a set of coordinates, used to define
+#' a background-sampling area around a species' known occurrences.
 #'
 #' @param DF The dataframe containing the coordinates.
 #' @param lon The name of the longitude column in the dataframe.
 #' @param lat The name of the latitude column in the dataframe.
 #' @param proj The projection of the coordinates.
-#' @return A polygon representing the expanded convex hull by 20%.
-#' @importFrom terra vect crds convHull geom centroids
+#' @param expansion Numeric expansion factor applied to the convex hull
+#'   around its centroid. Default 1.2 (a 20% expansion).
+#' @return A polygon representing the expanded convex hull.
+#' @importFrom terra vect convHull geom centroids
 #' @importFrom dplyr select
 #' @export
 #'
@@ -21,325 +24,256 @@
 #' Convex_20(DF, lon = "decimalLongitude", lat = "decimalLatitude",
 #' proj = "+proj=longlat +datum=WGS84 +no_defs")
 #'
-
-Convex_20 <- function(DF, lon = "decimalLongitude", lat = "decimalLatitude", proj = "+proj=longlat +datum=WGS84 +no_defs"){
+Convex_20 <- function(DF, lon = "decimalLongitude", lat = "decimalLatitude",
+                      proj = "+proj=longlat +datum=WGS84 +no_defs", expansion = 1.2) {
   x <- y <- NULL
-  SppOccur_TV <- terra::vect(DF, crs=proj, geom = c(lon, lat))
+  SppOccur_TV <- terra::vect(DF, crs = proj, geom = c(lon, lat))
 
-  # Then I get the coordinates as a dataframe for later use.
-  occs <- as.data.frame(terra::crds(SppOccur_TV))
-  colnames(occs) <- c("Longitude", "Latitude")
-
-  # Here I generate a minimum convex hull
   SppConvexTerra <- terra::convHull(SppOccur_TV)
 
-  ncg <- terra::geom(SppConvexTerra)|> as.data.frame() |> dplyr::select(x,y)
-  # Then I extract the geometry of it.
+  ncg <- terra::geom(SppConvexTerra) |> as.data.frame() |> dplyr::select(x, y)
 
-  # And the centroid.
   cntrd <- terra::centroids(SppConvexTerra) |>
-    terra::geom() |> as.data.frame() |> dplyr::select(x,y)
+    terra::geom() |> as.data.frame() |> dplyr::select(x, y)
 
-  # Finally, I expand the convex hull by 20%.
   ncg2 <- ncg
+  ncg2$x <- (ncg$x - cntrd$x) * expansion + cntrd$x
+  ncg2$y <- (ncg$y - cntrd$y) * expansion + cntrd$y
 
-  ncg2$x <- (ncg$x - cntrd$x)*1.2 + cntrd$x
-  ncg2$y <- (ncg$y - cntrd$y)*1.2 + cntrd$y
-
-
-
-  # And get it back as a polygon.
-  ncg2 <- terra::vect(as.matrix(ncg2), crs=proj, type = "polygon")
+  terra::vect(as.matrix(ncg2), crs = proj, type = "polygon")
 }
 
-
-
-#' Sample Land-Use Data for Species Presences or Background Locations
+#' Sample Environmental Data for Species Presences or Background Locations
 #'
-#' This function samples land-use data either from species presence locations or from background locations within a specified geographic area.
+#' Samples one or more environmental layers (categorical and/or continuous)
+#' either at species presence locations or at background locations drawn
+#' from within an expanded convex hull around those presences.
 #'
-#' @param DF A data frame containing species presence or background data, with columns for `species`, `decimalLongitude`, and `decimalLatitude`.
-#' @param file A string representing the path to a raster file that contains land-use data.
-#' @param type A string specifying whether to sample land-use data from species presences (`"pres"`) or from background locations (`"bg"`). Defaults to `"pres"`.
+#' @param DF A data frame with columns `species`, `decimalLongitude`, and
+#'   `decimalLatitude`.
+#' @param file A path (or vector of paths) to raster file(s) with the
+#'   environmental layers. Passed to `terra::rast()`, which stacks multiple
+#'   files into one multi-layer `SpatRaster` automatically.
+#' @param categorical Optional character vector naming which layer(s) in the
+#'   stack are categorical (e.g. land use). Layers not listed here are
+#'   treated as continuous. Layers already stored as factors in the raster
+#'   itself don't need to be listed.
+#' @param type Either `"pres"` (sample at presence locations) or `"bg"`
+#'   (sample background locations). Defaults to `"pres"`.
+#' @param n_bg Number of background points to sample when `type = "bg"`.
+#'   Default 10000.
 #'
-#' @return A data frame with the sampled land-use data. The data frame contains columns for `species`, `Landuse`, and `Pres`, where `Pres` indicates whether the row corresponds to a presence (1) or background (0) point.
+#' @return A data frame with one column per environmental layer (factor for
+#'   categorical layers, numeric for continuous ones), plus `species` and
+#'   `Pres` (1 for presence rows, 0 for background rows).
 #'
-#' @importFrom terra rast project extract crop spatSample names
-#' @importFrom dplyr select mutate filter
-#' @importFrom stringr str_detect
-#' @importFrom data.table as.data.table
+#' @importFrom terra rast vect project extract crop spatSample is.factor as.factor
+#' @importFrom dplyr select mutate
+#' @importFrom tidyr drop_na
 #'
 #' @export
-SampleLanduse <- function(DF, file, type = "pres") {
-  species <- decimalLongitude <- decimalLatitude <- Landuse <- .data <- NULL
+SampleEnv <- function(DF, file, categorical = NULL, type = "pres", n_bg = 10000) {
+  species <- decimalLongitude <- decimalLatitude <- NULL
 
-  # Load raster and detect layer name
-  LU <- terra::rast(file)
-  layer_name <- names(LU)[1]  # Get the first layer name (adjust index if needed)
+  Env <- terra::rast(file)
+  if (!is.null(categorical)) {
+    for (lyr in categorical) {
+      if (!terra::is.factor(Env[[lyr]])) Env[[lyr]] <- terra::as.factor(Env[[lyr]])
+    }
+  }
 
   Temp <- DF |>
     dplyr::select(species, decimalLongitude, decimalLatitude) |>
-    terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "epsg:4326") |>
-    terra::project(terra::crs(LU))
+    terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "EPSG:4326") |>
+    terra::project(terra::crs(Env))
 
   if (type == "pres") {
-    Data <- terra::extract(LU, Temp) |>
-      dplyr::mutate(Landuse = as.character(.data[[layer_name]]), Pres = 1) |>
-      dplyr::filter(!is.na(Landuse))
+    Data <- terra::extract(Env, Temp, ID = FALSE) |>
+      dplyr::mutate(Pres = 1) |>
+      tidyr::drop_na()
   } else if (type == "bg") {
-    Data <- LU |>
-      terra::crop(Convex_20(as.data.frame(Temp, geom = "xy"), lon = "x", lat = "y", proj = terra::crs(LU))) |>
-      terra::spatSample(10000, na.rm = TRUE) |>
-      dplyr::mutate(Landuse = as.character(.data[[layer_name]]), Pres = 0) |>
-      dplyr::filter(!is.na(Landuse))
+    Data <- Env |>
+      terra::crop(Convex_20(as.data.frame(Temp, geom = "xy"), lon = "x", lat = "y", proj = terra::crs(Env))) |>
+      terra::spatSample(n_bg, na.rm = TRUE, as.df = TRUE) |>
+      dplyr::mutate(Pres = 0) |>
+      tidyr::drop_na()
   }
 
   Data$species <- unique(Temp$species)
-  return(Data)
+  Data
 }
 
-#' Fit a Species Distribution Model Based on Land-Use Data
+#' Fit a Species Distribution Model from Mixed Environmental Predictors
 #'
-#' This function fits a MaxEnt model to predict species distribution based on land-use data. It handles cases where land-use types are listed as "Both" by splitting these into separate "Poor" and "Rich" categories.
+#' Fits a MaxEnt model (via `maxnet`) to presence/background data with any
+#' mix of categorical and continuous predictors. Categorical predictors
+#' (factor columns) are dummy-coded; continuous predictors get linear,
+#' quadratic, hinge, and/or product terms, chosen automatically by
+#' `maxnet::maxnet.formula()` based on sample size. No manual design matrix
+#' is built -- `maxnet` handles both column types directly from raw data.
 #'
-#' @param DF A data frame containing species presence and background data, with columns for `species`, `Landuse`, and `Pres`. The `Landuse` column should be a factor representing different land-use types, and `Pres` should indicate whether the row corresponds to a presence (1) or background (0) point.
+#' @param DF A data frame with `species`, `Pres` (1 = presence, 0 =
+#'   background), and one or more predictor columns (factor or numeric), as
+#'   produced by [SampleEnv()].
 #'
-#' @return A data frame with predicted species distribution for each land-use type. The data frame contains columns for `Landuse`, `Pred` (predicted value), and `species`.
+#' @return A fitted `maxnet` model object, or `NULL` if fitting failed or the
+#'   predictors have no variability to model against.
 #'
-#' @importFrom dplyr mutate select filter arrange desc bind_rows
-#' @importFrom tidyr pivot_longer
-#' @importFrom stats model.matrix predict
-#' @importFrom stringr str_remove_all
 #' @importFrom maxnet maxnet
 #'
 #' @export
-
-
 ModelSpecies <- function(DF) {
-  Landuse <- Pred <-NULL
-  All <- DF |>
-    dplyr::mutate(Landuse = as.factor(Landuse))
+  predictors <- setdiff(names(DF), c("species", "Pres"))
 
-  if (length(unique(All$Landuse)) > 1) {
-    Landuse_matrix <- model.matrix(~ Landuse - 1, data = All)
-    Mod <- tryCatch(
-      maxnet::maxnet(p = All$Pres, data = as.data.frame(Landuse_matrix)),
-      error = function(e) {
-        cat("Error in model fitting:", conditionMessage(e), "\n")
-        return(NULL)
-      }
-    )
+  has_variability <- any(vapply(
+    DF[predictors],
+    function(x) length(unique(x[!is.na(x)])) > 1,
+    logical(1)
+  ))
 
-    Preds <- data.frame(Landuse = unique(All$Landuse), Pred = 0)
-    Landuse_matrix <- model.matrix(~ Landuse - 1, data = Preds)
+  if (!has_variability) return(NULL)
 
-    if (!is.null(Mod)) {
-      Preds$Pred <- tryCatch(
-        predict(Mod, Landuse_matrix, type = "cloglog"),
-        error = function(e) {
-          cat("Error in prediction:", conditionMessage(e), "\n")
-          return(rep(0, nrow(Preds)))
-        }
-      )
+  tryCatch(
+    maxnet::maxnet(p = DF$Pres, data = DF[predictors]),
+    error = function(e) {
+      message("Error in model fitting: ", conditionMessage(e))
+      NULL
     }
-
-    Preds <- Preds |> dplyr::arrange(desc(Pred))
-    Preds$species <- unique(All$species)
-  } else {
-    Preds <- data.frame(Landuse = unique(All$Landuse), Pred = 0, species = unique(All$species))
-  }
-
-  return(Preds)
+  )
 }
 
 #' @title Model and Predict Habitat Suitability
 #'
-#' @description This function performs the complete workflow for modeling habitat suitability for multiple species. It includes sampling land-use data for presence and background points separately, and then fitting a MaxEnt model to predict habitat suitability based on the available land-use types.
+#' @description Fits a species distribution model per species and predicts
+#'   habitat suitability across every cell of the environmental raster
+#'   stack, returning one continuous suitability layer per species (rather
+#'   than a lookup table of predictions per category).
 #'
-#' @param DF A data frame containing species presence data with columns for species name, longitude (`decimalLongitude`), and latitude (`decimalLatitude`).
-#' @param file A file path to the raster layer containing land-use data.
+#' @param DF A data frame with species presence data: `species`,
+#'   `decimalLongitude`, `decimalLatitude`.
+#' @param file A path (or vector of paths) to the environmental raster
+#'   layer(s). Passed to `terra::rast()`.
+#' @param categorical Optional character vector naming which layer(s) are
+#'   categorical (e.g. land use). See [SampleEnv()].
 #'
-#' @details The function encompasses several steps:
-#' \enumerate{
-#'   \item Grouping the data by species using `dplyr::group_split`.
-#'   \item Sampling land-use data for species presence points using the `SampleLanduse` function.
-#'   \item Sampling land-use data for background points using the `SampleLanduse` function.
-#'   \item Combining the presence and background data, and fitting a MaxEnt model to predict habitat suitability using the `ModelSpecies` function, which also handles the duplication of rows where necessary.
-#' }
+#' @details For each species: samples the environment at presence points and
+#'   at background points (via [SampleEnv()]), fits a model (via
+#'   [ModelSpecies()]), and predicts a full suitability surface with
+#'   `terra::predict(..., type = "cloglog")`. If fitting fails for a
+#'   species, that species' layer is filled with 0 rather than dropped, so
+#'   the output stack always has one layer per input species.
 #'
-#' @return A data frame with predicted habitat suitability scores for each land-use type for each species.
+#' @return A multi-layer `SpatRaster`, one layer per species (named by
+#'   species), each cell holding predicted habitat suitability (0-1).
 #'
-#' @importFrom terra rast vect project crop extract spatSample levels
-#' @importFrom dplyr select mutate filter bind_rows left_join distinct arrange group_split
-#' @importFrom stringr str_detect str_replace_all str_remove_all
-#' @importFrom maxnet maxnet
-#' @importFrom tidyr pivot_longer
+#' @importFrom terra rast is.factor as.factor predict values
+#' @importFrom dplyr group_split bind_rows
 #' @importFrom purrr map
-#' @importFrom data.table as.data.table
 #'
 #' @export
-ModelAndPredictFunc <- function(DF, file) {
+ModelAndPredictFunc <- function(DF, file, categorical = NULL) {
   species <- NULL
 
-  # Load the raster and extract land-use levels
-  LU <- terra::rast(file)
-  landuse_levels <- levels(LU)[[1]][,2]  # Get the land-use level names (adjust as needed)
-
-  # Split the data by species
-  split_species <- dplyr::group_split(DF, species)
-
-  # Function to model each species individually
-  model_single_species <- function(species_data) {
-    Predicted <- data.frame(
-      Pred = 0,
-      Landuse = landuse_levels,  # Use the dynamic land-use categories here
-      species = unique(species_data$species)
-    )
-
-    if (nrow(species_data) > 0) {
-      tryCatch({
-        # Sample land-use data for presence points
-        Pres <- SampleLanduse(DF = species_data, file = file, type = "pres")
-
-        # Sample land-use data for background points
-        BG <- SampleLanduse(DF = species_data, file = file, type = "bg")
-
-        # Combine presence and background data
-        Both <- dplyr::bind_rows(Pres, BG)
-
-        # Model species habitat suitability
-        Predicted <- ModelSpecies(DF = Both)
-
-      }, error = function(e) {
-        # Handle the exception
-        cat("An error occurred:", conditionMessage(e), "\n")
-      })
+  Env <- terra::rast(file)
+  if (!is.null(categorical)) {
+    for (lyr in categorical) {
+      if (!terra::is.factor(Env[[lyr]])) Env[[lyr]] <- terra::as.factor(Env[[lyr]])
     }
-
-    return(Predicted)
   }
 
-  # Apply the modeling function to each species
+  empty_template <- function() {
+    r <- terra::rast(Env[[1]])  # same geometry, no values, no factor levels
+    terra::values(r) <- 0
+    r
+  }
+
+  split_species <- dplyr::group_split(DF, species)
+
+  model_single_species <- function(species_data) {
+    sp <- unique(species_data$species)
+
+    Suitability <- tryCatch({
+      if (nrow(species_data) == 0) stop("no presence records")
+
+      Pres <- SampleEnv(species_data, file = file, categorical = categorical, type = "pres")
+      BG   <- SampleEnv(species_data, file = file, categorical = categorical, type = "bg")
+      Both <- dplyr::bind_rows(Pres, BG)
+
+      Mod <- ModelSpecies(Both)
+
+      if (is.null(Mod)) {
+        empty_template()
+      } else {
+        terra::predict(Env, Mod, type = "cloglog", na.rm = TRUE)
+      }
+    }, error = function(e) {
+      message("An error occurred modeling ", sp, ": ", conditionMessage(e))
+      empty_template()
+    })
+
+    names(Suitability) <- sp
+    Suitability
+  }
+
   results <- purrr::map(split_species, model_single_species)
-
-  # Combine the results into a single data frame
-  combined_results <- dplyr::bind_rows(results)
-
-  return(combined_results)
+  do.call(c, results)
 }
-
-
 
 #' Create Prediction Thresholds for Species Distribution Models
 #'
-#' This function generates thresholds for species distribution predictions based on modeled land-use preferences. Thresholds are calculated for the 99th, 95th, and 90th percentiles of the predicted values.
+#' Generates presence-prediction thresholds directly from a species'
+#' predicted suitability raster, evaluated at its own known occurrence
+#' points -- no re-sampling of the environmental stack needed, since the
+#' suitability raster already encodes the model.
 #'
-#' @param Model A data frame containing model predictions, with columns for `species`, `Landuse`, and `Pred`.
-#' @param reference A data frame containing reference species presence data for threshold calibration.
-#' @param file A string representing the path to a raster file that contains land-use data.
+#' @param Model A multi-layer `SpatRaster` of predicted suitability, one
+#'   layer per species (named by species), as produced by
+#'   [ModelAndPredictFunc()].
+#' @param reference A data frame of reference occurrence points for
+#'   threshold calibration, with columns `species`, `decimalLongitude`,
+#'   `decimalLatitude`.
 #'
-#' @return A data frame with the calculated thresholds. The data frame contains columns for `species`, `Thres_99`, `Thres_95`, and `Thres_90`.
+#' @return A data frame with columns `species`, `Thres_99`, `Thres_95`, and
+#'   `Thres_90` -- the suitability value below which 1%, 5%, and 10% of
+#'   known occurrences fall, respectively.
 #'
-#' @importFrom dplyr filter left_join slice_max pull bind_rows
-#' @importFrom stringr str_detect str_replace_all
-#' @importFrom purrr map2 compact
+#' @importFrom terra vect project extract crs
+#' @importFrom dplyr filter select
+#' @importFrom purrr map compact
+#' @importFrom stats quantile
 #'
 #' @export
+create_thresholds <- function(Model, reference) {
+  species <- decimalLongitude <- decimalLatitude <- NULL
 
-create_thresholds <- function(Model, reference, file) {
-  species <- process_species <- Pred <- NULL
-  # Find species that are present in both Model and reference
-  common_species <- intersect(unique(Model$species), unique(reference$species))
-
-  # Filter Model and reference to include only common species
-  Model <- Model |> dplyr::filter(species %in% common_species)
+  common_species <- intersect(names(Model), unique(reference$species))
   reference <- reference |> dplyr::filter(species %in% common_species)
-
-  # Split Model and reference by species
-  Model_split <- split(Model, Model$species)
   reference_split <- split(reference, reference$species)
 
-  # Define a helper function to process each species individually
-  process_species <- function(Model_species, reference_species) {
+  process_species <- function(sp) {
+    ref_sp <- reference_split[[sp]]
+
     tryCatch({
-      if (nrow(reference_species) == 0) {
-        return(data.frame(
-          species = unique(Model_species$species),
-          Thres_99 = 1,
-          Thres_95 = 1,
-          Thres_90 = 1
-        ))
-      } else {
-        Thres <- data.frame(
-          species = unique(Model_species$species),
-          Thres_99 = NA,
-          Thres_95 = NA,
-          Thres_90 = NA
-        )
-
-        Pres <- SampleLanduse(DF = reference_species, file = file)
-
-        Thres$Thres_99 <- Pres |>
-          dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
-          dplyr::slice_max(order_by = Pred, prop = 0.99, with_ties = FALSE) |>
-          dplyr::pull(Pred) |>
-          min()
-
-        Thres$Thres_95 <- Pres |>
-          dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
-          dplyr::slice_max(order_by = Pred, prop = 0.95, with_ties = FALSE) |>
-          dplyr::pull(Pred) |>
-          min()
-
-        Thres$Thres_90 <- Pres |>
-          dplyr::left_join(Model_species, by = c("species", "Landuse")) |>
-          dplyr::slice_max(order_by = Pred, prop = 0.90, with_ties = FALSE) |>
-          dplyr::pull(Pred) |>
-          min()
-
-        return(Thres)
+      if (is.null(ref_sp) || nrow(ref_sp) == 0) {
+        return(data.frame(species = sp, Thres_99 = 1, Thres_95 = 1, Thres_90 = 1))
       }
-    }, error = function(e) {
-      # If there's an error, return NULL or another appropriate value
-      return(NULL)
-    })
+
+      pts <- ref_sp |>
+        dplyr::select(decimalLongitude, decimalLatitude) |>
+        terra::vect(geom = c("decimalLongitude", "decimalLatitude"), crs = "EPSG:4326") |>
+        terra::project(terra::crs(Model))
+
+      vals <- terra::extract(Model[[sp]], pts)[[sp]]
+      vals <- vals[!is.na(vals)]
+
+      q <- stats::quantile(vals, probs = c(0.01, 0.05, 0.10), na.rm = TRUE)
+
+      data.frame(species = sp, Thres_99 = unname(q[1]), Thres_95 = unname(q[2]), Thres_90 = unname(q[3]))
+    }, error = function(e) NULL)
   }
 
-  # Use purrr::map2 to apply process_species to each pair of Model and reference subsets
-  thresholds_list <- purrr::map2(Model_split, reference_split, process_species)
-
-  # Filter out any NULL results (if any errors occurred)
+  thresholds_list <- purrr::map(common_species, process_species)
   thresholds_list <- purrr::compact(thresholds_list)
 
-  # Combine the results into a single data frame
-  thresholds <- dplyr::bind_rows(thresholds_list)
-
-  return(thresholds)
+  dplyr::bind_rows(thresholds_list)
 }
-
-#' Generate a Lookup Table for Species Land-Use Preferences
-#'
-#' This function generates a lookup table that indicates the land-use types where species are predicted to be present, based on model predictions and specified thresholds.
-#'
-#' @param Model A data frame containing model predictions, with columns for `species`, `Landuse`, and `Pred`.
-#' @param Thresholds A data frame containing the thresholds for presence predictions, with columns for `species`, `Thres_99`, `Thres_95`, and `Thres_90`.
-#'
-#' @return A data frame that indicates the land-use types where species are predicted to be present. The data frame contains columns for `species`, `Landuse`, and `Pres`.
-#'
-#' @importFrom dplyr mutate select
-#' @importFrom data.table as.data.table
-#'
-#' @export
-
-Generate_Lookup <- function(Model, Thresholds) {
-  species <- Pres <- Pred <- Thres_95 <- Landuse <- . <- NULL
-  Model <- as.data.table(Model)
-  Model <- Model[species != "Spp"]
-  Thresholds <- as.data.table(Thresholds)
-  Thresholds <- Thresholds[species != "Spp"]
-  joined_data <- merge(Model, as.data.table(Thresholds), by = c("species"), all = TRUE)
-  joined_data[, Pres := ifelse(Pred > Thres_95, 1, 0)]
-  joined_data <- joined_data[Pres > 0]  # Assign the filtered result to joined_data
-  joined_data[, .(species, Landuse, Pres)]  # Return the selected columns
-}
-
