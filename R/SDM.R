@@ -134,12 +134,61 @@ ModelSpecies <- function(DF) {
   if (!has_variability) return(NULL)
 
   tryCatch(
-    maxnet::maxnet(p = DF$Pres, data = DF[predictors]),
+    maxnet::maxnet(
+      p = DF$Pres,
+      data = as.data.frame(DF[predictors]),
+      addsamplestobackground = FALSE # Bypasses the apply() bug
+    ),
     error = function(e) {
       message("Error in model fitting: ", conditionMessage(e))
       NULL
     }
   )
+}
+
+#' Predict a maxnet model onto every non-NA cell of a raster stack
+#'
+#' Bypasses `terra::predict()`'s internal per-chunk data building, which has
+#' known quirks with `maxnet`/`maxent` models on rasters that contain NA
+#' cells (rspatial/terra#352) and doesn't always propagate factor levels the
+#' same way `terra::extract()` does. Instead, this pulls every non-NA cell
+#' out as a plain data frame (factors intact, exactly like [SampleEnv()]
+#' would see them), predicts on that data frame directly with
+#' `predict.maxnet()`, and writes the results back into a template raster by
+#' cell index -- so training-space and prediction-space are guaranteed to be
+#' built the same way.
+#'
+#' Note this loads every non-NA cell into memory as one data frame, unlike
+#' `terra::predict()`'s memory-safe chunking. Fine for a country-sized
+#' raster at moderate resolution; if you outgrow memory, this would need to
+#' be chunked (e.g. with `terra::blocks()`).
+#'
+#' @param Env The environmental `SpatRaster` stack (already prepared with
+#'   any categorical layers marked via `terra::as.factor()`).
+#' @param Mod A fitted `maxnet` model.
+#' @param type Prediction type passed to `predict.maxnet()`. Default
+#'   `"cloglog"`.
+#'
+#' @return A single-layer `SpatRaster` of predicted values, NA outside the
+#'   cells that had complete predictor data.
+#'
+#' @importFrom terra as.data.frame rast values
+#' @keywords internal
+predict_maxnet_raster <- function(Env, Mod, type = "cloglog") {
+  vals <- terra::as.data.frame(Env, cells = TRUE, na.rm = TRUE)
+
+  Suitability <- terra::rast(Env, nlyrs = 1)
+  terra::values(Suitability) <- NA_real_
+
+  if (nrow(vals) == 0) return(Suitability)
+
+  cell_ids <- vals$cell
+  newdata <- vals[, setdiff(names(vals), "cell"), drop = FALSE]
+
+  preds <- as.numeric(predict(Mod, newdata = newdata, type = type))
+  Suitability[cell_ids] <- preds
+
+  Suitability
 }
 
 #' @title Model and Predict Habitat Suitability
@@ -158,15 +207,15 @@ ModelSpecies <- function(DF) {
 #'
 #' @details For each species: samples the environment at presence points and
 #'   at background points (via [SampleEnv()]), fits a model (via
-#'   [ModelSpecies()]), and predicts a full suitability surface with
-#'   `terra::predict(..., type = "cloglog")`. If fitting fails for a
-#'   species, that species' layer is filled with 0 rather than dropped, so
-#'   the output stack always has one layer per input species.
+#'   [ModelSpecies()]), and predicts a full suitability surface cell by cell
+#'   (via [predict_maxnet_raster()]). If fitting fails for a species, that
+#'   species' layer is filled with 0 rather than dropped, so the output
+#'   stack always has one layer per input species.
 #'
 #' @return A multi-layer `SpatRaster`, one layer per species (named by
 #'   species), each cell holding predicted habitat suitability (0-1).
 #'
-#' @importFrom terra rast is.factor as.factor predict values
+#' @importFrom terra rast is.factor as.factor values
 #' @importFrom dplyr group_split bind_rows
 #' @importFrom purrr map
 #'
@@ -204,7 +253,7 @@ ModelAndPredictFunc <- function(DF, file, categorical = NULL) {
       if (is.null(Mod)) {
         empty_template()
       } else {
-        terra::predict(Env, Mod, type = "cloglog", na.rm = TRUE)
+        predict_maxnet_raster(Env, Mod, type = "cloglog")
       }
     }, error = function(e) {
       message("An error occurred modeling ", sp, ": ", conditionMessage(e))

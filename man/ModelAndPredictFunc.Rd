@@ -29,8 +29,8 @@ than a lookup table of predictions per category).
 \details{
 For each species: samples the environment at presence points and
 at background points (via \code{\link[=SampleEnv]{SampleEnv()}}), fits a model (via
-\code{\link[=ModelSpecies]{ModelSpecies()}}), and predicts a full suitability surface with
-\code{terra::predict(..., type = "cloglog")}. If fitting fails for a
-species, that species' layer is filled with 0 rather than dropped, so
-the output stack always has one layer per input species.
+\code{\link[=ModelSpecies]{ModelSpecies()}}), and predicts a full suitability surface cell by cell
+(via \code{\link[=predict_maxnet_raster]{predict_maxnet_raster()}}). If fitting fails for a species, that
+species' layer is filled with 0 rather than dropped, so the output
+stack always has one layer per input species.
 }
