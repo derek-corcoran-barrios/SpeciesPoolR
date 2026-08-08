@@ -9,7 +9,7 @@ create_thresholds(Model, reference)
 \arguments{
 \item{Model}{A multi-layer \code{SpatRaster} of predicted suitability, one
 layer per species (named by species), as produced by
-\code{\link[=ModelAndPredictFunc]{ModelAndPredictFunc()}}.}
+\code{\link[=PredictSuitability]{PredictSuitability()}}.}
 
 \item{reference}{A data frame of reference occurrence points for
 threshold calibration, with columns \code{species}, \code{decimalLongitude},
