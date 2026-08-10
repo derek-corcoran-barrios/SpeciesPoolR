@@ -1,9 +1,9 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   how_to_use: how_to_use.html
-last_built: 2024-10-10T04:09Z
+last_built: 2026-08-10T07:54Z
 urls:
   reference: https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference
   article: https://derek-corcoran-barrios.github.io/SpeciesPoolR/articles
