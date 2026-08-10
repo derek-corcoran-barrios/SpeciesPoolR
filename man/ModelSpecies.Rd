@@ -2,16 +2,24 @@
 % Please edit documentation in R/SDM.R
 \name{ModelSpecies}
 \alias{ModelSpecies}
-\title{Fit a Species Distribution Model Based on Land-Use Data}
+\title{Fit a Species Distribution Model from Mixed Environmental Predictors}
 \usage{
 ModelSpecies(DF)
 }
 \arguments{
-\item{DF}{A data frame containing species presence and background data, with columns for \code{species}, \code{Landuse}, and \code{Pres}. The \code{Landuse} column should be a factor representing different land-use types, and \code{Pres} should indicate whether the row corresponds to a presence (1) or background (0) point.}
+\item{DF}{A data frame with \code{species}, \code{Pres} (1 = presence, 0 =
+background), and one or more predictor columns (factor or numeric), as
+produced by \code{\link[=SampleEnv]{SampleEnv()}}.}
 }
 \value{
-A data frame with predicted species distribution for each land-use type. The data frame contains columns for \code{Landuse}, \code{Pred} (predicted value), and \code{species}.
+A fitted \code{maxnet} model object, or \code{NULL} if fitting failed or the
+predictors have no variability to model against.
 }
 \description{
-This function fits a MaxEnt model to predict species distribution based on land-use data. It handles cases where land-use types are listed as "Both" by splitting these into separate "Poor" and "Rich" categories.
+Fits a MaxEnt model (via \code{maxnet}) to presence/background data with any
+mix of categorical and continuous predictors. Categorical predictors
+(factor columns) are dummy-coded; continuous predictors get linear,
+quadratic, hinge, and/or product terms, chosen automatically by
+\code{maxnet::maxnet.formula()} based on sample size. No manual design matrix
+is built -- \code{maxnet} handles both column types directly from raw data.
 }

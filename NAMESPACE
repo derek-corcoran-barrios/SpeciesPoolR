@@ -4,106 +4,135 @@ export(Clean_Taxa)
 export(Clean_Taxa_Taxize)
 export(Clean_Taxa_rgbif)
 export(Convex_20)
-export(Generate_Lookup)
+export(FitSpeciesModels)
 export(GetLandusePresences)
 export(GetOccs)
-export(ModelAndPredictFunc)
 export(ModelSpecies)
-export(SampleLanduse)
+export(PredictScenarios)
+export(PredictSuitability)
+export(SampleEnv)
 export(calc_pd)
 export(calc_rarity)
 export(calc_rarity_weight)
 export(count_presences)
+export(count_presences_auth)
+export(count_presences_simple)
 export(create_thresholds)
 export(export_final_presences)
 export(export_pd)
 export(export_rarity)
 export(export_richness)
+export(filter_valid_presences)
 export(generate_landuse_table)
 export(generate_long_landuse_table)
 export(generate_tree)
 export(get_data)
 export(get_presences)
-export(make_buffer_rasterized)
+export(load_one_scenario)
+export(load_scenario_collection)
+export(make_buffer)
 export(make_final_presences)
+export(make_landuse_scenarios)
+export(mask_suitability)
+export(mask_suitability_scenarios)
+export(mask_suitability_stack)
 export(run_workflow)
+export(threshold_suitability)
+export(threshold_suitability_scenarios)
+export(wkt_rect_ccw)
 export(write_cog)
 import(data.table)
-importFrom(Rarity,Irr)
-importFrom(Rarity,rWeights)
+importFrom(Rarity,
+  Irr,
+  rWeights
+)
 importFrom(V.PhyloMaker,phylo.maker)
 importFrom(crew,crew_controller_local)
-importFrom(data.table,"%chin%")
-importFrom(data.table,as.data.table)
-importFrom(data.table,data.table)
-importFrom(data.table,dcast)
-importFrom(data.table,melt)
-importFrom(data.table,rbindlist)
-importFrom(dplyr,across)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,desc)
-importFrom(dplyr,distinct)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_split)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,select)
-importFrom(dplyr,slice_max)
-importFrom(dplyr,ungroup)
+importFrom(data.table,
+  "%chin%",
+  as.data.table,
+  dcast,
+  melt
+)
+importFrom(dplyr,
+  across,
+  between,
+  bind_rows,
+  distinct,
+  filter,
+  group_by,
+  group_split,
+  left_join,
+  mutate,
+  rename,
+  select,
+  ungroup
+)
+importFrom(geotargets,tar_terra_rast)
 importFrom(janitor,make_clean_names)
 importFrom(maxnet,maxnet)
 importFrom(picante,pd)
-importFrom(purrr,compact)
-importFrom(purrr,keep)
-importFrom(purrr,map)
-importFrom(purrr,map2)
-importFrom(purrr,reduce)
-importFrom(readr,read_csv)
-importFrom(readr,write_csv)
+importFrom(purrr,
+  compact,
+  keep,
+  map,
+  map_chr,
+  reduce
+)
+importFrom(readr,
+  read_csv,
+  write_csv
+)
 importFrom(readxl,read_xlsx)
-importFrom(rgbif,name_backbone_checklist)
-importFrom(rgbif,occ_count)
 importFrom(rgbif,occ_data)
 importFrom(rlang,enquo)
-importFrom(stats,model.matrix)
-importFrom(stats,predict)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_remove_all)
+importFrom(stats,quantile)
 importFrom(stringr,str_replace_all)
-importFrom(targets,tar_helper)
-importFrom(targets,tar_make)
-importFrom(targets,tar_option_set)
-importFrom(targets,tar_target)
-importFrom(targets,tar_visnetwork)
-importFrom(taxize,gnr_resolve)
-importFrom(terra,"values<-")
-importFrom(terra,as.data.frame)
-importFrom(terra,buffer)
-importFrom(terra,centroids)
-importFrom(terra,convHull)
-importFrom(terra,crds)
-importFrom(terra,crop)
-importFrom(terra,crs)
-importFrom(terra,extract)
-importFrom(terra,geom)
-importFrom(terra,levels)
-importFrom(terra,minRect)
-importFrom(terra,names)
-importFrom(terra,ncell)
-importFrom(terra,project)
-importFrom(terra,rast)
-importFrom(terra,rasterize)
-importFrom(terra,spatSample)
-importFrom(terra,vect)
-importFrom(terra,writeRaster)
-importFrom(tibble,column_to_rownames)
-importFrom(tibble,rowid_to_column)
-importFrom(tibble,rownames_to_column)
-importFrom(tidyr,pivot_longer)
+importFrom(targets,
+  tar_helper,
+  tar_make,
+  tar_option_set,
+  tar_target,
+  tar_visnetwork
+)
+importFrom(taxize,gna_verifier)
+importFrom(terra,
+  "values<-",
+  aggregate,
+  as.data.frame,
+  as.factor,
+  buffer,
+  centroids,
+  convHull,
+  crop,
+  crs,
+  disagg,
+  ext,
+  extract,
+  geom,
+  hull,
+  ifel,
+  is.factor,
+  is.lonlat,
+  mask,
+  ncell,
+  nlyr,
+  project,
+  rast,
+  spatSample,
+  sprc,
+  values,
+  vect,
+  writeRaster,
+  xmax,
+  xmin,
+  ymax,
+  ymin
+)
+importFrom(tibble,
+  column_to_rownames,
+  rowid_to_column,
+  rownames_to_column
+)
+importFrom(tidyr,drop_na)
 importFrom(utils,write.table)

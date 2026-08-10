@@ -133,7 +133,7 @@ GetOccs <- function(Species, WriteFile = FALSE, continent = NULL, country = NULL
 #'
 #' @importFrom dplyr select
 #' @importFrom purrr keep map reduce
-#' @importFrom terra geom minRect vect
+#' @importFrom terra geom hull vect
 #' @examples
 #' \dontrun{
 #' # Assume `species_list` is a data.frame with a column named `species`
@@ -147,10 +147,8 @@ get_presences <- function(species, country = NULL, shapefile = NULL, limit = 100
 
   if(!is.null(shapefile) & is.null(country)){
     try({
-      geometry <- terra::vect(shapefile) |>
-        terra::minRect() |>
-        terra::geom(wkt = TRUE)
-      print(paste("Geometry created:", geometry))
+      geometry <- wkt_rect_ccw(shapefile)
+      message("Geometry created: ", geometry)
     }, silent = TRUE)
 
     if (is.null(geometry)) {
@@ -172,7 +170,7 @@ get_presences <- function(species, country = NULL, shapefile = NULL, limit = 100
                 Log = FALSE,
                 country = country,
                 limit = limit,
-                year='1999,2024',
+                year=paste0("1999,", format(Sys.time(), "%Y")),
                 geometry = geometry)
 
   try({DF <- DF |>
