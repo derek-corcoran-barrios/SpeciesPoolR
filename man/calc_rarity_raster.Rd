@@ -10,7 +10,9 @@ calc_rarity_raster(Binary, RW)
 \item{Binary}{A multi-layer binary (0/1) \code{SpatRaster}, one layer per
 species, layer-named by species.}
 
-\item{RW}{Rarity weights, as produced by \code{\link[=calc_rarity_weight]{calc_rarity_weight()}}.}
+\item{RW}{Rarity weights, as produced by \code{\link[=calc_rarity_weight]{calc_rarity_weight()}} -- a
+data.frame with species as row names (not \code{names()}), per how
+\code{Rarity::rWeights()}/\code{Rarity::Irr()} expect it.}
 }
 \value{
 A single-layer \code{SpatRaster} of Irr values, \code{NA} wherever

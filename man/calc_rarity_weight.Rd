@@ -12,8 +12,8 @@ calc_rarity_weight(df)
 \item{df}{A data frame containing at least two columns: \code{species} and \code{N}, where \code{species} represents the species names and \code{N} represents the number of occurrences for each species.}
 }
 \value{
-Rarity weights as returned by \code{Rarity::rWeights()}, named by
-species.
+A data.frame (from \code{Rarity::rWeights()}: columns \code{Q}, \code{R}, \code{W},
+\code{cut.off}), with species as row names -- not a named vector.
 
 A data frame with rarity weights for each species, calculated using the \code{rWeights} function.
 }

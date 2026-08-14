@@ -77,8 +77,8 @@ calc_richness_scenarios <- function(Binary_scenarios, names) {
 #' @param df A data frame with columns `species` and `N` (occurrence
 #'   counts), e.g. [count_presences()]'s output.
 #'
-#' @return Rarity weights as returned by `Rarity::rWeights()`, named by
-#'   species.
+#' @return A data.frame (from `Rarity::rWeights()`: columns `Q`, `R`, `W`,
+#'   `cut.off`), with species as row names -- not a named vector.
 #'
 #' @importFrom Rarity rWeights
 #'
@@ -99,7 +99,9 @@ calc_rarity_weight <- function(df) {
 #'
 #' @param Binary A multi-layer binary (0/1) `SpatRaster`, one layer per
 #'   species, layer-named by species.
-#' @param RW Rarity weights, as produced by [calc_rarity_weight()].
+#' @param RW Rarity weights, as produced by [calc_rarity_weight()] -- a
+#'   data.frame with species as row names (not `names()`), per how
+#'   `Rarity::rWeights()`/`Rarity::Irr()` expect it.
 #'
 #' @return A single-layer `SpatRaster` of Irr values, `NA` wherever
 #'   `Binary` was `NA`.
@@ -122,7 +124,7 @@ calc_rarity_raster <- function(Binary, RW) {
   colnames(mat) <- normalize_species_name(colnames(mat))
   mat <- t(mat) # Irr() wants species (rows) x sites (columns)
 
-  names(RW) <- normalize_species_name(names(RW))
+  rownames(RW) <- normalize_species_name(rownames(RW))
 
   Irr_result <- as.data.frame(Rarity::Irr(assemblages = mat, W = RW))
 
