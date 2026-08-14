@@ -188,6 +188,7 @@ Clean_Taxa_rgbif <- function(Cleaned_Taxize, WriteFile = FALSE, Species_Only = T
 #' @param verbose logical; if TRUE, prints progress and summary messages (default: TRUE).
 #'
 #' @return A data frame with the cleaned taxa and their scores.
+#' @importFrom dplyr bind_rows
 #'
 #' @export
 #'
@@ -206,7 +207,7 @@ Clean_Taxa <- function(Taxons, WriteFile = FALSE, Species_Only = TRUE, verbose =
       Final_Result[[i]] <- Clean_Taxa_rgbif(Cleaned_Taxize, WriteFile = WriteFile, Species_Only = Species_Only, verbose = verbose)
       if (verbose) message(paste("Chunk", i, "of", length(Taxons), "ready at", Sys.time()))
     }
-    Final_Result <- purrr::reduce(Final_Result, rbind)
+    Final_Result <- dplyr::bind_rows(Final_Result)
   }
   return(Final_Result)
 }
