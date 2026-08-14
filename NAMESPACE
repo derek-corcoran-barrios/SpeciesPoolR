@@ -12,8 +12,14 @@ export(PredictScenarios)
 export(PredictSuitability)
 export(SampleEnv)
 export(calc_pd)
+export(calc_pd_raster)
+export(calc_pd_scenarios)
 export(calc_rarity)
+export(calc_rarity_raster)
+export(calc_rarity_scenarios)
 export(calc_rarity_weight)
+export(calc_richness)
+export(calc_richness_scenarios)
 export(count_presences)
 export(count_presences_auth)
 export(count_presences_simple)
@@ -76,6 +82,7 @@ importFrom(purrr,
   compact,
   keep,
   map,
+  map2,
   map_chr,
   reduce
 )
@@ -99,6 +106,7 @@ importFrom(taxize,gna_verifier)
 importFrom(terra,
   "values<-",
   aggregate,
+  app,
   as.data.frame,
   as.factor,
   buffer,
