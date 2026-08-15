@@ -14,6 +14,9 @@ export(SampleEnv)
 export(calc_pd)
 export(calc_pd_raster)
 export(calc_pd_scenarios)
+export(calc_range_rarity)
+export(calc_range_rarity_scenarios)
+export(calc_range_weights)
 export(calc_rarity)
 export(calc_rarity_raster)
 export(calc_rarity_scenarios)
@@ -106,10 +109,12 @@ importFrom(taxize,gna_verifier)
 importFrom(terra,
   "values<-",
   aggregate,
+  allNA,
   app,
   as.data.frame,
   as.factor,
   buffer,
+  cellSize,
   centroids,
   convHull,
   crop,
@@ -118,6 +123,7 @@ importFrom(terra,
   ext,
   extract,
   geom,
+  global,
   hull,
   ifel,
   is.factor,
