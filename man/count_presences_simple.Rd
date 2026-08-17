@@ -2,52 +2,85 @@
 % Please edit documentation in R/count_presences.R
 \name{count_presences_simple}
 \alias{count_presences_simple}
-\title{Fast presence counts via GBIF facets (unauthenticated)}
+\title{Fast presence counts via GBIF facets}
 \usage{
 count_presences_simple(
   species,
   shapefile = NULL,
   country = NULL,
   year = c(1999L, as.integer(format(Sys.Date(), "\%Y"))),
-  facet_limit = 20000L,
+  facet_limit = 200000L,
+  retries = 5L,
   verbose = TRUE
 )
 }
 \arguments{
-\item{species}{A data frame/data.table/tibble with columns \code{family}, \code{genus}, \code{species}.
-(Use cleaned GBIF-aligned names for best matches.)}
+\item{species}{A data frame/data.table/tibble with columns \code{family},
+\code{genus}, \code{species}, and \code{gbif_speciesKey}.}
 
-\item{shapefile}{Path to a vector file readable by \code{terra::vect()}.
-If provided (and \code{country} is \code{NULL}), its MBR is used as the GBIF
-\code{geometry} filter via \code{\link{wkt_rect_ccw}}. Mutually exclusive with \code{country}.}
+\item{shapefile}{Optional path to a vector file readable by
+\code{terra::vect()}. If supplied and \code{country} is \code{NULL}, its bounding
+rectangle (via \code{\link[=wkt_rect_ccw]{wkt_rect_ccw()}}) is used as the GBIF \code{geometry}
+filter. Mutually exclusive with \code{country}. Prefer \code{country} when
+possible: a bounding rectangle over a coastal, island-heavy country
+like Denmark includes a fair amount of sea (and can nick neighboring
+countries), where a country code gives GBIF's exact attribution.}
 
-\item{country}{Two-letter ISO country code (e.g., \code{"DK"}). Ignored if \code{shapefile} is provided.
+\item{country}{Optional two-letter ISO country code, e.g. \code{"DK"}.
 Mutually exclusive with \code{shapefile}.}
 
-\item{year}{Integer vector \code{c(start, end)} with the year range (inclusive). Default is
-\code{c(1999, current_year)}.}
+\item{year}{Integer vector \code{c(start, end)} defining the year range
+(inclusive). Default \code{c(1999, current_year)}.}
 
-\item{facet_limit}{Integer maximum number of facet entries GBIF will return. Default \code{20000}.}
+\item{facet_limit}{Integer maximum number of speciesKey facet entries
+GBIF will return. Must be sized to the number of distinct species GBIF
+has ever recorded in the country/region, \emph{not} the length of your
+species list, since the facet covers the whole region regardless of
+how many species you asked about. Default \code{200000L}, matching rgbif's
+own documented example for country-level species counts. rgbif's docs
+report reliable results up to \code{500000}; going much higher risks the
+request itself failing.}
 
-\item{verbose}{Logical; if \code{TRUE}, prints helpful warnings.}
+\item{retries}{Number of attempts for a failed GBIF request, with
+exponential backoff between attempts. Default \code{5}.}
+
+\item{verbose}{Logical; print progress and retry messages. Default
+\code{TRUE}.}
 }
 \value{
 A \code{data.table} with columns \code{family}, \code{genus}, \code{species}, \code{N}.
 }
 \description{
-Performs a single GBIF search using a facet on \code{species} and returns
-occurrence counts for the supplied species list within either a country or the
-minimum bounding rectangle (MBR) of a shapefile (converted to CCW WKT with
-\code{\link{wkt_rect_ccw}}). This method is \strong{fast and polite} (one request),
-but facet results can be truncated if your species list exceeds \code{facet_limit}.
+Counts GBIF occurrence records for a supplied species list within either
+a country or a spatial extent. Always queries the country/geometry alone
+(never restricted by species key) and requests the complete speciesKey
+facet for that region, then joins those counts back onto the supplied
+species locally.
+
+There is deliberately no size-based branch that puts species keys
+directly into the query for "small" lists. That alternative failed in
+practice somewhere around a few thousand keys (a connection reset from
+GBIF's API), but the exact safe threshold below that isn't known -- it
+could be far lower. Rather than guess a cutoff and risk hitting the same
+failure at a smaller, more confusing scale, this function always uses
+the regional-facet strategy: the query never grows with the number of
+species requested, whether that's 7 or 400,000, so there's no
+query-size failure mode left to hit at all.
+
+Failed GBIF requests are retried with exponential backoff, since this
+project has repeatedly hit transient GBIF/network failures. Retries
+only help with \emph{transient} failures, though -- if a request fails
+because it is structurally too large (e.g. \code{facet_limit} set
+unreasonably high), retrying will just fail the same way every time.
 }
 \details{
-Count presences quickly (no auth) using GBIF facets
+Count presences using GBIF species facets
 
-This function makes \strong{one} call to \code{rgbif::occ_search()} with \code{facet = "species"}
-and joins the returned canonical species counts to your requested species. Species not present in the facet response
-receive \code{N = 0}. If your list is longer than \code{facet_limit}, GBIF may truncate the facet;
-consider \code{\link{count_presences_auth}} for complete, reproducible results.
+If the facet response has exactly \code{facet_limit} rows, that's a strong
+signal of truncation -- GBIF sorts facets by count descending, so a
+truncated facet drops the \emph{rarest} species first, silently. Rather than
+return possibly-incomplete counts, this raises an error asking you to
+increase \code{facet_limit}.
 }
 \examples{
 \dontrun{
@@ -57,16 +90,16 @@ sp        <- SpeciesPoolR::get_data(f_species)
 clean     <- SpeciesPoolR::Clean_Taxa(sp$Species)
 
 out <- count_presences_simple(
-  species   = clean,
-  shapefile = shp,
-  year      = c(1999, as.integer(format(Sys.Date(), "\%Y")))
+  species = clean,
+  country = "DK",
+  year    = c(1999, as.integer(format(Sys.Date(), "\%Y")))
 )
 head(out)
 }
 
 }
 \seealso{
-\code{\link{count_presences_auth}}, \code{\link{count_presences}}, \code{\link{wkt_rect_ccw}}
+\code{\link[=count_presences_auth]{count_presences_auth()}}, \code{\link[=count_presences]{count_presences()}}, \code{\link[=wkt_rect_ccw]{wkt_rect_ccw()}}
 
 Other GBIF helpers:
 \code{\link[=count_presences]{count_presences()}},
