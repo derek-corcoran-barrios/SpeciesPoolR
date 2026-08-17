@@ -3,7 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   how_to_use: how_to_use.html
-last_built: 2026-08-14T17:27Z
+last_built: 2026-08-17T11:22Z
 urls:
   reference: https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference
   article: https://derek-corcoran-barrios.github.io/SpeciesPoolR/articles

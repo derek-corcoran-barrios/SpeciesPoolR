@@ -22,6 +22,9 @@
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_pd.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_pd_raster.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_pd_scenarios.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_rarity.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_rarity_scenarios.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_weights.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_rarity.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_rarity_raster.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_rarity_scenarios.html</loc></url>
@@ -53,6 +56,7 @@
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/mask_suitability_stack.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/normalize_species_name.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/predict_maxnet_raster.html</loc></url>
+<url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/rtrees_supported_filter.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/run_workflow.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/threshold_suitability.html</loc></url>
 <url><loc>https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/threshold_suitability_scenarios.html</loc></url>

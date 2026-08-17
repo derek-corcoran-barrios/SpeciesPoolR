@@ -35,6 +35,12 @@
   : Calculate Phylogenetic Diversity, Cell by Cell
 - [`calc_pd_scenarios()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_pd_scenarios.md)
   : Calculate Phylogenetic Diversity Across a Collection of Scenarios
+- [`calc_range_rarity()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_rarity.md)
+  : Calculate Range-Size Rarity / Irreplaceability
+- [`calc_range_rarity_scenarios()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_rarity_scenarios.md)
+  : Calculate Range-Size Rarity Across Scenarios
+- [`calc_range_weights()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_range_weights.md)
+  : Calculate Baseline Range-Size Rarity Weights
 - [`calc_rarity()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_rarity.md)
   : Calculate the Index of Relative Rarity for Species Assemblages
 - [`calc_rarity_raster()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/calc_rarity_raster.md)
@@ -52,7 +58,7 @@
 - [`count_presences_auth()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/count_presences_auth.md)
   : Reproducible presence counts via GBIF downloads (authenticated)
 - [`count_presences_simple()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/count_presences_simple.md)
-  : Fast presence counts via GBIF facets (unauthenticated)
+  : Fast presence counts via GBIF facets
 - [`create_thresholds()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/create_thresholds.md)
   : Create Prediction Thresholds for Species Distribution Models
 - [`export_final_presences()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/export_final_presences.md)
@@ -93,6 +99,8 @@
   : Mask Every Scenario's Suitability Stack by Per-Species Buffers
 - [`mask_suitability_stack()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/mask_suitability_stack.md)
   : Mask a Multi-Species Suitability Stack by Per-Species Buffers
+- [`rtrees_supported_filter()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/rtrees_supported_filter.md)
+  : Filter for Species Covered by rtrees Megatrees
 - [`run_workflow()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/run_workflow.md)
   : Run the SpeciesPoolR Workflow
 - [`threshold_suitability()`](https://derek-corcoran-barrios.github.io/SpeciesPoolR/reference/threshold_suitability.md)

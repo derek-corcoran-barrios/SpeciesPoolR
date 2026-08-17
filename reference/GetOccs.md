@@ -70,8 +70,8 @@ species is returned.
 # \donttest{
 Presences <- GetOccs(Species = c("Abies concolor", "Canis lupus"), WriteFile = FALSE)
 #> Starting species 1
-#> 1 of 2 ready! 2026-08-14 17:27:58.196578
+#> 1 of 2 ready! 2026-08-17 11:22:59.118313
 #> Starting species 2
-#> 2 of 2 ready! 2026-08-14 17:28:16.890894
+#> 2 of 2 ready! 2026-08-17 11:23:15.824548
 # }
 ```
