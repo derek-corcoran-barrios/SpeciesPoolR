@@ -146,49 +146,192 @@ ModelSpecies <- function(DF) {
   )
 }
 
-#' Predict a maxnet model onto every non-NA cell of a raster stack
+#' Predict a maxnet model onto a raster stack in bounded-memory blocks
 #'
-#' Bypasses `terra::predict()`'s internal per-chunk data building, which has
-#' known quirks with `maxnet`/`maxent` models on rasters that contain NA
-#' cells (rspatial/terra#352) and doesn't always propagate factor levels the
-#' same way `terra::extract()` does. Instead, this pulls every non-NA cell
-#' out as a plain data frame (factors intact, exactly like [SampleEnv()]
-#' would see them), predicts on that data frame directly with
-#' `predict.maxnet()`, and writes the results back into a template raster by
-#' cell index -- so training-space and prediction-space are guaranteed to be
-#' built the same way.
+#' Reads the environmental raster a block at a time, converts only that block
+#' to the tabular representation required by `predict.maxnet()`, and writes
+#' predictions immediately to a file-backed raster. This keeps peak memory
+#' bounded by the selected block size instead of the total number of raster
+#' cells.
 #'
-#' Note this loads every non-NA cell into memory as one data frame, unlike
-#' `terra::predict()`'s memory-safe chunking. Fine for a country-sized
-#' raster at moderate resolution; if you outgrow memory, this would need to
-#' be chunked (e.g. with `terra::blocks()`).
+#' `terra::readValues(..., dataframe = TRUE)` is used deliberately so that
+#' categorical raster layers are returned with their category labels. Factor
+#' predictors are then aligned explicitly to the levels stored in the fitted
+#' `maxnet` model. Cells with an incomplete predictor vector, including a
+#' categorical value not seen during model fitting, are written as `NA`.
 #'
 #' @param Env The environmental `SpatRaster` stack (already prepared with
 #'   any categorical layers marked via `terra::as.factor()`).
 #' @param Mod A fitted `maxnet` model.
 #' @param type Prediction type passed to `predict.maxnet()`. Default
 #'   `"cloglog"`.
+#' @param filename Optional output filename. If `""`, a temporary GeoTIFF is
+#'   created. Supplying a filename is useful when the caller wants to manage
+#'   the prediction file explicitly.
+#' @param overwrite Logical passed to `terra::writeStart()`.
+#' @param blocks_in_memory Positive integer passed as `n` to
+#'   `terra::blocks()`. It represents the approximate number of copies of the
+#'   input data that may be needed in memory while choosing a block size.
+#'   Default `4L`.
 #'
-#' @return A single-layer `SpatRaster` of predicted values, NA outside the
-#'   cells that had complete predictor data.
+#' @return A file-backed, single-layer `SpatRaster` of predicted values, with
+#'   `NA` in cells that did not have a complete, model-compatible predictor
+#'   vector.
 #'
-#' @importFrom terra as.data.frame rast values
+#' @importFrom terra blocks rast readStart readStop readValues writeStart
+#'   writeStop writeValues
 #' @keywords internal
-predict_maxnet_raster <- function(Env, Mod, type = "cloglog") {
-  vals <- terra::as.data.frame(Env, cells = TRUE, na.rm = TRUE)
+predict_maxnet_raster <- function(
+    Env,
+    Mod,
+    type = "cloglog",
+    filename = "",
+    overwrite = TRUE,
+    blocks_in_memory = 4L
+) {
+  if (!inherits(Env, "SpatRaster")) {
+    stop("`Env` must be a terra SpatRaster.", call. = FALSE)
+  }
 
-  Suitability <- terra::rast(Env, nlyrs = 1)
-  terra::values(Suitability) <- NA_real_
+  if (!inherits(Mod, "maxnet")) {
+    stop("`Mod` must be a fitted maxnet model.", call. = FALSE)
+  }
 
-  if (nrow(vals) == 0) return(Suitability)
+  type <- match.arg(
+    type,
+    choices = c("link", "exponential", "cloglog", "logistic")
+  )
 
-  cell_ids <- vals$cell
-  newdata <- vals[, setdiff(names(vals), "cell"), drop = FALSE]
+  blocks_in_memory <- as.integer(blocks_in_memory)
+  if (
+    length(blocks_in_memory) != 1L ||
+    is.na(blocks_in_memory) ||
+    blocks_in_memory < 1L
+  ) {
+    stop("`blocks_in_memory` must be one positive integer.", call. = FALSE)
+  }
 
-  preds <- as.numeric(predict(Mod, newdata = newdata, type = type))
-  Suitability[cell_ids] <- preds
+  if (length(filename) != 1L || is.na(filename)) {
+    stop("`filename` must be one non-missing character value.", call. = FALSE)
+  }
 
-  Suitability
+  model_predictors <- names(Mod$levels)
+  if (is.null(model_predictors) || length(model_predictors) == 0L) {
+    model_predictors <- unique(c(names(Mod$varmin), names(Mod$samplemeans)))
+  }
+
+  missing_predictors <- setdiff(model_predictors, names(Env))
+  if (length(missing_predictors) > 0L) {
+    stop(
+      "Prediction raster is missing model predictor(s): ",
+      paste(missing_predictors, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  # Keep the same predictor order used for fitting and ignore unrelated layers.
+  Env <- Env[[model_predictors]]
+
+  if (!nzchar(filename)) {
+    filename <- tempfile(
+      pattern = "SpeciesPoolR_suitability_",
+      fileext = ".tif"
+    )
+  }
+
+  out <- terra::rast(Env[[1]])
+  names(out) <- "suitability"
+
+  block_info <- terra::blocks(Env, n = blocks_in_memory)
+
+  reading_open <- FALSE
+  writing_open <- FALSE
+
+  on.exit({
+    if (isTRUE(reading_open)) {
+      try(terra::readStop(Env), silent = TRUE)
+    }
+    if (isTRUE(writing_open)) {
+      try(terra::writeStop(out), silent = TRUE)
+    }
+  }, add = TRUE)
+
+  terra::readStart(Env)
+  reading_open <- TRUE
+
+  terra::writeStart(
+    out,
+    filename = filename,
+    overwrite = overwrite,
+    datatype = "FLT4S",
+    gdal = c("COMPRESS=DEFLATE")
+  )
+  writing_open <- TRUE
+
+  model_levels <- Mod$levels
+  factor_predictors <- if (is.null(model_levels)) {
+    character()
+  } else {
+    names(model_levels)[lengths(model_levels) > 0L]
+  }
+
+  for (i in seq_along(block_info$row)) {
+    newdata <- terra::readValues(
+      Env,
+      row = block_info$row[i],
+      nrows = block_info$nrows[i],
+      dataframe = TRUE
+    )
+
+    # Force categorical predictors to exactly the levels used for fitting.
+    # Unknown scenario categories become NA and are not predicted.
+    for (predictor in intersect(factor_predictors, names(newdata))) {
+      newdata[[predictor]] <- factor(
+        as.character(newdata[[predictor]]),
+        levels = model_levels[[predictor]]
+      )
+    }
+
+    complete <- stats::complete.cases(newdata)
+    prediction <- rep(NA_real_, nrow(newdata))
+
+    if (any(complete)) {
+      predicted <- as.numeric(
+        predict(
+          Mod,
+          newdata = newdata[complete, , drop = FALSE],
+          type = type
+        )
+      )
+
+      if (length(predicted) != sum(complete)) {
+        stop(
+          "`predict.maxnet()` returned ", length(predicted),
+          " values for ", sum(complete), " complete raster cells.",
+          call. = FALSE
+        )
+      }
+
+      prediction[complete] <- predicted
+    }
+
+    terra::writeValues(
+      out,
+      prediction,
+      start = block_info$row[i],
+      nrows = block_info$nrows[i]
+    )
+  }
+
+  terra::readStop(Env)
+  reading_open <- FALSE
+
+  terra::writeStop(out)
+  writing_open <- FALSE
+
+  result <- terra::rast(filename)
+  names(result) <- "suitability"
+  result
 }
 
 #' Fit Species Distribution Models
@@ -261,27 +404,82 @@ FitSpeciesModels <- function(DF, file, categorical = NULL) {
 #'   the models.
 #' @param categorical Optional character vector naming which layer(s) are
 #'   categorical. See [SampleEnv()].
+#' @param blocks_in_memory Positive integer passed to the internal block-based
+#'   raster predictor. Default `4L`. Lower-memory systems can increase this
+#'   value to request smaller processing blocks.
 #'
 #' @return A multi-layer `SpatRaster`, one layer per species (named by
 #'   species), each cell holding predicted habitat suitability (0-1). A
 #'   species whose model was `NULL` gets a layer filled with 0 rather than
 #'   being dropped, so the output always has one layer per input model.
 #'
-#' @importFrom terra rast is.factor as.factor values
+#' @importFrom terra rast is.factor as.factor init
 #' @importFrom purrr map
 #'
 #' @export
-PredictSuitability <- function(Models, file, categorical = NULL) {
+PredictSuitability <- function(
+    Models,
+    file,
+    categorical = NULL,
+    blocks_in_memory = 4L
+) {
+  if (!is.list(Models) || length(Models) == 0L) {
+    stop("`Models` must be a non-empty named list.", call. = FALSE)
+  }
+
+  model_names <- names(Models)
+  if (
+    is.null(model_names) ||
+    anyNA(model_names) ||
+    any(!nzchar(model_names)) ||
+    anyDuplicated(model_names)
+  ) {
+    stop("`Models` must have unique, non-empty species names.", call. = FALSE)
+  }
+
+  blocks_in_memory <- as.integer(blocks_in_memory)
+  if (
+    length(blocks_in_memory) != 1L ||
+    is.na(blocks_in_memory) ||
+    blocks_in_memory < 1L
+  ) {
+    stop("`blocks_in_memory` must be one positive integer.", call. = FALSE)
+  }
+
   Env <- if (inherits(file, "SpatRaster")) file else terra::rast(file)
+
   if (!is.null(categorical)) {
+    missing_categorical <- setdiff(categorical, names(Env))
+    if (length(missing_categorical) > 0L) {
+      stop(
+        "Categorical raster layer(s) not found: ",
+        paste(missing_categorical, collapse = ", "),
+        call. = FALSE
+      )
+    }
+
     for (lyr in categorical) {
       if (!terra::is.factor(Env[[lyr]])) Env[[lyr]] <- terra::as.factor(Env[[lyr]])
     }
   }
 
   empty_template <- function() {
-    r <- terra::rast(Env[[1]])  # same geometry, no values, no factor levels
-    terra::values(r) <- 0
+    filename <- tempfile(
+      pattern = "SpeciesPoolR_zero_suitability_",
+      fileext = ".tif"
+    )
+
+    r <- terra::rast(Env[[1]])
+    r <- terra::init(
+      r,
+      fun = 0,
+      filename = filename,
+      overwrite = TRUE,
+      wopt = list(
+        datatype = "FLT4S",
+        gdal = c("COMPRESS=DEFLATE")
+      )
+    )
     r
   }
 
@@ -292,7 +490,12 @@ PredictSuitability <- function(Models, file, categorical = NULL) {
       empty_template()
     } else {
       tryCatch(
-        predict_maxnet_raster(Env, Mod, type = "cloglog"),
+        predict_maxnet_raster(
+          Env = Env,
+          Mod = Mod,
+          type = "cloglog",
+          blocks_in_memory = blocks_in_memory
+        ),
         error = function(e) {
           message("An error occurred predicting ", sp, ": ", conditionMessage(e))
           empty_template()
@@ -305,7 +508,9 @@ PredictSuitability <- function(Models, file, categorical = NULL) {
   }
 
   results <- purrr::map(names(Models), predict_one)
-  do.call(c, results)
+  result <- do.call(c, results)
+  names(result) <- names(Models)
+  result
 }
 
 #' Create Prediction Thresholds for Species Distribution Models

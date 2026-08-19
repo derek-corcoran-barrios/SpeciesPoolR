@@ -4,7 +4,7 @@
 \alias{PredictSuitability}
 \title{Predict Habitat Suitability From Already-Fitted Models}
 \usage{
-PredictSuitability(Models, file, categorical = NULL)
+PredictSuitability(Models, file, categorical = NULL, blocks_in_memory = 4L)
 }
 \arguments{
 \item{Models}{A named list of fitted \code{maxnet} models (or \code{NULL} entries),
@@ -18,6 +18,10 @@ the models.}
 
 \item{categorical}{Optional character vector naming which layer(s) are
 categorical. See \code{\link[=SampleEnv]{SampleEnv()}}.}
+
+\item{blocks_in_memory}{Positive integer passed to the internal block-based
+raster predictor. Default \code{4L}. Lower-memory systems can increase this
+value to request smaller processing blocks.}
 }
 \value{
 A multi-layer \code{SpatRaster}, one layer per species (named by

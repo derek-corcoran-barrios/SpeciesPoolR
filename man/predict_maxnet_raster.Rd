@@ -2,9 +2,16 @@
 % Please edit documentation in R/SDM.R
 \name{predict_maxnet_raster}
 \alias{predict_maxnet_raster}
-\title{Predict a maxnet model onto every non-NA cell of a raster stack}
+\title{Predict a maxnet model onto a raster stack in bounded-memory blocks}
 \usage{
-predict_maxnet_raster(Env, Mod, type = "cloglog")
+predict_maxnet_raster(
+  Env,
+  Mod,
+  type = "cloglog",
+  filename = "",
+  overwrite = TRUE,
+  blocks_in_memory = 4L
+)
 }
 \arguments{
 \item{Env}{The environmental \code{SpatRaster} stack (already prepared with
@@ -14,26 +21,35 @@ any categorical layers marked via \code{terra::as.factor()}).}
 
 \item{type}{Prediction type passed to \code{predict.maxnet()}. Default
 \code{"cloglog"}.}
+
+\item{filename}{Optional output filename. If \code{""}, a temporary GeoTIFF is
+created. Supplying a filename is useful when the caller wants to manage
+the prediction file explicitly.}
+
+\item{overwrite}{Logical passed to \code{terra::writeStart()}.}
+
+\item{blocks_in_memory}{Positive integer passed as \code{n} to
+\code{terra::blocks()}. It represents the approximate number of copies of the
+input data that may be needed in memory while choosing a block size.
+Default \code{4L}.}
 }
 \value{
-A single-layer \code{SpatRaster} of predicted values, NA outside the
-cells that had complete predictor data.
+A file-backed, single-layer \code{SpatRaster} of predicted values, with
+\code{NA} in cells that did not have a complete, model-compatible predictor
+vector.
 }
 \description{
-Bypasses \code{terra::predict()}'s internal per-chunk data building, which has
-known quirks with \code{maxnet}/\code{maxent} models on rasters that contain NA
-cells (rspatial/terra#352) and doesn't always propagate factor levels the
-same way \code{terra::extract()} does. Instead, this pulls every non-NA cell
-out as a plain data frame (factors intact, exactly like \code{\link[=SampleEnv]{SampleEnv()}}
-would see them), predicts on that data frame directly with
-\code{predict.maxnet()}, and writes the results back into a template raster by
-cell index -- so training-space and prediction-space are guaranteed to be
-built the same way.
+Reads the environmental raster a block at a time, converts only that block
+to the tabular representation required by \code{predict.maxnet()}, and writes
+predictions immediately to a file-backed raster. This keeps peak memory
+bounded by the selected block size instead of the total number of raster
+cells.
 }
 \details{
-Note this loads every non-NA cell into memory as one data frame, unlike
-\code{terra::predict()}'s memory-safe chunking. Fine for a country-sized
-raster at moderate resolution; if you outgrow memory, this would need to
-be chunked (e.g. with \code{terra::blocks()}).
+\code{terra::readValues(..., dataframe = TRUE)} is used deliberately so that
+categorical raster layers are returned with their category labels. Factor
+predictors are then aligned explicitly to the levels stored in the fitted
+\code{maxnet} model. Cells with an incomplete predictor vector, including a
+categorical value not seen during model fitting, are written as \code{NA}.
 }
 \keyword{internal}
