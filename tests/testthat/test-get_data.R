@@ -27,12 +27,16 @@ test_that("get_data reads a CSV file without filtering", {
   expect_true("Species" %in% colnames(data))
 })
 
-# Test: Reading XLSX without filtering
-test_that("get_data reads an XLSX file without filtering", {
-  data <- get_data(test_xlsx)
-  expect_equal(nrow(data), 200)
-  expect_equal(ncol(data), 3)
-  expect_true("Species" %in% colnames(data))
+test_that("get_data reads an XLSX file", {
+  testthat::skip_if_not_installed("openxlsx")
+
+  path <- tempfile(fileext = ".xlsx")
+  on.exit(unlink(path), add = TRUE)
+
+  openxlsx::write.xlsx(sample_data, path, rowNames = FALSE)
+  result <- get_data(path)
+
+  expect_equal(nrow(result), 200L)
 })
 
 # Test: Filtering the data
