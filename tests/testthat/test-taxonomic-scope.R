@@ -1,18 +1,32 @@
 test_that("rtrees_supported_filter uses the Clean_Taxa column schema", {
   taxa <- data.frame(
-    species = paste("Species", seq_len(6L)),
-    kingdom = c("Plantae", rep("Animalia", 5L)),
+    species = paste("Species", seq_len(8L)),
+    kingdom = c("Plantae", rep("Animalia", 7L)),
     class = c(
       "Magnoliopsida",
       "Aves",
+      "Reptilia",
+      "Testudines",
       "Insecta",
       "Insecta",
       "Insecta",
       "Arachnida"
     ),
+    order = c(
+      "Rosales",
+      "Passeriformes",
+      "Squamata",
+      NA_character_,
+      "Hymenoptera",
+      "Lepidoptera",
+      "Coleoptera",
+      "Araneae"
+    ),
     family = c(
       "Rosaceae",
       "Corvidae",
+      "Colubridae",
+      "Emydidae",
       "Apidae",
       "Nymphalidae",
       "Carabidae",
@@ -32,6 +46,6 @@ test_that("rtrees_supported_filter uses the Clean_Taxa column schema", {
 
   expect_equal(
     selected$species,
-    paste("Species", seq_len(4L))
+    paste("Species", c(1L, 2L, 3L, 5L, 6L))
   )
 })

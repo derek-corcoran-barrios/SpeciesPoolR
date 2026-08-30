@@ -296,3 +296,33 @@ test_that("PD rejects non-binary raster values", {
     "other than 0 or 1"
   )
 })
+
+test_that("only squamates are classified as rtrees reptiles", {
+  taxonomy <- data.frame(
+    kingdom = rep("Animalia", 4L),
+    class = c(
+      "Reptilia",
+      "Testudines",
+      "Crocodylia",
+      "Squamata"
+    ),
+    order = c(
+      "Squamata",
+      NA_character_,
+      NA_character_,
+      NA_character_
+    ),
+    family = c(
+      "Colubridae",
+      "Emydidae",
+      "Crocodylidae",
+      "Lacertidae"
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(
+    classify_rtrees_group(taxonomy),
+    c("reptile", NA_character_, NA_character_, "reptile")
+  )
+})

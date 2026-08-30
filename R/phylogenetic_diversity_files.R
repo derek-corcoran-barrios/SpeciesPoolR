@@ -110,6 +110,13 @@ classify_rtrees_group <- function(x) {
   taxon_class <- tolower(trimws(as.character(x[[class_column]])))
   family <- tolower(trimws(as.character(x[[family_column]])))
 
+  order_index <- match("order", tolower(names(x)))
+  taxon_order <- if (is.na(order_index)) {
+    rep(NA_character_, nrow(x))
+  } else {
+    tolower(trimws(as.character(x[[order_index]])))
+  }
+
   out <- rep(NA_character_, nrow(x))
   out[kingdom %in% "plantae"] <- "plant"
   out[is.na(out) & taxon_class %in% "aves"] <- "bird"
@@ -117,11 +124,9 @@ classify_rtrees_group <- function(x) {
   out[is.na(out) & taxon_class %in% "amphibia"] <- "amphibian"
   out[
     is.na(out) &
-      taxon_class %in% c(
-        "reptilia",
-        "squamata",
-        "testudines",
-        "crocodylia"
+      (
+        taxon_class %in% "squamata" |
+          taxon_order %in% "squamata"
       )
   ] <- "reptile"
   out[is.na(out) & taxon_class %in% "chondrichthyes"] <- "shark_ray"

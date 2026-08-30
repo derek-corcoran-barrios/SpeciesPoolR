@@ -35,7 +35,8 @@ rtrees_supported_filter <- function() {
       class == "Aves" |
       class == "Mammalia" |
       class == "Amphibia" |
-      class %in% c("Reptilia", "Squamata", "Testudines", "Crocodylia") |
+      class == "Squamata" |
+      order == "Squamata" |
       class == "Chondrichthyes" |
       class %in% c("Actinopterygii", "Sarcopterygii") |
       family %in% c(
