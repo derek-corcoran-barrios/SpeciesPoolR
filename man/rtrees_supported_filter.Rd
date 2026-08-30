@@ -16,9 +16,11 @@ same convention as any other manual filter) that keeps only species in
 taxonomic groups \code{rtrees::get_tree()} can currently build a phylogeny
 for: plants, and among animals, birds, mammals, amphibians, reptiles,
 cartilaginous fish, bony fish, bees, and butterflies. See
-\code{rtrees::taxa_supported()} for the authoritative, currently-installed
+\code{rtrees::taxa_supported} for the authoritative, currently-installed
 group list -- this filter should be kept in sync with it by hand, since
 it can't be queried from inside a \code{quote()}d expression.
+The expression uses the lower-case \code{kingdom}, \code{class}, and \code{family}
+columns emitted by \code{\link[=Clean_Taxa]{Clean_Taxa()}}.
 }
 \details{
 Bees and butterflies aren't full taxonomic ranks in GBIF's backbone (a

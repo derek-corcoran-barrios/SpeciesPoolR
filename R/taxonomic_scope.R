@@ -5,9 +5,11 @@
 #' taxonomic groups `rtrees::get_tree()` can currently build a phylogeny
 #' for: plants, and among animals, birds, mammals, amphibians, reptiles,
 #' cartilaginous fish, bony fish, bees, and butterflies. See
-#' `rtrees::taxa_supported()` for the authoritative, currently-installed
+#' `rtrees::taxa_supported` for the authoritative, currently-installed
 #' group list -- this filter should be kept in sync with it by hand, since
 #' it can't be queried from inside a `quote()`d expression.
+#' The expression uses the lower-case `kingdom`, `class`, and `family`
+#' columns emitted by [Clean_Taxa()].
 #'
 #' Bees and butterflies aren't full taxonomic ranks in GBIF's backbone (a
 #' `Class`/`Order` filter can't isolate them the way it can for
@@ -29,18 +31,18 @@
 #' @export
 rtrees_supported_filter <- function() {
   quote(
-    Kingdom == "Plantae" |
-      Class == "Aves" |
-      Class == "Mammalia" |
-      Class == "Amphibia" |
-      Class %in% c("Reptilia", "Squamata", "Testudines", "Crocodylia") |
-      Class == "Chondrichthyes" |
-      Class %in% c("Actinopterygii", "Sarcopterygii") |
-      Family %in% c(
+    kingdom == "Plantae" |
+      class == "Aves" |
+      class == "Mammalia" |
+      class == "Amphibia" |
+      class %in% c("Reptilia", "Squamata", "Testudines", "Crocodylia") |
+      class == "Chondrichthyes" |
+      class %in% c("Actinopterygii", "Sarcopterygii") |
+      family %in% c(
         "Andrenidae", "Apidae", "Colletidae", "Halictidae",
         "Megachilidae", "Melittidae", "Stenotritidae"
       ) |
-      Family %in% c(
+      family %in% c(
         "Papilionidae", "Pieridae", "Nymphalidae",
         "Lycaenidae", "Hesperiidae", "Riodinidae"
       )
