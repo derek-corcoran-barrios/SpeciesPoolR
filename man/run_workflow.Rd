@@ -2,54 +2,160 @@
 % Please edit documentation in R/run_workflow.R
 \name{run_workflow}
 \alias{run_workflow}
-\title{Run the SpeciesPoolR Workflow}
+\title{Run a file-backed SpeciesPoolR diversity workflow}
 \usage{
 run_workflow(
-  workers = 2,
-  error = "null",
   file_path,
-  rastertemp,
-  rasterLU,
-  LanduseSuitability,
-  dist = 500,
-  limit = 1000,
-  filter = NULL,
+  predictors,
   country = NULL,
   shapefile = NULL,
+  filter = NULL,
+  groups = .workflow_terrestrial_groups,
+  terrestrial_only = TRUE,
+  species_per_group = Inf,
+  minimum_count = 7L,
+  minimum_records = 7L,
+  minimum_projected_species = 2L,
+  minimum_pd_groups = 1L,
+  dist = 500,
+  limit = 5000L,
+  retries = 5L,
+  categorical = "Landuse",
+  output_dir = file.path("Results", "speciespoolr_workflow"),
+  script = "_targets.R",
+  store = "_targets",
+  workers = 2L,
+  gbif_workers = min(2L, workers),
+  reduce_workers = 1L,
+  seed = 20260830L,
+  tree_index = 1L,
+  projection_blocks_in_memory = 16L,
+  metric_chunk_size = 50L,
+  pd_max_cells_per_block = 20000L,
+  error = "null",
   plot = TRUE
 )
 }
 \arguments{
-\item{workers}{Number of parallel workers to use in the \code{crew} controller. Default is 2.}
+\item{file_path}{CSV or XLSX taxon file. A table already returned by
+\code{\link[=Clean_Taxa]{Clean_Taxa()}} is preferred. A simpler file with a case-insensitive
+\code{Species} column is cleaned automatically.}
 
-\item{error}{Handling for errors in outdated targets. Default is "null".}
+\item{predictors}{Character vector of current-condition raster paths. Every
+layer must share a common geometry. Supply categorical layer names through
+\code{categorical}.}
 
-\item{file_path}{Path to the Excel or csv file containing the data.}
+\item{country}{Two-letter country code used for GBIF queries. Supply exactly
+one of \code{country} and \code{shapefile}.}
 
-\item{rastertemp}{A file path to the raster file that will be used as a template for rasterizing the buffers.}
+\item{shapefile}{Optional vector-file path used as the GBIF query extent.
+Supply exactly one of \code{country} and \code{shapefile}.}
 
-\item{rasterLU}{A file path to the raster file that has the landuses that exist in the area that will be modeled.}
+\item{filter}{Optional unquoted or \code{quote()}d expression evaluated on the
+cleaned taxon table after \code{rtrees_group} has been added. Taxonomic column
+names are lower case.}
 
-\item{LanduseSuitability}{A string representing the file path to the raster file containing land-use binary suitability data.}
+\item{groups}{rtrees groups retained in the analysis. The default contains
+the seven groups used by the terrestrial diversity pilot.}
 
-\item{dist}{A numeric value specifying the buffer distance in meters. Default is 500 meters.}
+\item{terrestrial_only}{If \code{TRUE} (default), exclude fish, sharks and rays,
+marine mammals, sirenians, and pinnipeds. This is appropriate for a
+terrestrial predictor stack. Set \code{FALSE} only with predictors and a domain
+suitable for the additional taxa.}
 
-\item{limit}{maximum number of occurrences downloaded}
+\item{species_per_group}{Number of candidates selected systematically across
+the GBIF-count distribution within each group. \code{Inf} (default) retains all
+eligible species. A value such as \code{6L} creates a balanced pilot.}
 
-\item{filter}{An optional expression used to filter the resulting \code{data.frame}. This should be an expression
-written as if you were using \code{dplyr::filter()}. The default is NULL, meaning no filtering is applied.}
+\item{minimum_count}{Minimum regional GBIF count required before selection.}
 
-\item{country}{A two-letter country code to define the area of interest for counting species presences. Default is NULL.}
+\item{minimum_records}{Minimum valid, unique downloaded occurrences required
+for model fitting.}
 
-\item{shapefile}{Path to a shapefile defining the area of interest for counting species presences. Default is NULL.}
+\item{minimum_projected_species}{Minimum successfully projected species
+required before calculating metrics.}
 
-\item{plot}{if TRUE (default) it will run the \code{targets::tar_visnetwork()} to plot the workflow}
+\item{minimum_pd_groups}{Minimum rtrees groups with at least two projected
+species required for PD.}
+
+\item{dist}{Buffer distance around occurrences in metres.}
+
+\item{limit}{Maximum number of occurrence records downloaded per species.}
+
+\item{retries}{Maximum GBIF download attempts per species.}
+
+\item{categorical}{Character vector naming categorical predictor layers.}
+
+\item{output_dir}{Root directory for projections, metrics, and audit files.}
+
+\item{script}{Path of the generated targets script. Existing content at this
+path is replaced by \code{\link[targets:tar_helper]{targets::tar_helper()}}.}
+
+\item{store}{Dedicated targets data store for this workflow.}
+
+\item{workers}{Number of compute workers.}
+
+\item{gbif_workers}{Number of GBIF download workers.}
+
+\item{reduce_workers}{Number of raster-reduction workers.}
+
+\item{seed}{Reproducible targets seed used for background sampling and other
+stochastic work.}
+
+\item{tree_index}{One-based posterior tree selected for rtrees groups that
+provide multiple megatrees.}
+
+\item{projection_blocks_in_memory}{Memory-control value passed to
+\code{\link[=PredictSuitability]{PredictSuitability()}}. Larger values request smaller processing blocks.}
+
+\item{metric_chunk_size}{Maximum number of species files opened in one
+richness or range-rarity reduction group.}
+
+\item{pd_max_cells_per_block}{Maximum raster cells processed in one PD block.}
+
+\item{error}{Global targets error mode. The default, \code{"null"}, permits the
+explicit status and audit targets to record branch exclusions.}
+
+\item{plot}{If \code{TRUE}, open \code{\link[targets:tar_visnetwork]{targets::tar_visnetwork()}} after the run.}
 }
 \value{
-Executes the \code{targets} pipeline.
+Invisibly, a list containing \code{script}, \code{store}, and \code{output_dir}.
 }
 \description{
-This function sets up and runs a \code{targets} workflow using the functions provided in the
-\code{SpeciesPoolR} package. The workflow includes steps for cleaning species data, counting
-species presences, filtering data, and generating buffers for spatial analysis.
+Creates and runs a \code{targets} pipeline for a current-condition biodiversity
+analysis. The generated pipeline cleans and scopes taxa, counts and downloads
+GBIF occurrences, fits one model per species, writes reason-coded projection
+status markers, validates the complete projection set, and calculates
+richness, range-size rarity, and group-specific phylogenetic diversity.
+}
+\details{
+The workflow follows the bounded-memory design used for large SpeciesPoolR
+analyses: successful species branches write one binary GeoTIFF each;
+richness and rarity use tree reductions; PD reads raster blocks into sparse
+matrices; and no complete cells-by-species raster stack is materialized.
+
+\code{rtrees} phylogenies are built separately for each supported group. Raw PD
+values therefore retain the branch-length scale of their own group tree and
+should not be summed or directly compared among groups without an explicit
+normalization step.
+}
+\examples{
+\dontrun{
+run_workflow(
+  file_path = "Clean_Taxa.csv",
+  predictors = readRDS("Predictors/current_predictor_paths.rds"),
+  country = "DK",
+  groups = c(
+    "plant", "bird", "mammal", "amphibian",
+    "reptile", "bee", "butterfly"
+  ),
+  species_per_group = 6L,
+  minimum_count = 20L,
+  minimum_projected_species = 30L,
+  categorical = "Landuse",
+  script = "_TargetsDiversityPilot.R",
+  store = "_targets_diversity_pilot"
+)
+}
+
 }

@@ -74,7 +74,6 @@ importFrom(Rarity,
   rWeights
 )
 importFrom(V.PhyloMaker,phylo.maker)
-importFrom(crew,crew_controller_local)
 importFrom(data.table,
   "%chin%",
   as.data.table,
@@ -95,7 +94,6 @@ importFrom(dplyr,
   select,
   ungroup
 )
-importFrom(geotargets,tar_terra_rast)
 importFrom(janitor,make_clean_names)
 importFrom(maxnet,maxnet)
 importFrom(picante,pd)
@@ -113,7 +111,6 @@ importFrom(readr,
 )
 importFrom(readxl,read_xlsx)
 importFrom(rgbif,occ_data)
-importFrom(rlang,enquo)
 importFrom(stats,quantile)
 importFrom(stringr,str_replace_all)
 importFrom(targets,
